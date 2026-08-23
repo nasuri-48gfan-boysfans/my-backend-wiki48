@@ -1,6 +1,7 @@
 async function submitAccessRequest(payload) {
-  const response = await fetch('/api/access-requests', {
+  const response = await fetch(window.wiki48ApiUrl('/api/access-requests'), {
     method: 'POST',
+    credentials: 'include',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
   });

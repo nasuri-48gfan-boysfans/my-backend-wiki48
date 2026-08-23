@@ -1,7 +1,7 @@
 const COMMUNITY_POLL_KEY = 'wiki48-community-poll';
 
 async function communityApi(url, options) {
-  const response = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...options });
+  const response = await fetch(window.wiki48ApiUrl(url), { credentials: 'include', headers: { 'Content-Type': 'application/json' }, ...options });
   const body = await response.text();
   let data;
   try { data = JSON.parse(body); } catch (error) { throw new Error('Backend API komunitas belum terhubung.'); }

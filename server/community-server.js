@@ -63,6 +63,21 @@ if (isProduction && (!process.env.SESSION_SECRET || process.env.SESSION_SECRET.l
 }
 app.disable('x-powered-by');
 app.set('trust proxy', isProduction ? 1 : 0);
+app.use((request, response, next) => {
+  const allowedOrigin = process.env.FRONTEND_ORIGIN;
+  const requestOrigin = request.get('origin');
+  if (allowedOrigin && requestOrigin === allowedOrigin) {
+    response.setHeader('access-control-allow-origin', allowedOrigin);
+    response.setHeader('access-control-allow-credentials', 'true');
+    response.setHeader('vary', 'Origin');
+  }
+  if (request.method === 'OPTIONS') {
+    response.setHeader('access-control-allow-methods', 'GET,POST,PATCH,OPTIONS');
+    response.setHeader('access-control-allow-headers', 'Content-Type');
+    return response.status(204).end();
+  }
+  next();
+});
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -433,7 +448,11 @@ async function start() {
   liveWorker.start().catch((error) => console.error(`[LIVE WORKER] ${error.message}`));
 }
 
-start().catch((error) => {
-  console.error(error.message);
-  process.exitCode = 1;
-});
+if (require.main === module) {
+  start().catch((error) => {
+    console.error(error.message);
+    process.exitCode = 1;
+  });
+}
+
+module.exports = { app, ensureSchema };

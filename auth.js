@@ -1,7 +1,4 @@
-function apiUrl(path) {
-  const configuredBase = document.querySelector('meta[name="wiki48-api-base"]')?.content?.trim().replace(/\/$/, '') || '';
-  return `${configuredBase}${path}`;
-}
+function apiUrl(path) { return window.wiki48ApiUrl ? window.wiki48ApiUrl(path) : path; }
 
 async function apiRequest(url, options) {
   const response = await fetch(apiUrl(url), { credentials: 'include', headers: { 'Content-Type': 'application/json' }, ...options });

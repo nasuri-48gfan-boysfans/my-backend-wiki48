@@ -5056,8 +5056,8 @@ function liveMembers() {
   return MEMBERS.filter((m) => m.isLive === true);
 }
 
-const LIVE_TRACKER_API_URL = window.location.protocol === 'file:' ? 'http://localhost:8787/api/live' : '/api/live';
-const LIVE_TRACKER_EVENTS_URL = window.location.protocol === 'file:' ? 'http://localhost:8787/api/live/events' : '/api/live/events';
+const LIVE_TRACKER_API_URL = window.location.protocol === 'file:' ? 'http://localhost:8787/api/live' : (window.wiki48ApiUrl ? window.wiki48ApiUrl('/api/live') : '/api/live');
+const LIVE_TRACKER_EVENTS_URL = window.location.protocol === 'file:' ? 'http://localhost:8787/api/live/events' : (window.wiki48ApiUrl ? window.wiki48ApiUrl('/api/live/events') : '/api/live/events');
 
 function applyLiveSnapshot(results) {
   const liveById = new Map((Array.isArray(results) ? results : []).map((item) => [item.id, item]));

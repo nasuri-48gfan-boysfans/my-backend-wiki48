@@ -1,5 +1,5 @@
 async function adminApi(url, options) {
-  const response = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...options });
+  const response = await fetch(window.wiki48ApiUrl(url), { credentials: 'include', headers: { 'Content-Type': 'application/json' }, ...options });
   const body = response.status === 204 ? '' : await response.text();
   let data = null;
   if (body) {
