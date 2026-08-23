@@ -1,11 +1,17 @@
 function apiUrl(path) { return window.wiki48ApiUrl ? window.wiki48ApiUrl(path) : path; }
 
 async function apiRequest(url, options) {
-  const response = await fetch(apiUrl(url), { credentials: 'include', headers: { 'Content-Type': 'application/json' }, ...options });
+  const endpoint = apiUrl(url);
+  let response;
+  try {
+    response = await fetch(endpoint, { credentials: 'include', headers: { 'Content-Type': 'application/json' }, ...options });
+  } catch (error) {
+    throw new Error(`Tidak bisa menghubungi backend: ${endpoint}`);
+  }
   const body = response.status === 204 ? '' : await response.text();
   let data = null;
   if (body) {
-    try { data = JSON.parse(body); } catch (error) { throw new Error('Backend API belum terhubung. Pastikan login memakai URL server Express, bukan hosting file statis.'); }
+    try { data = JSON.parse(body); } catch (error) { throw new Error(`Backend error HTTP ${response.status} dari ${response.url}: ${body.slice(0, 160) || 'respons kosong'}`); }
   }
   if (!response.ok) throw new Error(data?.error || 'Terjadi kesalahan.');
   return data;

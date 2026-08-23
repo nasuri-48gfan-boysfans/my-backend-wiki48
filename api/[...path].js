@@ -2,7 +2,7 @@ const { app, ensureSchema } = require('../server/community-server');
 
 let databaseReady;
 
-module.exports = async function vercelHandler(request, response) {
+module.exports = async function vercelApiHandler(request, response) {
   try {
     databaseReady ||= ensureSchema();
     await databaseReady;
@@ -10,7 +10,6 @@ module.exports = async function vercelHandler(request, response) {
   } catch (error) {
     databaseReady = undefined;
     console.error('[API STARTUP]', error.message);
-    console.error(error.message);
-    return response.status(500).json({ error: 'Backend database belum siap.' });
+    return response.status(500).json({ error: 'Backend database belum siap. Periksa environment variables Vercel dan koneksi Supabase.' });
   }
 };
