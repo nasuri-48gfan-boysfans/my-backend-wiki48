@@ -1,6 +1,15 @@
+function apiUrl(path) {
+  const configuredBase = document.querySelector('meta[name="wiki48-api-base"]')?.content?.trim().replace(/\/$/, '') || '';
+  return `${configuredBase}${path}`;
+}
+
 async function apiRequest(url, options) {
-  const response = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...options });
-  const data = response.status === 204 ? null : await response.json();
+  const response = await fetch(apiUrl(url), { credentials: 'include', headers: { 'Content-Type': 'application/json' }, ...options });
+  const body = response.status === 204 ? '' : await response.text();
+  let data = null;
+  if (body) {
+    try { data = JSON.parse(body); } catch (error) { throw new Error('Backend API belum terhubung. Pastikan login memakai URL server Express, bukan hosting file statis.'); }
+  }
   if (!response.ok) throw new Error(data?.error || 'Terjadi kesalahan.');
   return data;
 }

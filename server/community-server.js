@@ -1,5 +1,6 @@
 const path = require('node:path');
 const crypto = require('node:crypto');
+require('dotenv').config();
 const express = require('express');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
@@ -7,11 +8,15 @@ const bcrypt = require('bcryptjs');
 const session = require('cookie-session');
 const { Pool } = require('pg');
 const { createLiveWorker } = require('./live-worker');
-require('dotenv').config();
 
 const app = express();
 const port = Number(process.env.PORT || 3000);
-const pool = new Pool({ connectionString: process.env.DATABASE_URL });
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_SSL === 'true'
+    ? { rejectUnauthorized: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false' }
+    : undefined,
+});
 const liveWorker = createLiveWorker({ logger: console });
 const liveClients = new Set();
 const isProduction = process.env.NODE_ENV === 'production';

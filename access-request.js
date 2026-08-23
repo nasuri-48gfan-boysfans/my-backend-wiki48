@@ -1,10 +1,12 @@
-async function submitAccessRequest(body) {
+async function submitAccessRequest(payload) {
   const response = await fetch('/api/access-requests', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(body),
+    body: JSON.stringify(payload),
   });
-  const data = await response.json();
+  const body = await response.text();
+  let data;
+  try { data = JSON.parse(body); } catch (error) { throw new Error('Backend API belum terhubung. Form ini harus dijalankan dari server Express.'); }
   if (!response.ok) throw new Error(data.error || 'Pengajuan gagal dikirim.');
   return data;
 }

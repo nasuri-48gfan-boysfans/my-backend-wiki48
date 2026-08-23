@@ -1,6 +1,10 @@
 async function adminApi(url, options) {
   const response = await fetch(url, { headers: { 'Content-Type': 'application/json' }, ...options });
-  const data = response.status === 204 ? null : await response.json();
+  const body = response.status === 204 ? '' : await response.text();
+  let data = null;
+  if (body) {
+    try { data = JSON.parse(body); } catch (error) { throw new Error('Backend API admin belum terhubung.'); }
+  }
   if (!response.ok) throw new Error(data?.error || 'Permintaan admin gagal.');
   return data;
 }
