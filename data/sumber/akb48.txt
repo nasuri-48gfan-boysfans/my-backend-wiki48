@@ -1,0 +1,53 @@
+# AKB48 — daftar hasil baca, silakan koreksi
+# Satu member per baris. Kalau sudah tahu teamnya, tulis:  Nama | Team K
+# Baris berawalan # diabaikan importer.
+# Sumber pastemu belum memuat info team, jadi kolom team masih kosong.
+
+Chiba Erii
+Omori Maho
+Oguri Yui
+Kuranoo Narumi
+Shitao Miu
+Takahshi Ayane
+Nagano Serika
+Hashimoto Haruna
+Tokunaga Remi
+Sakagawa Hiyuka
+Iwatate Saho
+Fukuoka Seina
+Mukaichi Mion
+Suzuki Kurumi
+Taguchi Manaka
+Nagatomo Ayami
+Yamauchi Mizuki
+Ota Yuki
+Sato Airi
+Hashimoto Eriko
+Hatekayama Nozomi
+Hirata Yuki
+Hotei Moka
+Masai Mayuu
+Mizushima Miyuu
+Yamazaki Sora
+Akiyama
+Arai Sae
+Kudo
+Kasumi
+Kubo Hinano
+Sako Yumemi
+Narita Kohina
+Yagi Azuki
+Yamaguchi Yui
+Ito Momoka
+Okumoto Kairi
+Kawamura Yui
+Shiratori Sari
+Hanada Mei
+Oga Saki
+Kondo Saki
+Maruyama Hinata
+Takahashi Mao
+Tanaka Sayuri
+Makito Ema
+Morikawa Yu
+Watanabe Kiko

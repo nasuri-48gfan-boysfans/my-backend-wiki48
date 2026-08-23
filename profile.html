@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Profil komunitas WIKI48." />
+  <title>Profil Saya - WIKI48</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff806b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" href="img/icon-192.svg" />
+</head>
+<body class="profile-page">
+  <header class="site-header"><div class="container header-inner">
+    <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
+    <nav class="profile-nav" aria-label="Navigasi profil"><a href="members.html">Member Directory</a><a href="index.html#hero">Beranda</a></nav>
+  </div></header>
+  <main id="profilePage" class="profile-main"><section class="profile-hero" aria-labelledby="profileTitle">
+    <div class="profile-avatar" aria-hidden="true">🐰</div>
+    <div><p class="eyebrow pink-eyebrow">Ruang personalmu</p><h1 id="profileTitle">Halo, <span data-profile-name>Wiki Fan</span>!</h1><p class="profile-email" data-profile-email></p></div>
+  </section>
+  <div class="profile-content"><section class="profile-card profile-edit-card" aria-labelledby="editTitle"><p class="eyebrow coral-eyebrow">Identitas</p><h2 id="editTitle">Edit profil</h2><form id="profileForm" class="profile-form"><label for="profileName">Nama tampilan</label><input id="profileName" type="text" maxlength="40" required /><button class="auth-submit" type="submit">Simpan perubahan <span>→</span></button><p id="profileSaved" class="profile-saved" hidden>Profil berhasil diperbarui.</p></form></section>
+    <aside class="profile-card profile-summary"><p class="eyebrow lilac-eyebrow">Member sejak</p><strong data-profile-joined></strong><p>Oshi yang kamu pin akan tetap tersimpan di perangkat ini.</p><a class="profile-link" href="members.html">Kelola oshi <span>→</span></a><button id="logoutButton" class="logout-button" type="button">Keluar dari akun</button></aside>
+  </div></main>
+  <footer class="site-footer"><div class="container"><p>© <span id="year">2026</span> WIKI48</p></div></footer>
+  <script src="auth.js" defer></script><script src="pwa.js" defer></script>
+</body>
+</html>

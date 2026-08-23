@@ -1,0 +1,482 @@
+# BIODATA AKB48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- akb48-01  ·    ·  Chiba Erii
+Chiba Erii
+panggilan: Erii
+angkatan: 2nd Generation Draft Members
+lahir: 2003-10-27
+asal: Kanagawa
+tinggi: 165
+darah: A
+gabung: 
+
+# --- akb48-02  ·    ·  Omori Maho
+Omori Maho
+panggilan: Mahopyon
+angkatan: 3rd Generation Draft Members
+lahir: 1999-12-05
+asal: Ibaraki
+tinggi: 162
+darah: B
+gabung: 
+
+# --- akb48-03  ·    ·  Oguri Yui
+Oguri Yui
+panggilan: Yuiyui
+angkatan: Team 8 / (April, 2014)
+lahir: 2001-12-26
+asal: Tokyo
+tinggi: 163
+darah: AB
+gabung: 
+
+# --- akb48-04  ·    ·  Kuranoo Narumi
+Kuranoo Narumi
+panggilan: Naru
+angkatan: Team 8 / (April, 2014)
+lahir: 2000-11-08
+asal: Kumamoto
+tinggi: 152
+darah: A
+gabung: 
+
+# --- akb48-05  ·    ·  Shitao Miu
+Shitao Miu
+panggilan: Miu
+angkatan: Team 8 / (April, 2014)
+lahir: 2001-04-03
+asal: Yamaguchi
+tinggi: 162
+darah: A
+gabung: 
+
+# --- akb48-06  ·    ·  Takahashi Ayane
+Takahshi Ayane
+panggilan: Ayane
+angkatan: Team 8 / (April, 2014)
+lahir: 1997-12-30
+asal: Saitama
+tinggi: 153
+darah: B
+gabung: 
+
+# --- akb48-07  ·    ·  Nagano Serika
+Nagano Serika
+panggilan: Serichan
+angkatan: Team 8 / (April, 2014)
+lahir: 2001-03-27
+asal: Osaka
+tinggi: 158
+darah: O
+gabung: 
+
+# --- akb48-08  ·    ·  Hashimoto Haruna
+Hashimoto Haruna
+panggilan: Harupyon
+angkatan: Team 8 / (April, 2014)
+lahir: 2000-05-25
+asal: Toyama
+tinggi: 150
+darah: A
+gabung: 
+
+# --- akb48-09  ·    ·  Tokunaga Remi
+Tokunaga Remi
+panggilan: Remi
+angkatan: Team 8 / (October, 2019)
+lahir: 2006-10-01
+asal: Tottori
+tinggi: 157
+darah: O
+gabung: 
+
+# --- akb48-10  ·    ·  Sakagawa Hiyuka
+Sakagawa Hiyuka
+panggilan: Hiyuka
+angkatan: Team 8 / (December, 2019)
+lahir: 2006-10-07
+asal: Fukui
+tinggi: 159
+darah: O
+gabung: 
+
+# --- akb48-11  ·    ·  Iwatate Saho
+Iwatate Saho
+panggilan: Sahhoo
+angkatan: AKB48 13th Generation
+lahir: 1994-10-04
+asal: Kanagawa
+tinggi: 157
+darah: B
+gabung: 
+
+# --- akb48-12  ·    ·  Fukuoka Seina
+Fukuoka Seina
+panggilan: Seichan
+angkatan: AKB48 15th Generation
+lahir: 2000-08-01
+asal: Kanagawa
+tinggi: 155
+darah: **
+gabung: 
+
+# --- akb48-13  ·    ·  Mukaichi Mion
+Mukaichi Mion
+panggilan: Miion
+angkatan: AKB48 15th Generation
+lahir: 1998-01-29
+asal: Saitama
+tinggi: 150
+darah: O
+gabung: 
+
+# --- akb48-14  ·    ·  Suzuki Kurumi
+Suzuki Kurumi
+panggilan: Kururun
+angkatan: AKB48 16th Generation
+lahir: 2004-09-02
+asal: Tokyo
+tinggi: 151
+darah: A
+gabung: 
+
+# --- akb48-15  ·    ·  Taguchi Manaka
+Taguchi Manaka
+panggilan: Manaka
+angkatan: AKB48 16th Generation
+lahir: 2003-12-12
+asal: Kanagawa
+tinggi: 152
+darah: **
+gabung: 
+
+# --- akb48-16  ·    ·  Nagatomo Ayami
+Nagatomo Ayami
+panggilan: Ayamin
+angkatan: AKB48 16th Generation
+lahir: 2000-11-02
+asal: Kanagawa
+tinggi: 161
+darah: O
+gabung: 
+
+# --- akb48-17  ·    ·  Yamauchi Mizuki
+Yamauchi Mizuki
+panggilan: Zukkii/Zucky<ref>[https://youtu.be/8AwaAg4Ht-I?is=Fgcy1jKP0hgHMch5 overture 2.0 - Luckyfes'26 ver.]</ref>
+angkatan: AKB48 16th Generation
+lahir: 2001-09-20
+asal: Tokyo
+tinggi: 162
+darah: O
+gabung: 
+
+# --- akb48-18  ·    ·  Ota Yuki
+Ota Yuki
+panggilan: Yukitan
+angkatan: AKB48 17th Generation
+lahir: 2004-03-27
+asal: Kanagawa
+tinggi: 157
+darah: O
+gabung: 
+
+# --- akb48-19  ·    ·  Sato Airi
+Sato Airi
+panggilan: Aichan
+angkatan: AKB48 17th Generation
+lahir: 2004-06-24
+asal: Chiba
+tinggi: 156
+darah: B
+gabung: 
+
+# --- akb48-20  ·    ·  Hashimoto Eriko
+Hashimoto Eriko
+panggilan: Erichan
+angkatan: AKB48 17th Generation
+lahir: 2006-04-16
+asal: Osaka
+tinggi: 156
+darah: B
+gabung: 
+
+# --- akb48-21  ·    ·  Hatakeyama Nozomi
+Hatekayama Nozomi
+panggilan: Nonchan
+angkatan: AKB48 17th Generation
+lahir: 2008-01-25
+asal: Saitama
+tinggi: 159
+darah: O
+gabung: 
+
+# --- akb48-22  ·    ·  Hirata Yuki
+Hirata Yuki
+panggilan: Yukinee
+angkatan: AKB48 17th Generation
+lahir: 2002-09-03
+asal: Saitama
+tinggi: 157
+darah: A
+gabung: 
+
+# --- akb48-23  ·    ·  Hotei Moka
+Hotei Moka
+panggilan: Hotechan
+angkatan: AKB48 17th Generation
+lahir: 2004-12-01
+asal: Hyogo
+tinggi: 151
+darah: O
+gabung: 
+
+# --- akb48-24  ·    ·  Masai Mayuu
+Masai Mayuu
+panggilan: Mayuchan
+angkatan: 17th Generation AKB48
+lahir: 2005-03-01
+asal: Saitama
+tinggi: 154
+darah: B
+gabung: 
+
+# --- akb48-25  ·    ·  Mizushima Miyuu
+Mizushima Miyuu
+panggilan: Mizumin
+angkatan: AKB48 17th Generation
+lahir: 2003-11-12
+asal: Hokkaido
+tinggi: 157
+darah: A
+gabung: 
+
+# --- akb48-26  ·    ·  Yamazaki Sora
+Yamazaki Sora
+panggilan: Sorara
+angkatan: AKB48 17th Generation
+lahir: 2004-05-13
+asal: Tokyo
+tinggi: 152
+darah: B
+gabung: 
+
+# --- akb48-27  ·    ·  Akiyama Yuna
+Akiyama
+panggilan: Yunachan
+angkatan: AKB48 18th Generation
+lahir: 
+asal: Chiba
+tinggi: 158
+darah: A
+gabung: 
+
+# --- akb48-28  ·    ·  Arai Sae
+Arai Sae
+panggilan: Saechan
+angkatan: AKB48 18th Generation
+lahir: 
+asal: Tokyo
+tinggi: 162
+darah: A
+gabung: 
+
+# --- akb48-29  ·    ·  Kudo Yua
+Kudo
+panggilan: Yua
+angkatan: Boku ga Mitakatta Aozora 1st Generation
+lahir: 2009-08-04
+asal: Hokkaido
+tinggi: 159
+darah: B
+gabung: 
+
+# --- akb48-30  ·    ·  Kudo Kasumi
+Kasumi
+panggilan: Kasumin
+angkatan: AKB48 18th Generation
+lahir: 
+asal: Oita
+tinggi: 159
+darah: O
+gabung: 
+
+# --- akb48-31  ·    ·  Kubo Hinano
+Kubo Hinano
+panggilan: Chanhina
+angkatan: AKB48 18th Generation
+lahir: 
+asal: Nagano
+tinggi: 163
+darah: A
+gabung: 
+
+# --- akb48-32  ·    ·  Sako Yumemi
+Sako Yumemi
+panggilan: Yumemin
+angkatan: AKB48 18th Generation
+lahir: 
+asal: Saitama
+tinggi: 162
+darah: **
+gabung: 
+
+# --- akb48-33  ·    ·  Narita Kohina
+Narita Kohina
+panggilan: Kohi
+angkatan: AKB48 18th Generation
+lahir: 
+asal: Hokkaido
+tinggi: 158
+darah: AB
+gabung: 
+
+# --- akb48-34  ·    ·  Yagi Azuki
+Yagi Azuki
+panggilan: Azu
+angkatan: AKB48 18th Generation
+lahir: 
+asal: Tokyo
+tinggi: 159
+darah: **
+gabung: 
+
+# --- akb48-35  ·    ·  Yamaguchi Yui
+Yamaguchi Yui
+panggilan: Yuichi
+angkatan: AKB48 18th Generation
+lahir: 
+asal: Nagasaki
+tinggi: 158
+darah: A
+gabung: 
+
+# --- akb48-36  ·    ·  Ito Momoka
+Ito Momoka
+panggilan: Itomomo
+angkatan: AKB48 19th Generation
+lahir: 2003-12-06
+asal: Saitama
+tinggi: 157
+darah: A
+gabung: 
+
+# --- akb48-37  ·    ·  Okumoto Kairi
+Okumoto Kairi
+panggilan: Kairi
+angkatan: AKB48 19th Generation
+lahir: 2007-01-27
+asal: Tokyo
+tinggi: 155
+darah: O
+gabung: 
+
+# --- akb48-38  ·    ·  Kawamura Yui
+Kawamura Yui
+panggilan: Kawayui
+angkatan: AKB48 19th Generation
+lahir: 2006-06-18
+asal: Hokkaido
+tinggi: 155
+darah: A
+gabung: 
+
+# --- akb48-39  ·    ·  Shiratori Sari
+Shiratori Sari
+panggilan: Sarii
+angkatan: AKB48 19th Generation
+lahir: 2010-09-10
+asal: Tokyo
+tinggi: 160
+darah: A
+gabung: 
+
+# --- akb48-40  ·    ·  Hanada Mei
+Hanada Mei
+panggilan: Meimei
+angkatan: AKB48 19th Generation
+lahir: 2005-06-05
+asal: Kanagawa
+tinggi: 152
+darah: O
+gabung: 
+
+# --- akb48-41  ·    ·  Oga Saki
+Oga Saki
+panggilan: Saachan
+angkatan: AKB48 20th Generation
+lahir: 2006-05-16
+asal: Fukushima
+tinggi: 168
+darah: B
+gabung: 
+
+# --- akb48-42  ·    ·  Kondo Saki
+Kondo Saki
+panggilan: Kosaki
+angkatan: AKB48 20th Generation
+lahir: 2012-02-23
+asal: Aichi
+tinggi: 
+darah: **
+gabung: 
+
+# --- akb48-43  ·    ·  Maruyama Hinata
+Maruyama Hinata
+panggilan: Maruchan
+angkatan: AKB48 20th Generation
+lahir: 2008-07-11
+asal: Niigata
+tinggi: 159
+darah: A
+gabung: 
+
+# --- akb48-44  ·    ·  Takahashi Mao
+Takahashi Mao
+panggilan: Maatan
+angkatan: AKB48 21st Generation
+lahir: 2010-06-25
+asal: Hokkaido
+tinggi: 156
+darah: 
+gabung: 
+
+# --- akb48-45  ·    ·  Tanaka Sayuri
+Tanaka Sayuri
+panggilan: Sayurin
+angkatan: AKB48 21st Generation
+lahir: 2008-12-09
+asal: Saitama
+tinggi: 
+darah: 
+gabung: 
+
+# --- akb48-46  ·    ·  Makito Ema
+Makito Ema
+panggilan: Emachan
+angkatan: AKB48 21st Generation
+lahir: 2007-05-25
+asal: Aichi
+tinggi: 156
+darah: 
+gabung: 
+
+# --- akb48-47  ·    ·  Morikawa Yu
+Morikawa Yu
+panggilan: Yuuyu
+angkatan: AKB48 21st Generation
+lahir: 2008-06-24
+asal: Hyogo
+tinggi: 161
+darah: AB
+gabung: 
+
+# --- akb48-48  ·    ·  Watanabe Kiko
+Watanabe Kiko
+panggilan: Kikochan
+angkatan: AKB48 21st Generation
+lahir: 2007-07-12
+asal: Akita
+tinggi: 
+darah: 
+gabung: 
+

@@ -1,0 +1,48 @@
+# BNK48 — 37 member aktif
+# Format: Nama Latin | Team | Aksara Asli   (kolom ke-3 opsional)
+# Koreksi di file INI, bukan di asli/. Baris berawalan # diabaikan.
+# Hapus baris = hapus member. Nama Latin dipakai untuk search,
+# urutan A-Z, dan nama file foto img/<id>.jpg.
+
+# ---- Team BIII (11) ----
+Marine  | Team BIII
+Fame    | Team BIII
+Hoop    | Team BIII
+Janry   | Team BIII
+Luksorn | Team BIII
+Mail    | Team BIII
+Micha   | Team BIII
+Monet   | Team BIII
+Patt    | Team BIII
+Praew   | Team BIII
+Wawa    | Team BIII
+
+# ---- Team NV (11) ----
+Emmy    | Team NV
+Arlee   | Team NV
+Berry   | Team NV
+Jew     | Team NV
+L       | Team NV
+Palmmy  | Team NV
+Pancake | Team NV
+Proud   | Team NV
+Saonoi  | Team NV
+Sindy   | Team NV
+Yoghurt | Team NV
+
+# ---- Trainee (15) ----
+Galeya   | Trainee
+Khaimook | Trainee
+Mayji    | Trainee
+Nall     | Trainee
+Nammonn  | Trainee
+Neen     | Trainee
+Niya     | Trainee
+Blythe   | Trainee
+Cartoon  | Trainee
+Grape    | Trainee
+Inkcha   | Trainee
+Khowjow  | Trainee
+Mint     | Trainee
+Mirin    | Trainee
+Rose     | Trainee

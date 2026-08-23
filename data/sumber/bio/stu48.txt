@@ -1,0 +1,452 @@
+# BIODATA STU48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- stu48-01  ·  Gen 1  ·  Kai Cocoa
+Kai Cocoa
+panggilan: Cocoa
+angkatan: STU48 1st Generation
+lahir: 2003-11-28
+asal: Hiroshima
+tinggi: 154
+darah: B
+gabung: 
+
+# --- stu48-02  ·  Gen 1  ·  Taniguchi Mahina
+Taniguchi Mahina
+panggilan: Mahi
+angkatan: 1st Generation
+lahir: 2000-02-03
+asal: Tokushima
+tinggi: 161
+darah: A
+gabung: 
+
+# --- stu48-03  ·  Gen 1  ·  Hyodo Aoi
+Hyodo Aoi
+panggilan: Aoi
+angkatan: 1st Generation
+lahir: 2001-01-18
+asal: Ehime
+tinggi: 162
+darah: A
+gabung: 
+
+# --- stu48-04  ·  Gen 1  ·  Fukuda Akari
+Fukuda Akari
+panggilan: Fukuchan
+angkatan: 1st Generation
+lahir: 1999-03-29
+asal: Kagawa
+tinggi: 164
+darah: O
+gabung: 
+
+# --- stu48-05  ·  Gen 1  ·  Shinano Soraha
+Shinano Soraha
+panggilan: Soraha
+angkatan: 3rd Generation Draft Members
+lahir: 2003-08-09
+asal: Hyogo
+tinggi: 163
+darah: A
+gabung: 
+
+# --- stu48-06  ·  Gen 1  ·  Nakamura Mai
+Nakamura Mai
+panggilan: MaiQ
+angkatan: 3rd Generation Draft Members
+lahir: 1999-04-04
+asal: Ehime
+tinggi: 163
+darah: O
+gabung: 
+
+# --- stu48-07  ·  Gen 2  ·  Ikeda Yura
+Ikeda Yura
+panggilan: Ikedachan
+angkatan: 2nd Generation
+lahir: 2004-02-08
+asal: Hiroshima
+tinggi: 152
+darah: AB
+gabung: 
+
+# --- stu48-08  ·  Gen 2  ·  Utsumi Rine
+Utsumi Rine
+panggilan: Rinetan
+angkatan: 2nd Generation
+lahir: 2002-11-05
+asal: Okayama
+tinggi: 153
+darah: O
+gabung: 
+
+# --- stu48-09  ·  Gen 2  ·  Osaki Serika
+Osaki Serika
+panggilan: Paseri
+angkatan: 2nd Generation
+lahir: 1997-11-16
+asal: Nagasaki
+tinggi: 161
+darah: O
+gabung: 
+
+# --- stu48-10  ·  Gen 2  ·  Kawamata Yuuna
+Kawamata Yuuna
+panggilan: Yuna
+angkatan: 2nd Generation
+lahir: 2003-12-10
+asal: Hiroshima
+tinggi: 162
+darah: A
+gabung: 
+
+# --- stu48-11  ·  Gen 2  ·  Kudo Riko
+Kudo Riko
+panggilan: Rikochi
+angkatan: 2nd Generation
+lahir: 2002-03-29
+asal: Yamaguchi
+tinggi: 156
+darah: **
+gabung: 
+
+# --- stu48-12  ·  Gen 2  ·  Sako Himeka
+Sako Himeka
+panggilan: Himetan
+angkatan: 2nd Generation
+lahir: 2007-03-14
+asal: Hiroshima
+tinggi: 161
+darah: O
+gabung: 
+
+# --- stu48-13  ·  Gen 2  ·  Takao Sayaka
+Takao Sayaka
+panggilan: Saayan
+angkatan: 2nd Generation
+lahir: 1998-12-04
+asal: Fukuoka
+tinggi: 153
+darah: B
+gabung: 
+
+# --- stu48-14  ·  Gen 2  ·  Harada Sayaka
+Harada Sayaka
+panggilan: Sayakarin
+angkatan: 2nd Generation
+lahir: 2001-06-19
+asal: Fukuoka
+tinggi: 163
+darah: O
+gabung: 
+
+# --- stu48-15  ·  Gen 2  ·  Muneyuki Rika
+Muneyuki Rika
+panggilan: Rika
+angkatan: 2nd Generation
+lahir: 2000-06-15
+asal: Ehime
+tinggi: 167
+darah: O
+gabung: 
+
+# --- stu48-16  ·  Gen 2  ·  Yoshida Sara
+Yoshida Sara
+panggilan: Sara
+angkatan: 2nd Generation
+lahir: 2002-02-19
+asal: Fukuoka
+tinggi: 163
+darah: B
+gabung: 
+
+# --- stu48-17  ·  Gen 2  ·  Watanabe Natsuki
+Watanabe Natsuki
+panggilan: Nacchan
+angkatan: 2nd Generation
+lahir: 2000-12-12
+asal: Yamaguchi
+tinggi: 156
+darah: O
+gabung: 
+
+# --- stu48-18  ·  Gen 2.5  ·  Okada Azumi
+Okada Azumi
+panggilan: Azumi
+angkatan: New Wave Project
+lahir: 2003-01-20
+asal: Hiroshima
+tinggi: 148
+darah: A
+gabung: 
+
+# --- stu48-19  ·  Gen 2.5  ·  Okamura Rio
+Okamura Rio
+panggilan: Riotsun
+angkatan: STU48 2.5th Generation
+lahir: 2008-10-08
+asal: Hiroshima
+tinggi: 161
+darah: A
+gabung: 
+
+# --- stu48-20  ·  Gen 2.5  ·  Kurushima Yuka
+Kurushima Yuka
+panggilan: Yuuka
+angkatan: New Wave Project
+lahir: 2005-09-24
+asal: Hiroshima
+tinggi: 150
+darah: A
+gabung: 
+
+# --- stu48-21  ·  Gen 2.5  ·  Morokuzu Noa
+Morokuzu Noa
+panggilan: Noapi
+angkatan: STU48 2.5th Generation
+lahir: 2009-11-11
+asal: Hiroshima
+tinggi: 156
+darah: **
+gabung: 
+
+# --- stu48-22  ·  Gen 3  ·  Arai Ria
+Arai Ria
+panggilan: Ria
+angkatan: STU48 3rd Generation
+lahir: 2008-10-05
+asal: Hiroshima
+tinggi: 
+darah: **
+gabung: 
+
+# --- stu48-23  ·  Gen 3  ·  Ishihara Yuuna
+Ishihara Yuuna
+panggilan: Yuuna
+angkatan: STU48 3rd Generation
+lahir: 2004-08-07
+asal: Okayama
+tinggi: 
+darah: **
+gabung: 
+
+# --- stu48-24  ·  Gen 3  ·  Okuda Yuina
+Okuda Yuina
+panggilan: Yuina
+angkatan: STU48 3rd Generation
+lahir: 2006-07-07
+asal: Gifu
+tinggi: 
+darah: **
+gabung: 
+
+# --- stu48-25  ·  Gen 3  ·  Kitazawa Ichigo
+Kitazawa Ichigo
+panggilan: Ichigo
+angkatan: STU48 3rd Generation
+lahir: 2004-12-27
+asal: Yamanashi
+tinggi: 
+darah: **
+gabung: 
+
+# --- stu48-26  ·  Gen 3  ·  Hamada Hibiki
+Hamada Hibiki
+panggilan: Hiichan
+angkatan: STU48 3rd Generation
+lahir: 2003-01-23
+asal: Nagasaki
+tinggi: 
+darah: **
+gabung: 
+
+# --- stu48-27  ·  Gen 3  ·  Morisue Himena
+Morisue Himena
+panggilan: Hiitan
+angkatan: STU48 3rd Generation
+lahir: 2002-06-20
+asal: Okayama
+tinggi: 
+darah: **
+gabung: 
+
+# --- stu48-28  ·  Gen 4  ·  Ishimatsu Haruna
+Ishimatsu Haruna
+panggilan: Haruchan
+angkatan: STU48 4th Generation
+lahir: 
+asal: Fukuoka
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-29  ·  Gen 4  ·  Inoue Kurea
+Inoue Kurea
+panggilan: Kuu
+angkatan: STU48 4th Generation
+lahir: 
+asal: Hiroshima
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-30  ·  Gen 4  ·  Kabutake Mana
+Kabutake Mana
+panggilan: Kabuchan
+angkatan: STU48 4th Generation
+lahir: 
+asal: Okayama
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-31  ·  Gen 4  ·  Kihara Hinayo
+Kihara Hinayo
+panggilan: Hinapii
+angkatan: STU48 4th Generation
+lahir: 
+asal: Hiroshima
+tinggi: 
+darah: O
+gabung: 
+
+# --- stu48-32  ·  Gen 4  ·  Komatsu Nayu
+Komatsu Nayu
+panggilan: Nayuyu
+angkatan: STU48 4th Generation
+lahir: 
+asal: Fukuoka
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-33  ·  Gen 4  ·  Sakaki Towana
+Sakaki Towana
+panggilan: Wawa
+angkatan: STU48 4th Generation
+lahir: 
+asal: Hiroshima
+tinggi: 
+darah: O
+gabung: 
+
+# --- stu48-34  ·  Gen 4  ·  Sakazaki Ai
+Sakazaki Ai
+panggilan: Sakaai
+angkatan: STU48 4th Generation
+lahir: 
+asal: Fukuoka
+tinggi: 
+darah: O
+gabung: 
+
+# --- stu48-35  ·  Gen 4  ·  Shimada Sayaka
+Shimada Sayaka
+panggilan: Sayatan
+angkatan: STU48 4th Generation
+lahir: 2007-06-02
+asal: Hyogo
+tinggi: 
+darah: AB
+gabung: 
+
+# --- stu48-36  ·  Gen 4  ·  Sogabe Ako
+Sogabe Ako
+panggilan: Ako
+angkatan: STU48 4th Generation
+lahir: 
+asal: Ehime
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-37  ·  Gen 4  ·  Takamura Shiori
+Takamura Shiori
+panggilan: Shiorin
+angkatan: STU48 4th Generation
+lahir: 
+asal: Saitama
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-38  ·  Gen 4  ·  Tanaka Nanako
+Tanaka Nanako
+panggilan: Nanachan
+angkatan: STU48 4th Generation
+lahir: 2006-01-27
+asal: Osaka
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-39  ·  Gen 4  ·  Douho Runa
+Douho Runa
+panggilan: Runachi
+angkatan: STU48 4th Generation
+lahir: 
+asal: Hiroshima
+tinggi: 
+darah: O
+gabung: 
+
+# --- stu48-40  ·  Gen 4  ·  Nonaka Rio
+Nonaka Rio
+panggilan: Riochii
+angkatan: STU48 4th Generation
+lahir: 2012-10-26
+asal: Hiroshima
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-41  ·  Gen 4  ·  Hamada Mii
+Hamada Mii
+panggilan: Miinya
+angkatan: STU48 4th Generation
+lahir: 2008-06-19
+asal: Ehime
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-42  ·  Gen 4  ·  Fujita Amu
+Fujita Amu
+panggilan: Amunya
+angkatan: STU48 4th Generation
+lahir: 2010-08-23
+asal: Kagawa
+tinggi: 
+darah: A
+gabung: 
+
+# --- stu48-43  ·  Gen 4  ·  Miyoshi Maaya
+Miyoshi Maaya
+panggilan: Maanya
+angkatan: STU48 4th Generation
+lahir: 2011-04-17
+asal: Hiroshima
+tinggi: 
+darah: AB
+gabung: 
+
+# --- stu48-44  ·  Gen 4  ·  Yagi Yuuna
+Yagi Yuuna
+panggilan: Unachii
+angkatan: STU48 4th Generation
+lahir: 2008-02-11
+asal: Hyogo
+tinggi: 
+darah: O
+gabung: 
+
+# --- stu48-45  ·  Gen 4  ·  Yokoi Yuina
+Yokoi Yuina
+panggilan: Yokoyui
+angkatan: STU48 4th Generation
+lahir: 2007-09-27
+asal: Shizuoka
+tinggi: 
+darah: B
+gabung: 
+

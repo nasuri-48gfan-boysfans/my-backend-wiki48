@@ -1,0 +1,592 @@
+# BIODATA JKT48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- jkt48-01  ·  Team Love  ·  Fiony Alveria
+Fiony Alveria Tantri
+panggilan: Fiony
+angkatan: 8th Generation
+lahir: 2002-02-04
+asal: Jakarta
+tinggi: 164
+darah: O
+gabung: 
+
+# --- jkt48-02  ·  Team Love  ·  Indah Cahya
+Indah Cahya Nabila
+panggilan: Indah
+angkatan: 9th Generation
+lahir: 2001-03-20
+asal: Jambi
+tinggi: 169
+darah: A
+gabung: 
+
+# --- jkt48-03  ·  Team Love  ·  Aurellia
+Aurellia
+panggilan: Lia
+angkatan: JKT48 10th Generation
+lahir: 2002-10-29
+asal: Jakarta
+tinggi: 157
+darah: O
+gabung: 
+
+# --- jkt48-04  ·  Team Love  ·  Anindya Ramadhani
+Anindya Ramadhani Purnomo
+panggilan: Anindya
+angkatan: 11th Generation
+lahir: 2005-10-18
+asal: West Java
+tinggi: 153
+darah: O
+gabung: 
+
+# --- jkt48-05  ·  Team Love  ·  Celline Thefani
+Celline Thefanie
+panggilan: Elin
+angkatan: 11th Generation
+lahir: 2007-04-09
+asal: Banten
+tinggi: 164
+darah: O
+gabung: 
+
+# --- jkt48-06  ·  Team Love  ·  Cynthia Yaputera
+Cynthia Yaputera
+panggilan: Cynthia
+angkatan: 11th Generation
+lahir: 2003-11-22
+asal: Jakarta
+tinggi: 160
+darah: O
+gabung: 
+
+# --- jkt48-07  ·  Team Love  ·  Grace Octaviani
+Grace Octaviani Tunajaya
+panggilan: Gracie
+angkatan: 11th Generation
+lahir: 2007-10-18
+asal: Banten
+tinggi: 166
+darah: B
+gabung: 
+
+# --- jkt48-08  ·  Team Love  ·  Michelle Alexandra
+Michellle Alexandra Suandi
+panggilan: Michie
+angkatan: JKT48 11th Generation
+lahir: 2009-04-22
+asal: Jakarta
+tinggi: 162
+darah: O
+gabung: 
+
+# --- jkt48-09  ·  Team Love  ·  Aurhel Alana
+Aurhel Alana Tirta
+panggilan: Lana
+angkatan: JKT48 12th Generation
+lahir: 2006-09-14
+asal: Jakarta
+tinggi: 162
+darah: 
+gabung: 
+
+# --- jkt48-10  ·  Team Love  ·  Fritzy Rosmerian
+Fritzy Rosmerian
+panggilan: Fritzy
+angkatan: JKT48 12th Generation
+lahir: 2008-07-28
+asal: Jakarta
+tinggi: 155
+darah: A
+gabung: 
+
+# --- jkt48-11  ·  Team Love  ·  Hillary Abigail
+Hilliary Abigail Mantiri
+panggilan: Lily
+angkatan: JKT48 12th Generation
+lahir: 2007-10-19
+asal: New Hampshire
+tinggi: 163
+darah: O
+gabung: 
+
+# --- jkt48-12  ·  Team Love  ·  Jazzlyn Trisha
+Jazzlyn Agatha Thrisha Indra Putri
+panggilan: Trisha
+angkatan: JKT48 12th Generation
+lahir: 2011-02-16
+asal: Jakarta
+tinggi: 161
+darah: O
+gabung: 
+
+# --- jkt48-13  ·  Team Love  ·  Nayla Suji
+Araki Nayla Suji Aurelia
+panggilan: Nayla
+angkatan: JKT48 12th Generation
+lahir: 2007-06-18
+asal: Kumamoto
+tinggi: 163
+darah: AB
+gabung: 
+
+# --- jkt48-14  ·  Team Passion  ·  Feni Fitriyanti
+Feni Fitriyanti
+panggilan: Feni
+angkatan: JKT48 3rd Generation
+lahir: 1999-01-16
+asal: West Java
+tinggi: 163
+darah: O
+gabung: 
+
+# --- jkt48-15  ·  Team Passion  ·  Angelina Christy
+Angelina Christy
+panggilan: Christy
+angkatan: 7th Generation
+lahir: 2005-12-05
+asal: Jakarta
+tinggi: 166
+darah: O
+gabung: 
+
+# --- jkt48-16  ·  Team Passion  ·  Jessica Chandra
+Jessica Rich Chandra
+panggilan: Jessi
+angkatan: 7th Generation
+lahir: 2005-09-23
+asal: Jakarta
+tinggi: 165
+darah: O
+gabung: 
+
+# --- jkt48-17  ·  Team Passion  ·  Mutiara Azzahra
+Muthe Azzahra Umandana
+panggilan: Muthe
+angkatan: 7th Generation
+lahir: 2004-07-12
+asal: Jakarta
+tinggi: 165
+darah: B
+gabung: 
+
+# --- jkt48-18  ·  Team Passion  ·  Cornelia Vanisa
+Cornelia Shafa Vanisa
+panggilan: Oniel
+angkatan: 8th Generation
+lahir: 2002-07-26
+asal: Banten
+tinggi: 165
+darah: O
+gabung: 
+
+# --- jkt48-19  ·  Team Passion  ·  Kathrina Irene
+Kathrina Irene Indarto Putri
+panggilan: Kathrina
+angkatan: 9th Generation
+lahir: 2006-07-26
+asal: West Java
+tinggi: 166
+darah: A
+gabung: 
+
+# --- jkt48-20  ·  Team Passion  ·  Raisha Syifa
+Raisha Syifa Wardhana
+panggilan: Raisha
+angkatan: JKT48 10th Generation
+lahir: 2007-11-11
+asal: Banten
+tinggi: 169
+darah: AB
+gabung: 
+
+# --- jkt48-21  ·  Team Passion  ·  Dena Natalia
+Dena Natalia Ang
+panggilan: Danella
+angkatan: 11th Generation
+lahir: 2005-12-16
+asal: West Java
+tinggi: 163
+darah: O
+gabung: 
+
+# --- jkt48-22  ·  Team Passion  ·  Desy Natalia
+Desy Natalia Ang
+panggilan: Daisy
+angkatan: 11th Generation
+lahir: 2005-12-16
+asal: West Java
+tinggi: 165
+darah: O
+gabung: 
+
+# --- jkt48-23  ·  Team Passion  ·  Abigail Rachel
+Abigail Rachel Lie
+panggilan: Aralie
+angkatan: JKT48 12th Generation
+lahir: 
+asal: Jakarta
+tinggi: 164
+darah: B
+gabung: 
+
+# --- jkt48-24  ·  Team Passion  ·  Catherina Vallencia
+Catherina Valencia Kurniawan
+panggilan: Erine
+angkatan: JKT48 12th Generation
+lahir: 
+asal: West Java
+tinggi: 162
+darah: B
+gabung: 
+
+# --- jkt48-25  ·  Team Passion  ·  Michelle Levia
+Michelle Levia Afirin
+panggilan: Levi
+angkatan: JKT48 12th Generation
+lahir: 2009-01-24
+asal: Banten
+tinggi: 169
+darah: O
+gabung: 
+
+# --- jkt48-26  ·  Team Passion  ·  Ribka Budiman
+Ribka Budiman
+panggilan: Ribka
+angkatan: JKT48 12th Generation
+lahir: 
+asal: West Java
+tinggi: 162
+darah: O
+gabung: 
+
+# --- jkt48-27  ·  Team Passion  ·  Victoria Kimberly
+Victoria Kimberly Lukitama
+panggilan: Kimmy
+angkatan: JKT48 12th Generation
+lahir: 2010-03-08
+asal: Jakarta
+tinggi: 162
+darah: AB
+gabung: 
+
+# --- jkt48-28  ·  Team Dream  ·  Gita Sekar Andarini
+Gita Sekar Andarini
+panggilan: Gita
+angkatan: 6th Generation
+lahir: 2001-06-30
+asal: Jakarta
+tinggi: 165
+darah: O
+gabung: 
+
+# --- jkt48-29  ·  Team Dream  ·  Febriola Sinambela
+Febriola Sinambela
+panggilan: Olla
+angkatan: 7th Generation
+lahir: 2005-02-26
+asal: Jakarta
+tinggi: 157
+darah: B
+gabung: 
+
+# --- jkt48-30  ·  Team Dream  ·  Freya Jayawardana
+Freyanashifa Jayawardana
+panggilan: Freya
+angkatan: 7th Generation
+lahir: 2006-02-13
+asal: Jakarta
+tinggi: 161
+darah: B
+gabung: 
+
+# --- jkt48-31  ·  Team Dream  ·  Helisma Putri
+Helisma Mauludzunia Putri Kurnia
+panggilan: Eli
+angkatan: 7th Generation
+lahir: 2000-06-15
+asal: West Java
+tinggi: 167
+darah: O
+gabung: 
+
+# --- jkt48-32  ·  Team Dream  ·  Lulu Salsabila
+Lulu Azkiya Salsabila
+panggilan: Lulu
+angkatan: 8th Generation
+lahir: 2002-10-23
+asal: Banten
+tinggi: 160
+darah: B
+gabung: 
+
+# --- jkt48-33  ·  Team Dream  ·  Marsha Lenathea
+Marsha Lenathea Lapian
+panggilan: Marsha
+angkatan: 9th Generation
+lahir: 2006-01-09
+asal: Jakarta
+tinggi: 163
+darah: O
+gabung: 
+
+# --- jkt48-34  ·  Team Dream  ·  Abigail Rachel
+Gabriella Abigail Mewengkang
+panggilan: Aralie
+angkatan: JKT48 12th Generation
+lahir: 
+asal: Jakarta
+tinggi: 164
+darah: B
+gabung: 
+
+# --- jkt48-35  ·  Team Dream  ·  Jesslyn Elly
+Jesslyn Septiani
+panggilan: Lyn
+angkatan: JKT48 10th Generation
+lahir: 2001-09-13
+asal: Jakarta
+tinggi: 155
+darah: O
+gabung: 
+
+# --- jkt48-36  ·  Team Dream  ·  Greesella Adhalia
+Greesella Sophina Adhalia
+panggilan: Greesel
+angkatan: 11th Generation
+lahir: 2006-01-10
+asal: West Java
+tinggi: 167
+darah: O
+gabung: 
+
+# --- jkt48-37  ·  Team Dream  ·  Adeline Wijaya
+Adeline Wijaya
+panggilan: Delynn
+angkatan: JKT48 12th Generation
+lahir: 
+asal: Jakarta
+tinggi: 167
+darah: B
+gabung: 
+
+# --- jkt48-38  ·  Team Dream  ·  Nina Tutachia
+Nina Tutachia Browning Chapman
+panggilan: Nachia
+angkatan: JKT48 12th Generation
+lahir: 2009-10-16
+asal: Bali
+tinggi: 164
+darah: O
+gabung: 
+
+# --- jkt48-39  ·  Team Dream  ·  Oline Manuel
+Oline Manuel Chay
+panggilan: Oline
+angkatan: JKT48 12th Generation
+lahir: 2007-11-03
+asal: Jakarta
+tinggi: 170
+darah: B
+gabung: 
+
+# --- jkt48-40  ·  Team Dream  ·  Shabilqis Naila
+Shahbilqis Naila Bustomi
+panggilan: Nala
+angkatan: JKT48 12th Generation
+lahir: 2008-09-01
+asal: Jakarta
+tinggi: 160
+darah: B
+gabung: 
+
+# --- jkt48-41  ·  Trainee  ·  Astrella Virgiananda
+Astrella Virgiananda Nugraha
+panggilan: Virgi
+angkatan: 13th Generation
+lahir: 2010-08-06
+asal: 
+tinggi: 164
+darah: AB
+gabung: 
+
+# --- jkt48-42  ·  Trainee  ·  Aulia Riza
+Aulia Riza Firdausy Effendi
+panggilan: Auwia
+angkatan: 13th Generation
+lahir: 2007-07-14
+asal: 
+tinggi: 166
+darah: O
+gabung: 
+
+# --- jkt48-43  ·  Trainee  ·  Bong Aprilli
+Bong Aprilli Paskah
+panggilan: Rilly
+angkatan: 13th Generation
+lahir: 2010-04-01
+asal: 
+tinggi: 166
+darah: A
+gabung: 
+
+# --- jkt48-44  ·  Trainee  ·  Hagia Sopia
+Hagia Sopia
+panggilan: Giaa
+angkatan: 13th Generation
+lahir: 2008-07-01
+asal: 
+tinggi: 165
+darah: O
+gabung: 
+
+# --- jkt48-45  ·  Trainee  ·  Humaira Ramadhani
+Humaria Ramadhani Salfiandi
+panggilan: Maira
+angkatan: 13th Generation
+lahir: 2011-08-13
+asal: 
+tinggi: 159
+darah: A
+gabung: 
+
+# --- jkt48-46  ·  Trainee  ·  Jacqueline Immanuela
+Jacqueline Immanuela Jonathan
+panggilan: Ekin
+angkatan: 13th Generation
+lahir: 2009-07-09
+asal: 
+tinggi: 161
+darah: B
+gabung: 
+
+# --- jkt48-47  ·  Trainee  ·  Jemima Evodie
+Jemima Evodie Mayra Lijaya
+panggilan: Jemima
+angkatan: 13th Generation
+lahir: 2009-11-09
+asal: 
+tinggi: 165
+darah: O
+gabung: 
+
+# --- jkt48-48  ·  Trainee  ·  Mikaela Kusjanto
+Mikaela Kusjanto
+panggilan: Mikaela
+angkatan: 13th Generation
+lahir: 2007-12-15
+asal: 
+tinggi: 166
+darah: O
+gabung: 
+
+# --- jkt48-49  ·  Trainee  ·  Nur Intan
+Nur Intan
+panggilan: Intan
+angkatan: 13th Generation
+lahir: 2006-02-24
+asal: West Java
+tinggi: 157
+darah: B
+gabung: 
+
+# --- jkt48-50  ·  Trainee  ·  Afera Thalia
+Afera Thalia Putri Eysteinn
+panggilan: Fera
+angkatan: 14th Generation
+lahir: 2012-10-20
+asal: Jakarta
+tinggi: 160
+darah: O
+gabung: 
+
+# --- jkt48-51  ·  Trainee  ·  Carissa Dini
+Carissa Dini Asmaranti
+panggilan: Carissa
+angkatan: 14th Generation
+lahir: 2012-02-02
+asal: West Java
+tinggi: 154
+darah: A
+gabung: 
+
+# --- jkt48-52  ·  Trainee  ·  Christabella Bonita
+Christabella Bonita Claura Chandra
+panggilan: Bella
+angkatan: 14th Generation
+lahir: 2011-03-02
+asal: 
+tinggi: 161
+darah: A
+gabung: 
+
+# --- jkt48-53  ·  Trainee  ·  Fahira Putri
+Fahira Putri Kirana
+panggilan: Fahira
+angkatan: 14th Generation
+lahir: 2012-08-13
+asal: 
+tinggi: 152
+darah: O
+gabung: 
+
+# --- jkt48-54  ·  Trainee  ·  Fatimah Azzahra
+Fatimah Azzahra
+panggilan: Rara
+angkatan: 14th Generation
+lahir: 2010-08-30
+asal: 
+tinggi: 170
+darah: AB
+gabung: 
+
+# --- jkt48-55  ·  Trainee  ·  Heidi Suyangga
+Heidi Suyangga
+panggilan: Heidi
+angkatan: 14th Generation
+lahir: 2008-08-27
+asal: 
+tinggi: 164
+darah: O
+gabung: 
+
+# --- jkt48-56  ·  Trainee  ·  Maxine Faye
+Maxine Faye Lee
+panggilan: Maxine
+angkatan: 14th Generation
+lahir: 2011-12-02
+asal: 
+tinggi: 164
+darah: B
+gabung: 
+
+# --- jkt48-57  ·  Trainee
+Puty Jazyta
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- jkt48-58  ·  Trainee  ·  Ralyne Van Irwan
+Ralyne Van Irwan
+panggilan: Ralyne
+angkatan: 14th Generation
+lahir: 2011-10-15
+asal: 
+tinggi: 152
+darah: AB
+gabung: 
+
+# --- jkt48-59  ·  Trainee  ·  Sona Kalyana
+Sona Kalyana Purboprasetyani
+panggilan: Sona
+angkatan: 14th Generation
+lahir: 2011-12-01
+asal: 
+tinggi: 154
+darah: O
+gabung: 
+

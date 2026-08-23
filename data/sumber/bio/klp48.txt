@@ -1,0 +1,212 @@
+# BIODATA KLP48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- klp48-01  ·    ·  Elley Amanda Wong
+Elley Amanda Wong
+panggilan: Amanda
+angkatan: KLP48 1st Generation
+lahir: 2007-02-13
+asal: Kuala Lumpur
+tinggi: 161
+darah: 
+gabung: 
+
+# --- klp48-02  ·    ·  Ann Drea Tey
+Ann Drea Tey
+panggilan: Ann Drea
+angkatan: KLP48 1st Generation
+lahir: 2008-08-06
+asal: Selangor
+tinggi: 157
+darah: 
+gabung: 
+
+# --- klp48-03  ·    ·  Made Devi Ranita Ningtara
+Made Devi Ranita Ningtara
+panggilan: Devi
+angkatan: JKT48 4th Generation / KLP48 1st Generation
+lahir: 2000-11-18
+asal: Bali
+tinggi: 163
+darah: B
+gabung: 
+
+# --- klp48-04  ·    ·  Shuen Hiu Yau
+Shuen Hiu Yao
+panggilan: Hillary
+angkatan: KLP48 1st Generation
+lahir: 2008-11-22
+asal: Hong Kong
+tinggi: 159
+darah: 
+gabung: 
+
+# --- klp48-05  ·    ·  Tan Zi Tong
+Tan Zi Tong
+panggilan: Khalies
+angkatan: KLP48 1st Generation
+lahir: 2008-08-27
+asal: Kuala Lumpur
+tinggi: 166
+darah: 
+gabung: 
+
+# --- klp48-06  ·    ·  Salwa Sunanda
+Salwa Sunanda
+panggilan: Salwa
+angkatan: KLP48 1st Generation
+lahir: 2007-07-17
+asal: Kuala Lumpur
+tinggi: 152
+darah: 
+gabung: 
+
+# --- klp48-07  ·    ·  Elvyone Tiffany Ticha Anak Donaldin
+Elvyone Tifanny Ticha Anak Donaldin
+panggilan: Tiffany
+angkatan: KLP48 1st Generation
+lahir: 2009-09-23
+asal: Sarawak
+tinggi: 155
+darah: 
+gabung: 
+
+# --- klp48-08  ·    ·  Foo Yi Shyan
+Foo Yi Shyan
+panggilan: Yi Shyan
+angkatan: KLP48 1st Generation
+lahir: 2004-06-28
+asal: Perak
+tinggi: 165
+darah: 
+gabung: 
+
+# --- klp48-09  ·  
+Turybsbek Aisha
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- klp48-10  ·    ·  Alice Wong Vei Yew
+Alice Wong Vei Yew
+panggilan: Alice
+angkatan: KLP48 2nd Generation
+lahir: 2004-04-30
+asal: Selangor
+tinggi: 163
+darah: 
+gabung: 
+
+# --- klp48-11  ·    ·  Cindy Alexandria
+Cindy Alexandria
+panggilan: Cindy
+angkatan: KLP48 2nd Generation
+lahir: 2008-05-17
+asal: Jakarta
+tinggi: 154
+darah: 
+gabung: 
+
+# --- klp48-12  ·    ·  Diva Nurhaliza
+Diva Nurhaliza
+panggilan: Diva
+angkatan: KLP48 2nd Generation
+lahir: 2004-05-11
+asal: 
+tinggi: 155
+darah: 
+gabung: 
+
+# --- klp48-13  ·    ·  Sekar Wejayanti Mumtahanah
+Sekar Wejayanti Mumtahanah
+panggilan: Hana
+angkatan: KLP48 2nd Generation
+lahir: 2004-02-24
+asal: 
+tinggi: 158
+darah: 
+gabung: 
+
+# --- klp48-14  ·    ·  Wee Xi Ting
+Wee Xi Ting
+panggilan: Isabel
+angkatan: KLP48 2nd Generation
+lahir: 2008-09-11
+asal: Kuala Lumpur
+tinggi: 161
+darah: 
+gabung: 
+
+# --- klp48-15  ·    ·  Jocelyna Marcelly
+Jocelyna Marcelly
+panggilan: Joo
+angkatan: KLP48 2nd Generation
+lahir: 2005-11-27
+asal: Sabah
+tinggi: 155
+darah: 
+gabung: 
+
+# --- klp48-16  ·    ·  Kei Annisa Adnan
+Kei Annisa Adnan
+panggilan: Kei
+angkatan: KLP48 2nd Generation
+lahir: 2009-04-16
+asal: Selangor
+tinggi: 155
+darah: 
+gabung: 
+
+# --- klp48-17  ·    ·  Maia Fae Chong
+Maia Fae Chong
+panggilan: Maia
+angkatan: KLP48 2nd Generation
+lahir: 2010-10-06
+asal: Selangor
+tinggi: 154
+darah: 
+gabung: 
+
+# --- klp48-18  ·    ·  Ueda Mashiro
+Ueda Mashiro
+panggilan: Mashiro
+angkatan: KLP48 2nd Generation
+lahir: 2003-01-29
+asal: Nara
+tinggi: 162
+darah: 
+gabung: 
+
+# --- klp48-19  ·    ·  Sharifah Sharleez Binti Syed Affendi
+Sharifah Sharleez Binti Syed Affendi
+panggilan: Sharleez
+angkatan: KLP48 2nd Generation
+lahir: 2009-02-19
+asal: Kuala Lumpur
+tinggi: 163
+darah: 
+gabung: 
+
+# --- klp48-20  ·    ·  Kuak Shu Zhen
+Kuak Shu Zhen
+panggilan: Shu Zhen
+angkatan: KLP48 2nd Generation
+lahir: 2001-08-20
+asal: Perak
+tinggi: 153
+darah: 
+gabung: 
+
+# --- klp48-21  ·    ·  Tara Tan
+Tara Tan
+panggilan: Tara
+angkatan: KLP48 2nd Generation
+lahir: 2010-08-02
+asal: Selangor
+tinggi: 162
+darah: 
+gabung: 
+

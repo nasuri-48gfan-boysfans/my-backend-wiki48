@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" /><meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Panel review akses WIKI48." /><title>Admin Panel - WIKI48</title>
+  <link rel="stylesheet" href="style.css" /><link rel="manifest" href="manifest.json" /><meta name="theme-color" content="#33253d" />
+</head>
+<body class="admin-page">
+  <header class="site-header"><div class="container header-inner"><a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a><button id="adminLogout" class="admin-logout" type="button">Keluar</button></div></header>
+  <main class="admin-main"><div class="admin-heading"><div><p class="eyebrow lilac-eyebrow">Private workspace</p><h1>Review <span>access request</span></h1><p>Nilai pengajuan secara manual sebelum memberikan akses wiki.</p></div><select id="requestStatus" aria-label="Filter status pengajuan"><option value="pending">Pending</option><option value="approved">Approved</option><option value="rejected">Rejected</option><option value="all">Semua</option></select></div><p id="adminMessage" class="admin-message" role="status"></p><section id="requestList" class="request-list" aria-live="polite"><p class="community-loading">Memuat pengajuan...</p></section></main>
+  <script src="admin.js" defer></script><script src="pwa.js" defer></script>
+</body>
+</html>

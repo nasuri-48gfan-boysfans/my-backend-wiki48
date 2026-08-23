@@ -1,0 +1,232 @@
+# BIODATA CGM48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- cgm48-01  ·  Team C
+Chanyapak Nongbua
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-02  ·  Team C  ·  Izuta Rina
+Izuta Rina
+panggilan: Izurina
+angkatan: AKB48 10th Generation
+lahir: 1995-11-26
+asal: Saitama
+tinggi: 158
+darah: A
+gabung: 
+
+# --- cgm48-03  ·  Team C  ·  Angel Nicole Santillan
+Angel
+panggilan: Angel
+angkatan: MNL48 5th Generation
+lahir: 2006-07-31
+asal: Metro Manila
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-04  ·  Team C
+Fortune
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-05  ·  Team C
+Kaiwan
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-06  ·  Team C
+Kaning
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-07  ·  Team C
+Marmink
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-08  ·  Team C
+Nenna
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-09  ·  Team C
+Nena
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-10  ·  Team C
+Punch
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-11  ·  Team C  ·  Sita Teeradechsakul
+Sita
+panggilan: Sita
+angkatan: 1st Generation
+lahir: 2003-06-25
+asal: Bangkok
+tinggi: 164
+darah: O
+gabung: 
+
+# --- cgm48-12  ·  Team C  ·  Wu JingJing
+Jingjing
+panggilan: 小猪仔
+angkatan: CKG48 1st Generation
+lahir: 1998-06-30
+asal: Hunan
+tinggi: 160
+darah: A
+gabung: 
+
+# --- cgm48-13  ·  Team C  ·  Oda Nana
+Nana
+panggilan: Oda
+angkatan: 1st Generation
+lahir: 1998-06-04
+asal: Shizuoka
+tinggi: 161
+darah: O
+gabung: 
+
+# --- cgm48-14  ·  Team C
+Papang
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-15  ·  Trainee
+Emma
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-16  ·  Trainee
+Lookked
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-17  ·  Trainee  ·  Abe Mei
+Mei
+panggilan: Mei
+angkatan: Team 8 / (April, 2014)
+lahir: 2001-02-09
+asal: Shimane
+tinggi: 157
+darah: A
+gabung: 
+
+# --- cgm48-18  ·  Trainee
+Milk
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-19  ·  Trainee
+Ping
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-20  ·  Trainee
+Kwan
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-21  ·  Trainee
+Lingling
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-22  ·  Trainee
+Runma
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- cgm48-23  ·  Trainee
+Preme
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+

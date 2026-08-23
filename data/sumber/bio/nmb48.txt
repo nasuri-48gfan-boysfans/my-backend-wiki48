@@ -1,0 +1,522 @@
+# BIODATA NMB48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- nmb48-01  ·    ·  Abe Wakana
+Abe Wakana
+panggilan: Wakapon
+angkatan: NMB48 3rd Draft Generation
+lahir: 2001-07-18
+asal: Osaka
+tinggi: 159
+darah: O
+gabung: 
+
+# --- nmb48-02  ·    ·  Izumi Ayano
+Izumi Ayano
+panggilan: Aanon
+angkatan: 3rd Generation Draft Members
+lahir: 2004-11-22
+asal: Kyoto
+tinggi: 165
+darah: AB
+gabung: 
+
+# --- nmb48-03  ·    ·  Shiotsuki Keito
+Shiotsuki Keito
+panggilan: Keito
+angkatan: 3rd Generation Draft Members
+lahir: 2005-12-15
+asal: Osaka
+tinggi: 160
+darah: A
+gabung: 
+
+# --- nmb48-04  ·    ·  Mizuta Shiori
+Mizuta Shiori
+panggilan: Shiori
+angkatan: NMB48 5th Generation
+lahir: 1998-12-21
+asal: Ehime
+tinggi: 155
+darah: B
+gabung: 
+
+# --- nmb48-05  ·    ·  Shinzawa Nao
+Shinzawa Nao
+panggilan: ShinShin
+angkatan: NMB48 6th Generation
+lahir: 1998-08-02
+asal: Hyogo
+tinggi: 156
+darah: B
+gabung: 
+
+# --- nmb48-06  ·    ·  Hirayama Mai
+Hirayama Mai
+panggilan: Maitii
+angkatan: NMB48 7th Generation
+lahir: 2002-11-16
+asal: Osaka
+tinggi: 164
+darah: A
+gabung: 
+
+# --- nmb48-07  ·    ·  Ike Honoka
+Ike Honoka
+panggilan: Hono
+angkatan: NMB48 8th Generation
+lahir: 2003-12-16
+asal: Nara
+tinggi: 158
+darah: O
+gabung: 
+
+# --- nmb48-08  ·    ·  Kuroshima Sakura
+Kuroshima Sakura
+panggilan: Sakuchan
+angkatan: NMB48 8th Generation
+lahir: 2009-04-07
+asal: Osaka
+tinggi: 150
+darah: A
+gabung: 
+
+# --- nmb48-09  ·    ·  Sakashita Mako
+Sakashita Mako
+panggilan: Makochi
+angkatan: NMB48 8th Generation
+lahir: 2005-08-02
+asal: Osaka
+tinggi: 160
+darah: -
+gabung: 
+
+# --- nmb48-10  ·    ·  Sakata Misaki
+Sakata Misaki
+panggilan: Sakatan
+angkatan: NMB48 8th Generation
+lahir: 2005-11-08
+asal: Osaka
+tinggi: 156
+darah: B
+gabung: 
+
+# --- nmb48-11  ·    ·  Sakamoto Risa
+Sakamoto Risa
+panggilan: Risa
+angkatan: NMB48 8th Generation
+lahir: 2008-12-24
+asal: Hyogo
+tinggi: 154
+darah: -
+gabung: 
+
+# --- nmb48-12  ·    ·  Sakurada Ayaka
+Sakurada Ayaka
+panggilan: Ayapyon
+angkatan: NMB48 8th Generation
+lahir: 2002-03-25
+asal: Okayama
+tinggi: 158
+darah: A
+gabung: 
+
+# --- nmb48-13  ·    ·  Tatsumoto Yayoi
+Tatsumoto Yayoi
+panggilan: Yayoi
+angkatan: NMB48 8th Generation
+lahir: 2005-03-02
+asal: Hyogo
+tinggi: 164
+darah: O
+gabung: 
+
+# --- nmb48-14  ·    ·  Tanaka Yukino
+Tanaka Yukino
+panggilan: Yukino
+angkatan: NMB48 8th Generation
+lahir: 2007-11-16
+asal: Osaka
+tinggi: 153
+darah: O
+gabung: 
+
+# --- nmb48-15  ·  
+Fukuna Ami
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- nmb48-16  ·    ·  Matsuoka Sakura
+Matsuoka Sakura
+panggilan: Sakura
+angkatan: NMB48 8th Generation
+lahir: 2003-06-24
+asal: Osaka
+tinggi: 152
+darah: -
+gabung: 
+
+# --- nmb48-17  ·    ·  Matsumoto Mihina
+Matsumoto Mihina
+panggilan: Mihhii
+angkatan: NMB48 8th Generation
+lahir: 2008-05-22
+asal: Osaka
+tinggi: 151
+darah: A
+gabung: 
+
+# --- nmb48-18  ·    ·  Kato Yuuka
+Aobara Yuuka
+panggilan: Uuka
+angkatan: NMB48 3rd Generation
+lahir: 1997-08-01
+asal: Osaka
+tinggi: 164
+darah: A
+gabung: 
+
+# --- nmb48-19  ·    ·  Aobara Waka
+Aobara Waka
+panggilan: Wakatan
+angkatan: NMB48 9th Generation
+lahir: 2004-01-06
+asal: Osaka
+tinggi: 158
+darah: A
+gabung: 
+
+# --- nmb48-20  ·    ·  Ikeda Tenna
+Ikeda Tenna
+panggilan: Tenna
+angkatan: NMB48 9th Generation
+lahir: 2005-10-05
+asal: Hyogo
+tinggi: 161
+darah: AB
+gabung: 
+
+# --- nmb48-21  ·    ·  Itagaki Koyori
+Itagaki Koyori
+panggilan: Koyorin
+angkatan: NMB48 9th Generation
+lahir: 2005-05-23
+asal: Mie
+tinggi: 159
+darah: AB
+gabung: 
+
+# --- nmb48-22  ·    ·  Kinugasa Ayami
+Kinugasa Ayami
+panggilan: Ayami
+angkatan: NMB48 9th Generation
+lahir: 2010-11-03
+asal: Osaka
+tinggi: 150
+darah: O
+gabung: 
+
+# --- nmb48-23  ·    ·  Tanaka Misora
+Tanaka Misora
+panggilan: Misora
+angkatan: NMB48 9th Generation
+lahir: 2004-08-24
+asal: Kyoto
+tinggi: 150
+darah: O
+gabung: 
+
+# --- nmb48-24  ·    ·  Nishi Yuma
+Nishi Yuma
+panggilan: Nishiyuma
+angkatan: NMB48 9th Generation
+lahir: 2006-03-25
+asal: Chiba
+tinggi: 160
+darah: -
+gabung: 
+
+# --- nmb48-25  ·    ·  Nishijima Rio
+Nishijima Rio
+panggilan: Riopi
+angkatan: NMB48 9th Generation
+lahir: 2004-11-08
+asal: Shizuoka
+tinggi: 164
+darah: O
+gabung: 
+
+# --- nmb48-26  ·    ·  Nishida Honoka
+Nishida Honoka
+panggilan: Honopii
+angkatan: NMB48 9th Generation
+lahir: 2005-03-10
+asal: Nara
+tinggi: 157
+darah: A
+gabung: 
+
+# --- nmb48-27  ·    ·  Haga Rei
+Haga Rei
+panggilan: Reipon
+angkatan: NMB48 9th Generation
+lahir: 2006-03-29
+asal: Hyogo
+tinggi: 153
+darah: -
+gabung: 
+
+# --- nmb48-28  ·    ·  Funahashi Reina
+Funahashi Reina
+panggilan: Renya
+angkatan: NMB48 9th Generation
+lahir: 2008-04-01
+asal: Osaka
+tinggi: 154
+darah: O
+gabung: 
+
+# --- nmb48-29  ·    ·  Miyamoto Ami
+Miyamoto Ami
+panggilan: Amitan
+angkatan: NMB48 9th Generation
+lahir: 2010-07-01
+asal: Hyogo
+tinggi: 140
+darah: AB
+gabung: 
+
+# --- nmb48-30  ·    ·  Yoshimi Ayane
+Yoshimi Ayane
+panggilan: Yoshimin
+angkatan: NMB48 9th Generation
+lahir: 2007-10-18
+asal: Hyogo
+tinggi: 158
+darah: A
+gabung: 
+
+# --- nmb48-31  ·    ·  Ishiyama Chihiro
+Ishiyama Chihiro
+panggilan: Chihirun
+angkatan: NMB48 10th Generation
+lahir: 2008-05-24
+asal: Hyogo
+tinggi: 165
+darah: O
+gabung: 
+
+# --- nmb48-32  ·    ·  Uchida Aisha
+Uchida Aisha
+panggilan: Aishan
+angkatan: NMB48 10th Generation
+lahir: 2004-06-12
+asal: Osaka
+tinggi: 155
+darah: O
+gabung: 
+
+# --- nmb48-33  ·    ·  Kine Iroha
+Kine Iroha
+panggilan: Irohan
+angkatan: NMB48 10th Generation
+lahir: 2010-10-25
+asal: Osaka
+tinggi: 160
+darah: A
+gabung: 
+
+# --- nmb48-34  ·    ·  Shibuya Asana
+Shibuya Asana
+panggilan: Asanya
+angkatan: NMB48 10th Generation
+lahir: 2006-10-27
+asal: Miyagi
+tinggi: 161
+darah: B
+gabung: 
+
+# --- nmb48-35  ·    ·  Takahashi Kotone
+Takahashi Kotone
+panggilan: Kotocchi
+angkatan: NMB48 10th Generation
+lahir: 2003-04-20
+asal: Osaka
+tinggi: 164
+darah: AB
+gabung: 
+
+# --- nmb48-36  ·    ·  Takeda Kyoka
+Takeda Kyoka
+panggilan: Kyooka
+angkatan: NMB48 10th Generation
+lahir: 2012-09-13
+asal: Osaka
+tinggi: 150
+darah: O
+gabung: 
+
+# --- nmb48-37  ·    ·  Tanaka Miria
+Tanaka Miria
+panggilan: Miichan
+angkatan: NMB48 10th Generation
+lahir: 2010-12-09
+asal: Nara
+tinggi: 154
+darah: O
+gabung: 
+
+# --- nmb48-38  ·    ·  Miyahara Konon
+Miyahara Konon
+panggilan: Kononon
+angkatan: NMB48 10th Generation
+lahir: 2010-04-19
+asal: Osaka
+tinggi: 150
+darah: AB
+gabung: 
+
+# --- nmb48-39  ·    ·  Murai Yuri
+Murai Yuri
+panggilan: Yuurin
+angkatan: NMB48 10th Generation
+lahir: 2005-03-05
+asal: Mie
+tinggi: 152
+darah: B
+gabung: 
+
+# --- nmb48-40  ·    ·  Yamaguchi Mio
+Yamaguchi Mio
+panggilan: Miochan
+angkatan: NMB48 10th Generation
+lahir: 2007-09-27
+asal: Osaka
+tinggi: 161
+darah: B
+gabung: 
+
+# --- nmb48-41  ·    ·  Akamatsu Sora
+Akamatsu Sora
+panggilan: Sorarin
+angkatan: NMB48 11th Generation
+lahir: 2010-04-15
+asal: Osaka
+tinggi: 161
+darah: -
+gabung: 
+
+# --- nmb48-42  ·    ·  Okagoshi Seira
+Okagoshi Seira
+panggilan: Seechan
+angkatan: NMB48 11th Generation
+lahir: 2006-11-10
+asal: Osaka
+tinggi: 160
+darah: A
+gabung: 
+
+# --- nmb48-43  ·    ·  Sakurai Himari
+Sakurai Himari
+panggilan: Himari
+angkatan: NMB48 11th Generation
+lahir: 2008-08-02
+asal: Osaka
+tinggi: 154
+darah: O
+gabung: 
+
+# --- nmb48-44  ·    ·  Zenke Yurika
+Zenke Yurika
+panggilan: Zenchan
+angkatan: NMB48 11th Generation
+lahir: 2004-12-09
+asal: Hyogo
+tinggi: 159
+darah: O
+gabung: 
+
+# --- nmb48-45  ·    ·  Takahashi Mau
+Takahashi
+panggilan: Mauchan
+angkatan: 1st Generation NGT48
+lahir: 2001-06-03
+asal: Niigata
+tinggi: 160
+darah: A
+gabung: 
+
+# --- nmb48-46  ·    ·  Aso Juna
+Juna
+panggilan: Jucchan
+angkatan: NGT48 4th Generation
+lahir: 2006-04-20
+asal: Toyama
+tinggi: 
+darah: O
+gabung: 
+
+# --- nmb48-47  ·    ·  Tanaka Rei
+Tanaka Rei
+panggilan: ReiRei
+angkatan: NMB48 11th Generation
+lahir: 2006-11-01
+asal: Tokyo
+tinggi: 155
+darah: O
+gabung: 
+
+# --- nmb48-48  ·    ·  Taniguchi Shino
+Taniguchi Shino
+panggilan: Shinochan
+angkatan: NMB48 11th Generation
+lahir: 2000-11-15
+asal: Kanagawa
+tinggi: 155
+darah: A
+gabung: 
+
+# --- nmb48-49  ·    ·  Nishizumi Misaki
+Nishizumi Misaki
+panggilan: Miinyan
+angkatan: NMB48 11th Generation
+lahir: 2012-11-27
+asal: Hyogo
+tinggi: 159
+darah: A
+gabung: 
+
+# --- nmb48-50  ·    ·  Fukuhara Kotomi
+Fukuhara Kotomi
+panggilan: Kotomin
+angkatan: NMB48 11th Generation
+lahir: 2005-09-26
+asal: Osaka
+tinggi: 149
+darah: O
+gabung: 
+
+# --- nmb48-51  ·    ·  Yabuuchi Hinata
+Yabuuchi Hinata
+panggilan: Hiinya
+angkatan: NMB48 11th Generation
+lahir: 2008-05-20
+asal: Osaka
+tinggi: 151
+darah: A
+gabung: 
+
+# --- nmb48-52  ·    ·  Wada Kotone
+Wada Kotone
+panggilan: Kottii
+angkatan: NMB48 11th Generation
+lahir: 2008-09-29
+asal: Osaka
+tinggi: 157
+darah: B
+gabung: 
+

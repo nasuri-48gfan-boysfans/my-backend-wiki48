@@ -1,0 +1,53 @@
+# NGT48 — 36 member aktif
+# Format: Nama Latin | Team | Aksara Asli   (kolom ke-3 opsional)
+# Koreksi di file INI, bukan di asli/. Baris berawalan # diabaikan.
+# Hapus baris = hapus member. Nama Latin dipakai untuk search,
+# urutan A-Z, dan nama file foto img/<id>.jpg.
+
+# ---- Gen 1 (1) ----
+Seiji Reina | Gen 1 | 清司 麗菜
+
+# ---- Gen 2 (3) ----
+Nishigata Marina | Gen 2 | 西潟 茉莉奈
+Otsuka Nanami    | Gen 2 | 大塚 七海
+Mimura Hino      | Gen 2 | 三村 妃乃
+
+# ---- Gen 3 (7) ----
+Sato Kairi    | Gen 3 | 佐藤 海里
+Isobe Rua     | Gen 3 | 磯部 瑠紅
+Kita Hanae    | Gen 3 | 喜多 花恵
+Kitamura Yuha | Gen 3 | 北村 優羽
+Kimoto Yuna   | Gen 3 | 木本 優菜
+Suizu Natsuki | Gen 3 | 水津 菜月
+Sugimoto Moe  | Gen 3 | 杉本 萌
+
+# ---- Gen 4 (7) ----
+Isozaki Nana     | Gen 4 | 磯崎 菜々
+Okumura Momoka   | Gen 4 | 奥村 百花
+Kimoto Anna      | Gen 4 | 木本 杏菜
+Sato Hiroka      | Gen 4 | 佐藤 広花
+Shinzawa Aoi     | Gen 4 | 新沢 葵唯
+Takashima Yua    | Gen 4 | 高島 柚愛
+Nishikawa Haruna | Gen 4 | 西川 晴菜
+
+# ---- Gen 5 (10) ----
+Azama Yui        | Gen 5 | 安座間 葵
+Adachi Yume      | Gen 5 | 足立 夢
+Omachi Yuka      | Gen 5 | 大町 瑠華
+Kai Mizuki       | Gen 5 | 甲斐 瑞希
+Kitazawa Mone    | Gen 5 | 北沢 萌音
+Sato Yuuka       | Gen 5 | 佐藤 侑花
+Suto Rinka       | Gen 5 | 須藤 凛華
+Taniguchi Haruka | Gen 5 | 谷口 晴香
+Nakata Asami     | Gen 5 | 仲田 朝美
+Minagawa Hiyori  | Gen 5 | 皆川 日和
+
+# ---- Gen 6 (8) ----
+Ayaki Maaya    | Gen 6 | 綾木 舞彩
+Inomata Sana   | Gen 6 | 猪股 咲奈
+Ohashi Ayano   | Gen 6 | 大橋 彩乃
+Katayama Shuri | Gen 6 | 片山 珠莉
+Kuga Mirei     | Gen 6 | 久賀 美玲
+Sato Honoka    | Gen 6 | 佐藤 穂花
+Hirai Yuzuha   | Gen 6 | 平井 柚葉
+Hosoya Naho    | Gen 6 | 細谷 菜帆

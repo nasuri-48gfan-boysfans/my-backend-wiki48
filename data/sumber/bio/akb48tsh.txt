@@ -1,0 +1,152 @@
+# BIODATA AKB48 Team SH — diambil dari infobox profil AKB48 Wiki.
+#
+# --- akb48tsh-01  ·  Gen 1  ·  Ye ZhiEn
+Ye ZhiEn
+panggilan: 知恩
+angkatan: TSH48 1st Generation
+lahir: 1999-10-13
+asal: Guangdong
+tinggi: 156
+darah: O
+gabung: 
+
+# --- akb48tsh-02  ·  Gen 1  ·  Zhou NianQi
+Zhou NianQi
+panggilan: 77
+angkatan: TSH48 1st Generation
+lahir: 2002-08-24
+asal: Jiangxi
+tinggi: 167
+darah: O
+gabung: 
+
+# --- akb48tsh-03  ·  Gen 2  ·  Cheng AnZi
+Cheng AnZi
+panggilan: 小魔头
+angkatan: TSH48 2nd Generation
+lahir: 2002-03-12
+asal: Hubei
+tinggi: 
+darah: |zodiac = 12
+gabung: 
+
+# --- akb48tsh-04  ·  Gen 2  ·  Gui ChuChu
+Gui ChuChu
+panggilan: 楚楚
+angkatan: TSH48 2nd Generation
+lahir: 1999-03-10
+asal: Hunan
+tinggi: 162
+darah: O
+gabung: 
+
+# --- akb48tsh-05  ·  Gen 3  ·  Qiu DiEr
+Qiu DiEr
+panggilan: YēZi
+angkatan: TSH48 3rd Generation
+lahir: 2000-01-27
+asal: Zhejiang
+tinggi: 160
+darah: B
+gabung: 
+
+# --- akb48tsh-06  ·  Gen 3  ·  Wang AnNi
+Wang AnNi
+panggilan: ĀnNī
+angkatan: TSH48 3rd Generation
+lahir: 2000-02-19
+asal: Zhejiang
+tinggi: 160
+darah: |zodiac = 19
+gabung: 
+
+# --- akb48tsh-07  ·  Gen 3  ·  Zhang JiaZhe
+Zhang JiaZhe
+panggilan: ZhéZhé
+angkatan: TSH48 3rd Generation
+lahir: 1998-03-08
+asal: Jiangsu
+tinggi: 202
+darah: O
+gabung: 
+
+# --- akb48tsh-08  ·  Gen 4  ·  Chen JiaYi
+Chen JiaYi
+panggilan: JiaYi
+angkatan: 1st Generation Draft Members
+lahir: 1996-05-23
+asal: Guangxi
+tinggi: 158
+darah: B
+gabung: 
+
+# --- akb48tsh-09  ·  Gen 4  ·  Wang XiaoYang
+Wang XiaoYang
+panggilan: XiǎoYang
+angkatan: TSH48 4th Generation
+lahir: 2000-05-14
+asal: Beijing
+tinggi: 202
+darah: |zodiac = 14
+gabung: 
+
+# --- akb48tsh-10  ·  Gen 4  ·  Wu Fan
+Wu Fan
+panggilan: FánFán
+angkatan: 1st Generation Draft Members
+lahir: 2004-06-26
+asal: Shanghai
+tinggi: 171
+darah: B
+gabung: 
+
+# --- akb48tsh-11  ·  Gen 4  ·  Zhang YiLin
+Zhang YiLin
+panggilan: Momorin
+angkatan: 1st Generation Draft Members
+lahir: 2005-09-12
+asal: Beijing
+tinggi: 202
+darah: O
+gabung: 
+
+# --- akb48tsh-12  ·  Gen 5  ·  Zhang ShiYu
+Zhang ShiYu
+panggilan: 诗诗
+angkatan: TSH48 5th Generation
+lahir: 2002-08-29
+asal: Shanghai
+tinggi: 163
+darah: |zodiac = 29
+gabung: 
+
+# --- akb48tsh-13  ·  Gen 5  ·  Zheng YuShan
+Zheng YuShan
+panggilan: ShanShan
+angkatan: TSH48 5th Generation
+lahir: 2006-06-20
+asal: Liaoning
+tinggi: 
+darah: O
+gabung: 
+
+# --- akb48tsh-14  ·  Gen 6  ·  Huang ZhenXuan
+Huang ZhenXuan
+panggilan: さらたん
+angkatan: TSH48 6th Generation
+lahir: 1999-01-15
+asal: Fujian
+tinggi: 
+darah: |zodiac = 15
+gabung: 
+
+# --- akb48tsh-15  ·  Gen 6  ·  Wei XiaoYa
+Wei XiaoYa
+panggilan: 小仓
+angkatan: TSH48 6th Generation
+lahir: 2001-03-18
+asal: Guangxi
+tinggi: 
+darah: |zodiac = 18
+gabung: 
+

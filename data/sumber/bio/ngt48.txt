@@ -1,0 +1,362 @@
+# BIODATA NGT48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- ngt48-01  ·  Gen 1  ·  Seiji Reina
+Seiji Reina
+panggilan: Reinya
+angkatan: Baito AKB / 1st Generation NGT48
+lahir: 2001-04-19
+asal: Saitama
+tinggi: 151
+darah: O
+gabung: 
+
+# --- ngt48-02  ·  Gen 2  ·  Nishigata Marina
+Nishigata Marina
+panggilan: Gatanee
+angkatan: Baito AKB / 2nd Generation Draft Members
+lahir: 1995-10-16
+asal: Tokyo
+tinggi: 158
+darah: O
+gabung: 
+
+# --- ngt48-03  ·  Gen 2  ·  Otsuka Nanami
+Otsuka Nanami
+panggilan: Nanamin
+angkatan: 2nd Generation
+lahir: 2000-11-07
+asal: Niigata
+tinggi: 
+darah: A
+gabung: 
+
+# --- ngt48-04  ·  Gen 2  ·  Mimura Hino
+Mimura Hino
+panggilan: Hinochan
+angkatan: 
+lahir: 2002-06-15
+asal: Saitama
+tinggi: 158
+darah: O
+gabung: 
+
+# --- ngt48-05  ·  Gen 3  ·  Sato Kairi
+Sato Kairi
+panggilan: Kairi
+angkatan: 3rd Generation Draft Members
+lahir: 2000-08-05
+asal: Niigata
+tinggi: 160
+darah: A
+gabung: 
+
+# --- ngt48-06  ·  Gen 3  ·  Isobe Rua
+Isobe Rua
+panggilan: Beruchan
+angkatan: 3rd Generation
+lahir: 2007-05-07
+asal: Niigata
+tinggi: 160
+darah: A
+gabung: 
+
+# --- ngt48-07  ·  Gen 3  ·  Kita Hanae
+Kita Hanae
+panggilan: Hanae
+angkatan: 3rd Generation
+lahir: 2003-09-09
+asal: Kanagawa
+tinggi: 158
+darah: O
+gabung: 
+
+# --- ngt48-08  ·  Gen 3  ·  Kitamura Yuha
+Kitamura Yuha
+panggilan: Yuuha
+angkatan: 3rd Generation
+lahir: 2004-09-22
+asal: Niigata
+tinggi: 154
+darah: B
+gabung: 
+
+# --- ngt48-09  ·  Gen 3  ·  Kimoto Yuna
+Kimoto Yuna
+panggilan: Motoyuna
+angkatan: 3rd Generation
+lahir: 2003-06-17
+asal: Niigata
+tinggi: 160
+darah: A
+gabung: 
+
+# --- ngt48-10  ·  Gen 3  ·  Suizu Natsuki
+Suizu Natsuki
+panggilan: Natsurin
+angkatan: 3rd Generation
+lahir: 2004-04-27
+asal: Chiba
+tinggi: 153
+darah: B
+gabung: 
+
+# --- ngt48-11  ·  Gen 3  ·  Sugimoto Moe
+Sugimoto Moe
+panggilan: Mocchan
+angkatan: 3rd Generation
+lahir: 2005-07-17
+asal: Nagano
+tinggi: 166
+darah: O
+gabung: 
+
+# --- ngt48-12  ·  Gen 4  ·  Isozaki Nana
+Isozaki Nana
+panggilan: Nanachan
+angkatan: NGT48 4th Generation
+lahir: 2006-07-12
+asal: Kanagawa
+tinggi: 
+darah: A
+gabung: 
+
+# --- ngt48-13  ·  Gen 4  ·  Okumura Momoka
+Okumura Momoka
+panggilan: Momomaru
+angkatan: NGT48 4th Generation
+lahir: 2003-08-28
+asal: Hyogo
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-14  ·  Gen 4  ·  Kimoto Anna
+Kimoto Anna
+panggilan: Anna
+angkatan: NGT48 4th Generation
+lahir: 2007-10-16
+asal: Niigata
+tinggi: 
+darah: AB
+gabung: 
+
+# --- ngt48-15  ·  Gen 4  ·  Sato Hiroka
+Sato Hiroka
+panggilan: Hirokappi
+angkatan: NGT48 4th Generation
+lahir: 2007-08-08
+asal: Niigata
+tinggi: 154
+darah: O
+gabung: 
+
+# --- ngt48-16  ·  Gen 4  ·  Shinzawa Aoi
+Shinzawa Aoi
+panggilan: Aochan
+angkatan: NGT48 4th Generation
+lahir: 2008-07-24
+asal: Niigata
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-17  ·  Gen 4  ·  Takashima Yua
+Takashima Yua
+panggilan: Yutan
+angkatan: NGT48 4th Generation
+lahir: 2010-01-21
+asal: Niigata
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-18  ·  Gen 4  ·  Nishikawa Haruna
+Nishikawa Haruna
+panggilan: Haruchan
+angkatan: NGT48 4th Generation
+lahir: 2003-05-17
+asal: Osaka
+tinggi: 
+darah: A
+gabung: 
+
+# --- ngt48-19  ·  Gen 5  ·  Azama Yui
+Azama Yui
+panggilan: Azamacchi
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Hyogo
+tinggi: 
+darah: B
+gabung: 
+
+# --- ngt48-20  ·  Gen 5  ·  Adachi Yume
+Adachi Yume
+panggilan: Yume
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-21  ·  Gen 5  ·  Omachi Yuka
+Omachi Yuka
+panggilan: Machiyuka
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Nagano
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-22  ·  Gen 5  ·  Kai Mizuki
+Kai Mizuki
+panggilan: Zukichan
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Ibaraki
+tinggi: 
+darah: A
+gabung: 
+
+# --- ngt48-23  ·  Gen 5  ·  Kitazawa Mone
+Kitazawa Mone
+panggilan: Monene
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Nagano
+tinggi: 
+darah: -
+gabung: 
+
+# --- ngt48-24  ·  Gen 5  ·  Sato Yu
+Sato Yuuka
+panggilan: Yuuchan
+angkatan: Hinatazaka46 5th Generation
+lahir: 
+asal: Fukuoka
+tinggi: 159
+darah: AB
+gabung: 
+
+# --- ngt48-25  ·  Gen 5  ·  Suto Rinka
+Suto Rinka
+panggilan: Rintii
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Gunma
+tinggi: 
+darah: B
+gabung: 
+
+# --- ngt48-26  ·  Gen 5  ·  Taniguchi Haruka
+Taniguchi Haruka
+panggilan: Harutan
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Toyama
+tinggi: 
+darah: AB
+gabung: 
+
+# --- ngt48-27  ·  Gen 5  ·  Nakata Asami
+Nakata Asami
+panggilan: Asamin
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Nagano
+tinggi: 
+darah: A
+gabung: 
+
+# --- ngt48-28  ·  Gen 5  ·  Minagawa Hiyori
+Minagawa Hiyori
+panggilan: Piyotan
+angkatan: NGT48 5th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: A
+gabung: 
+
+# --- ngt48-29  ·  Gen 6  ·  Aiki Maaya
+Ayaki Maaya
+panggilan: Maachan
+angkatan: NGT48 6th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-30  ·  Gen 6  ·  Inomata Sana
+Inomata Sana
+panggilan: Sanana
+angkatan: NGT48 6th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-31  ·  Gen 6  ·  Ohashi Ayano
+Ohashi Ayano
+panggilan: Ayanon
+angkatan: NGT48 6th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: A
+gabung: 
+
+# --- ngt48-32  ·  Gen 6  ·  Katayama Shuri
+Katayama Shuri
+panggilan: Shurichan
+angkatan: NGT48 6th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-33  ·  Gen 6  ·  Kuga Mirei
+Kuga Mirei
+panggilan: Niina
+angkatan: NGT48 6th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: A
+gabung: 
+
+# --- ngt48-34  ·  Gen 6  ·  Sato Honoka
+Sato Honoka
+panggilan: Honoka
+angkatan: NGT48 6th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: B
+gabung: 
+
+# --- ngt48-35  ·  Gen 6  ·  Hirai Yuzuha
+Hirai Yuzuha
+panggilan: Hiracchan
+angkatan: NGT48 6th Generation
+lahir: 
+asal: Niigata
+tinggi: 
+darah: O
+gabung: 
+
+# --- ngt48-36  ·  Gen 6  ·  Hosoya Naho
+Hosoya Naho
+panggilan: Nahorin
+angkatan: NGT48 6th Generation
+lahir: 
+asal: Kanagawa
+tinggi: 
+darah: A
+gabung: 
+

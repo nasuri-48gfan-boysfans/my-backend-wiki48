@@ -1,0 +1,60 @@
+# STU48 — 45 member aktif
+# Format: Nama Latin | Team | Aksara Asli   (kolom ke-3 opsional)
+# Koreksi di file INI, bukan di asli/. Baris berawalan # diabaikan.
+# Hapus baris = hapus member. Nama Latin dipakai untuk search,
+# urutan A-Z, dan nama file foto img/<id>.jpg.
+
+# ---- Gen 1 (6) ----
+Kai Cocoa        | Gen 1 | 甲斐 心愛
+Taniguchi Mahina | Gen 1 | 谷口 茉妃菜
+Hyodo Aoi        | Gen 1 | 兵頭 葵
+Fukuda Akari     | Gen 1 | 福田 朱里
+Shinano Soraha   | Gen 1 | 信濃 宙花
+Nakamura Mai     | Gen 1 | 中村 舞
+
+# ---- Gen 2 (11) ----
+Ikeda Yura       | Gen 2 | 池田 裕楽
+Utsumi Rine      | Gen 2 | 内海 里音
+Osaki Serika     | Gen 2 | 尾崎 世里花
+Kawamata Yuuna   | Gen 2 | 川又 優菜
+Kudo Riko        | Gen 2 | 工藤 理子
+Sako Himeka      | Gen 2 | 迫 姫華
+Takao Sayaka     | Gen 2 | 高雄 覚
+Harada Sayaka    | Gen 2 | 原田 清花
+Muneyuki Rika    | Gen 2 | 宗雪 里香
+Yoshida Sara     | Gen 2 | 吉田 彩良
+Watanabe Natsuki | Gen 2 | 渡辺 菜月
+
+# ---- Gen 2.5 (4) ----
+Okada Azumi    | Gen 2.5 | 岡田 あずみ
+Okamura Rio    | Gen 2.5 | 岡村 梨央
+Kurushima Yuka | Gen 2.5 | 久留島 優果
+Morokuzu Noa   | Gen 2.5 | 諸葛 望愛
+
+# ---- Gen 3 (6) ----
+Arai Ria        | Gen 3 | 新井 黎華
+Ishihara Yuuna  | Gen 3 | 石原 侑奈
+Okuda Yuina     | Gen 3 | 奥田 唯菜
+Kitazawa Ichigo | Gen 3 | 北澤 苺
+Hamada Hibiki   | Gen 3 | 浜田 響
+Morisue Himena  | Gen 3 | 森末 姫奈
+
+# ---- Gen 4 (18) ----
+Ishimatsu Haruna | Gen 4 | 石松 陽菜
+Inoue Kurea      | Gen 4 | 井上 紅空
+Kabutake Mana    | Gen 4 | 甲竹 愛菜
+Kihara Hinayo    | Gen 4 | 木原 陽菜乃
+Komatsu Nayu     | Gen 4 | 小松 奈優
+Sakaki Towana    | Gen 4 | 榊 永遠
+Sakazaki Ai      | Gen 4 | 坂崎 愛
+Shimada Sayaka   | Gen 4 | 島田 さやか
+Sogabe Ako       | Gen 4 | 曾我部 亜古
+Takamura Shiori  | Gen 4 | 高村 詩織
+Tanaka Nanako    | Gen 4 | 田中 奈々子
+Douho Runa       | Gen 4 | 堂本 瑠奈
+Nonaka Rio       | Gen 4 | 野中 莉生
+Hamada Mii       | Gen 4 | 浜田 未衣
+Fujita Amu       | Gen 4 | 藤田 愛夢
+Miyoshi Maaya    | Gen 4 | 三好 摩彩
+Yagi Yuuna       | Gen 4 | 八木 結愛
+Yokoi Yuina      | Gen 4 | 横井 結衣

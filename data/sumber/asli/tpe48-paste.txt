@@ -1,0 +1,10 @@
+ini tpe48 
+Unit Daisy
+	Anggota Resmi: Chen Shih-ya, Lu Hsiang-yi, Pan Tzu-yi, Sin Tik-kei, Tsai Ya-en.
+	Trainee: Chia I-chen, Tung Zih-syuan.
+Unit Bellflower
+	Anggota Resmi: Fujii Mayu, Lau Hiu-ching, Li Meng-chun, Lin Chieh, Chiu Pin-han.
+	Trainee: Cheng Yu-wei, Chou Chia-an.
+Unit Sakura
+	Anggota Resmi: Liu Hsiao-ting, Lin Yu-hsin, Tseng Shih-yu, Zhou Jia-yi.
+	Trainee: Lin Chia-ying, Yuan Tzu-chu.

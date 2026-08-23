@@ -1,0 +1,22 @@
+{
+  "name": "wiki48-community",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WIKI48 community backend",
+  "main": "server/community-server.js",
+  "scripts": {
+    "start": "node server/community-server.js",
+    "dev": "node --watch server/community-server.js"
+  },
+  "dependencies": {
+    "bcryptjs": "^3.0.2",
+    "cookie-session": "^2.1.1",
+    "dotenv": "^16.6.1",
+    "express-rate-limit": "^7.5.0",
+    "express": "^5.1.0",
+    "helmet": "^8.1.0",
+    "google-auth-library": "^10.2.1",
+    "pg": "^8.16.3",
+    "redis": "^5.0.1"
+  }
+}

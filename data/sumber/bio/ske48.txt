@@ -1,0 +1,562 @@
+# BIODATA SKE48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- ske48-01  ·  Team E  ·  Ida Reona
+Ida Reona
+panggilan: Reona
+angkatan: SKE48 6th Generation
+lahir: 1998-12-03
+asal: Mie
+tinggi: 165
+darah: AB
+gabung: 
+
+# --- ske48-02  ·  Team KII  ·  Kamata Natsuki
+Kamata Natsuki
+panggilan: Nakki
+angkatan: SKE48 6th Generation
+lahir: 1996-08-29
+asal: Aichi
+tinggi: 163
+darah: O
+gabung: 
+
+# --- ske48-03  ·  Team S  ·  Kumazaki Haruka
+Kumazaki Haruka
+panggilan: Kumachan
+angkatan: SKE48 6th Generation
+lahir: 1997-08-10
+asal: Aichi
+tinggi: 160
+darah: O
+gabung: 
+
+# --- ske48-04  ·  Team S  ·  Aikawa Honoka
+Aikawa Honoka
+panggilan: Honono
+angkatan: SKE48 7th Generation
+lahir: 2003-10-22
+asal: Aichi
+tinggi: 153
+darah: O
+gabung: 
+
+# --- ske48-05  ·  Gen 7  ·  Asai Yuka
+Asai Yuka
+panggilan: Yukatan
+angkatan: SKE48 7th Generation
+lahir: 2003-11-10
+asal: Aichi
+tinggi: 163
+darah: O
+gabung: 
+
+# --- ske48-06  ·  Team E  ·  Ota Ayaka
+Ota Ayaka
+panggilan: Ayamero
+angkatan: SKE48 7th Generation
+lahir: 2000-08-17
+asal: Gifu
+tinggi: 153
+darah: B
+gabung: 
+
+# --- ske48-07  ·  Team S  ·  Ishiguro Yuzuki
+Ishiguro Yuzuki
+panggilan: Yuzupo
+angkatan: SKE48 8th Generation
+lahir: 2003-10-11
+asal: Aichi
+tinggi: 162
+darah: AB
+gabung: 
+
+# --- ske48-08  ·  Team KII  ·  Inoue Ruka
+Inoue Ruka
+panggilan: Ruuchan
+angkatan: SKE48 8th Generation
+lahir: 2001-06-12
+asal: Kumamoto
+tinggi: 155
+darah: O
+gabung: 
+
+# --- ske48-09  ·  Gen 8  ·  Kitagawa Yoshino
+Kitagawa Yoshino
+panggilan: Yokonyan
+angkatan: SKE48 8th Generation
+lahir: 2001-01-24
+asal: Osaka
+tinggi: 158
+darah: O
+gabung: 
+
+# --- ske48-10  ·  Gen 8  ·  Kurashima Ami
+Kurashima Ami
+panggilan: Amichan
+angkatan: SKE48 8th Generation
+lahir: 2005-06-28
+asal: Kanagawa
+tinggi: 153
+darah: B
+gabung: 
+
+# --- ske48-11  ·  Gen 8  ·  Sakamoto Marin
+Sakamoto Marin
+panggilan: Marin
+angkatan: SKE48 8th Generation
+lahir: 2002-02-02
+asal: Aichi
+tinggi: 161
+darah: B
+gabung: 
+
+# --- ske48-12  ·  Gen 8  ·  Sato Kaho
+Sato Kaho
+panggilan: Satokaho
+angkatan: SKE48 8th Generation
+lahir: 1997-05-16
+asal: Aichi
+tinggi: 160
+darah: A
+gabung: 
+
+# --- ske48-13  ·  Gen 8  ·  Nomura Miyo
+Nomura Miyo
+panggilan: Miyomaru
+angkatan: SKE48 8th Generation
+lahir: 2003-02-01
+asal: Aichi
+tinggi: 168
+darah: A
+gabung: 
+
+# --- ske48-14  ·  Team E  ·  Akahori Kimie
+Akahori Kimie
+panggilan: Kimi
+angkatan: SKE48 9th Generation
+lahir: 2002-01-21
+asal: Shizuoka
+tinggi: 157
+darah: A
+gabung: 
+
+# --- ske48-15  ·  Team KII  ·  Arano Himeka
+Arano Himeka
+panggilan: Himetan
+angkatan: SKE48 9th Generation
+lahir: 2002-01-09
+asal: Kanagawa
+tinggi: 168
+darah: O
+gabung: 
+
+# --- ske48-16  ·  Gen 9  ·  Ikeda Kaede
+Ikeda Kaede
+panggilan: Kaenyan
+angkatan: SKE48 9th Generation
+lahir: 2000-07-05
+asal: Nagasaki
+tinggi: 155
+darah: O
+gabung: 
+
+# --- ske48-17  ·  Team S  ·  Iriuchijima Sayaka
+Iriuchijima Sayaka
+panggilan: Saya
+angkatan: SKE48 9th Generation
+lahir: 1999-05-13
+asal: Kanagawa
+tinggi: 154
+darah: O
+gabung: 
+
+# --- ske48-18  ·  Gen 9  ·  Suzuki Ena
+Suzuki Ena
+panggilan: Enamaru
+angkatan: SKE48 9th Generation
+lahir: 2004-01-09
+asal: Aichi
+tinggi: 158
+darah: A
+gabung: 
+
+# --- ske48-19  ·  Gen 9  ·  Suzuki Kokona
+Suzuki Kokona
+panggilan: Kokona
+angkatan: SKE48 9th Generation
+lahir: 2003-12-28
+asal: Gifu
+tinggi: 156
+darah: A
+gabung: 
+
+# --- ske48-20  ·  Gen 9  ·  Nakasaka Miyu
+Nakasaka Miyu
+panggilan: Nakachan
+angkatan: SKE48 9th Generation
+lahir: 2005-06-11
+asal: Aichi
+tinggi: 159
+darah: O
+gabung: 
+
+# --- ske48-21  ·  Team E  ·  Aoki Rika
+Aoki Rika
+panggilan: Rian
+angkatan: SKE48 10th Generation
+lahir: 1999-09-02
+asal: Osaka
+tinggi: 165
+darah: A
+gabung: 
+
+# --- ske48-22  ·  Team KII  ·  Ito Miki
+Ito Miki
+panggilan: Miki
+angkatan: SKE48 10th Generation
+lahir: 2002-08-11
+asal: Aichi
+tinggi: 164
+darah: A
+gabung: 
+
+# --- ske48-23  ·  Gen 10  ·  Nishii Mio
+Nishii Mio
+panggilan: Mio
+angkatan: SKE48 10th Generation
+lahir: 2001-03-16
+asal: Osaka
+tinggi: 154
+darah: **
+gabung: 
+
+# --- ske48-24  ·  Team E  ·  Omura Anzu
+Omura Anzu
+panggilan: AzuAzu
+angkatan: SKE48 11th Generation
+lahir: 2005-09-20
+asal: Aichi
+tinggi: 155
+darah: O
+gabung: 
+
+# --- ske48-25  ·  Team KII  ·  Shinohara Kyoka
+Shinohara Kyoka
+panggilan: Kyoppy
+angkatan: SKE48 11th Generation
+lahir: 2004-06-03
+asal: Hyogo
+tinggi: 155
+darah: O
+gabung: 
+
+# --- ske48-26  ·  Team S  ·  Sugimoto Riina
+Sugimoto Riina
+panggilan: Riichan
+angkatan: SKE48 11th Generation
+lahir: 2008-09-20
+asal: Aichi
+tinggi: 156
+darah: A
+gabung: 
+
+# --- ske48-27  ·  Gen 11  ·  Hara Yune
+Hara Yune
+panggilan: Yuune
+angkatan: SKE48 11th Generation
+lahir: 2001-11-23
+asal: Fukuoka
+tinggi: 152
+darah: O
+gabung: 
+
+# --- ske48-28  ·  Gen 11  ·  Morimoto Kurumi
+Morimoto Kurumi
+panggilan: Kurumin
+angkatan: SKE48 11th Generation
+lahir: 2007-09-03
+asal: Nara
+tinggi: 162
+darah: B
+gabung: 
+
+# --- ske48-29  ·  Gen 11  ·  Yamamura Sakura
+Yamamura Sakura
+panggilan: Sakkuu
+angkatan: SKE48 11th Generation
+lahir: 2006-09-20
+asal: Aichi
+tinggi: 155
+darah: A
+gabung: 
+
+# --- ske48-30  ·  Team S  ·  Ito Kokomi
+Ito Kokomi
+panggilan: Kokomin
+angkatan: SKE48 12th Generation
+lahir: 2008-12-08
+asal: Nagano
+tinggi: 158
+darah: A
+gabung: 
+
+# --- ske48-31  ·  Team KII  ·  Okuno Kokoha
+Okuno Kokoha
+panggilan: Kokoha
+angkatan: SKE48 12th Generation
+lahir: 2005-02-20
+asal: Hiroshima
+tinggi: 168
+darah: A
+gabung: 
+
+# --- ske48-32  ·  Team E  ·  Kawamura Yua
+Kawamura Yua
+panggilan: Yuanyan
+angkatan: SKE48 12th Generation
+lahir: 2006-01-31
+asal: Aichi
+tinggi: 152
+darah: A
+gabung: 
+
+# --- ske48-33  ·  Gen 12  ·  Kuramoto Hana
+Kuramoto Hana
+panggilan: Hananan
+angkatan: SKE48 12th Generation
+lahir: 2004-09-13
+asal: Gifu
+tinggi: 156
+darah: A
+gabung: 
+
+# --- ske48-34  ·  Gen 12  ·  Takamura Saya
+Takamura Saya
+panggilan: Saya
+angkatan: SKE48 12th Generation
+lahir: 2004-07-04
+asal: Kanagawa
+tinggi: 153
+darah: O
+gabung: 
+
+# --- ske48-35  ·  Gen 12  ·  Hasegawa Miyabi
+Hasegawa Miyabi
+panggilan: Miichan
+angkatan: SKE48 12th Generation
+lahir: 2010-11-20
+asal: Aichi
+tinggi: 152
+darah: A
+gabung: 
+
+# --- ske48-36  ·  Gen 12  ·  Matsukawa Miyu
+Matsukawa Miyu
+panggilan: Miyu
+angkatan: SKE48 12th Generation
+lahir: 2008-04-15
+asal: Aichi
+tinggi: 160
+darah: 
+gabung: 
+
+# --- ske48-37  ·  Gen 12  ·  Minamisawa Coco
+Minamisawa Coco
+panggilan: Cocchan
+angkatan: SKE48 12th Generation
+lahir: 2007-10-26
+asal: Nagano
+tinggi: 165
+darah: A
+gabung: 
+
+# --- ske48-38  ·  Team E  ·  Ota Manae
+Ota Manae
+panggilan: Manae
+angkatan: SKE48 13th Generation
+lahir: 2007-12-16
+asal: Hyogo
+tinggi: 164
+darah: B
+gabung: 
+
+# --- ske48-39  ·  Gen 13  ·  Kawamura Shoko
+Kawamura Shoko
+panggilan: Shoko
+angkatan: SKE48 13th Generation
+lahir: 2007-09-15
+asal: Gifu
+tinggi: 162
+darah: B
+gabung: 
+
+# --- ske48-40  ·  Gen 13  ·  Kubota Rei
+Kubota Rei
+panggilan: Rei
+angkatan: SKE48 13th Generation
+lahir: 2009-11-23
+asal: Aichi
+tinggi: 155
+darah: A
+gabung: 
+
+# --- ske48-41  ·  Team KII  ·  Kumoi Sana
+Kumoi Sana
+panggilan: Sanachan
+angkatan: SKE48 13th Generation
+lahir: 2005-11-27
+asal: Aichi
+tinggi: 157
+darah: B
+gabung: 
+
+# --- ske48-42  ·  Team S  ·  Kuwahara Tsubaki
+Kuwahara Tsubaki
+panggilan: Tsuuchan
+angkatan: SKE48 13th Generation
+lahir: 2006-02-25
+asal: Saga
+tinggi: 167
+darah: A
+gabung: 
+
+# --- ske48-43  ·  Gen 13  ·  Kondo Mikoto
+Kondo Mikoto
+panggilan: Miiko
+angkatan: SKE48 13th Generation
+lahir: 2003-11-25
+asal: Tottori
+tinggi: 160
+darah: A
+gabung: 
+
+# --- ske48-44  ·  Gen 13  ·  Sakurai Arisa
+Sakurai Arisa
+panggilan: Risanya
+angkatan: SKE48 13th Generation
+lahir: 2003-11-07
+asal: Tokyo
+tinggi: 159
+darah: A
+gabung: 
+
+# --- ske48-45  ·  Gen 13  ·  Sasaki Nozomi
+Sasaki Nozomi
+panggilan: Nontan
+angkatan: SKE48 13th Generation
+lahir: 2010-10-19
+asal: Aichi
+tinggi: 160
+darah: O
+gabung: 
+
+# --- ske48-46  ·  Gen 13  ·  Tachibana Ayame
+Tachibana Ayame
+panggilan: Amechan
+angkatan: SKE48 13th Generation
+lahir: 2009-06-24
+asal: Tokyo
+tinggi: 154
+darah: B
+gabung: 
+
+# --- ske48-47  ·  Gen 6  ·  Tamura Mayu (SKE48)
+Tamura Mayu
+panggilan: Mayumayu
+angkatan: SKE48 13th Generation
+lahir: 2007-09-18
+asal: Tokyo
+tinggi: 161
+darah: -
+gabung: 
+
+# --- ske48-48  ·  Gen 13  ·  Hijiri Haruka
+Hijiri Haruka
+panggilan: Haruru
+angkatan: SKE48 13th Generation
+lahir: 2007-02-04
+asal: Tokyo
+tinggi: 162
+darah: -
+gabung: 
+
+# --- ske48-49  ·  Gen 13  ·  Miyamoto Rinka
+Miyamoto Rinka
+panggilan: Rinka
+angkatan: SKE48 13th Generation
+lahir: 2007-09-10
+asal: Kumamoto
+tinggi: 157
+darah: O
+gabung: 
+
+# --- ske48-50  ·  Gen 13  ·  Yokoi Shiho
+Yokoi Shiho
+panggilan: Shiitan
+angkatan: SKE48 13th Generation
+lahir: 2011-11-08
+asal: Aichi
+tinggi: 145
+darah: B
+gabung: 
+
+# --- ske48-51  ·  Gen 14  ·  Iida Yura
+Iida Yura
+panggilan: Yurayura
+angkatan: SKE48 14th Generation
+lahir: 2012-07-04
+asal: Aichi
+tinggi: 156
+darah: A
+gabung: 
+
+# --- ske48-52  ·  Gen 14  ·  Ikeda Arisa
+Ikeda Arisa
+panggilan: Aritan
+angkatan: SKE48 14th Generation
+lahir: 2011-08-25
+asal: Aichi
+tinggi: 164
+darah: B
+gabung: 
+
+# --- ske48-53  ·  Gen 14  ·  Takeshita Marika
+Takeshita Marika
+panggilan: Maripi
+angkatan: SKE48 14th Generation
+lahir: 2005-12-17
+asal: Osaka
+tinggi: 166
+darah: A
+gabung: 
+
+# --- ske48-54  ·  Gen 14  ·  Nakao Fuka
+Nakao Fuka
+panggilan: Fukachan
+angkatan: SKE48 14th Generation
+lahir: 2007-01-17
+asal: Aichi
+tinggi: 155
+darah: O
+gabung: 
+
+# --- ske48-55  ·  Gen 14  ·  Yajima Nagi
+Yajima Nagi
+panggilan: Nagichi
+angkatan: SKE48 14th Generation
+lahir: 2008-09-09
+asal: Aichi
+tinggi: 151
+darah: O
+gabung: 
+
+# --- ske48-56  ·  Team KII  ·  Matsumoto Chikako
+Matsumoto Chikako
+panggilan: Chikako
+angkatan: 1st Generation Draft Members
+lahir: 1999-11-19
+asal: Osaka
+tinggi: 160
+darah: O
+gabung: 
+

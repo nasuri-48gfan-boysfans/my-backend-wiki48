@@ -1,0 +1,17 @@
+ini tsh 48 
+Nama Member	Generasi	
+Ye ZhiEn	Gen 1	
+Zhou NianQi	Gen 1	
+Cheng AnZi	Gen 2	
+Gui ChuChu	Gen 2	
+Qiu DiEr	Gen 3	
+Wang AnNi	Gen 3	
+Zhang JiaZhe	Gen 3	
+Chen JiaYi	Gen 4	
+Wang XiaoYang	Gen 4	
+Wu Fan	Gen 4	
+Zhang YiLin	Gen 4	
+Zhang ShiYu	Gen 5	
+Zheng YuShan	Gen 5	
+Huang ZhenXuan	Gen 6	
+Wei XiaoYa	Gen 6

@@ -1,0 +1,50 @@
+# HKT48 — 39 member aktif
+# Format: Nama Latin | Team | Aksara Asli   (kolom ke-3 opsional)
+# Koreksi di file INI, bukan di asli/. Baris berawalan # diabaikan.
+# Hapus baris = hapus member. Nama Latin dipakai untuk search,
+# urutan A-Z, dan nama file foto img/<id>.jpg.
+
+# ---- Team H (15) ----
+Ikuno Rina      | Team H | 生野 莉奈
+Ishibashi Ibuki | Team H | 石橋 颯
+Ishimatsu Yuina | Team H | 石松 結菜
+Ichimura Airi   | Team H | 市村 愛里
+Kitagawa Hiiro  | Team H | 北川 陽彩
+Kurihara Sae    | Team H | 栗原 紗英
+Shibui Mina     | Team H | 渋井 美奈
+Toyonaga Aki    | Team H | 豊永 阿紀
+Nakano Minami   | Team H | 中野 南実
+Fujino Kokoha   | Team H | 藤野 心葉
+Fuchigami Mai   | Team H | 渕上 舞
+Matsunaga Yura  | Team H | 松永 悠良
+Yanase Reia     | Team H | 梁瀬 鈴雅
+Yamauchi Yuna   | Team H | 山内 祐奈
+Ryuto Ayane     | Team H | 龍頭 綺音
+
+# ---- Team KIV (15) ----
+Akiyoshi Yuka    | Team KIV | 秋吉 優花
+Izawa Miyu       | Team KIV | 井澤 美優
+Ishii Ayane      | Team KIV | 石井 彩音
+Ihara Hanna      | Team KIV | 猪原 絆愛
+Imamura Maria    | Team KIV | 今村 麻莉愛
+Eura Yuka        | Team KIV | 江浦 優香
+Eguchi Kokoha    | Team KIV | 江口 心々華
+Oba Risaki       | Team KIV | 大庭 凜咲
+Kuriyama Rina    | Team KIV | 栗山 梨奈
+Takemoto Kurumi  | Team KIV | 竹本 くるみ
+Tachibana Kokoro | Team KIV | 立花 心良
+Tanaka Iori      | Team KIV | 田中 伊桜莉
+Fukui Karen      | Team KIV | 福井 可憐
+Morisaki Saaya   | Team KIV | 森﨑 冴彩
+Yasui Hina       | Team KIV | 安井 妃奈
+
+# ---- Kenkyuusei (9) ----
+Aoki Hinako     | Kenkyuusei | 青木 日菜子
+Ishikawa Amiyu  | Kenkyuusei | 石川 歩実優
+Inoshima Rirea  | Kenkyuusei | 猪島 莉玲亜
+Kure Yuna       | Kenkyuusei | 呉 優菜
+Tsurukawa Nachi | Kenkyuusei | 靏川 那智
+Nagano Rara     | Kenkyuusei | 長野 らら
+Matsumoto Maika | Kenkyuusei | 松本 苺花
+Yamakawa Maria  | Kenkyuusei | 山川 万里愛
+Yoshida Mei     | Kenkyuusei | 吉田 めい

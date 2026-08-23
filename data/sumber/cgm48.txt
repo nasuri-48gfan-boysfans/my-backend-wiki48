@@ -1,0 +1,35 @@
+# CGM48 — 23 member aktif
+# Format: Nama Latin | Team | Aksara Asli   (kolom ke-3 opsional)
+# Koreksi di file INI, bukan di asli/. Baris berawalan # diabaikan.
+# Hapus baris = hapus member. Nama Latin dipakai untuk search,
+# urutan A-Z, dan nama file foto img/<id>.jpg.
+#
+# Perlu keputusanmu:
+#   - "Kaning" juga muncul sebagai nama panggung "Chanyapak Nongbua" — mungkin orang yang sama
+
+# ---- Team C (14) ----
+Chanyapak Nongbua | Team C
+Izuta Rina        | Team C
+Angel             | Team C
+Fortune           | Team C
+Kaiwan            | Team C
+Kaning            | Team C
+Marmink           | Team C
+Nenna             | Team C
+Nena              | Team C
+Punch             | Team C
+Sita              | Team C
+Jingjing          | Team C
+Nana              | Team C
+Papang            | Team C
+
+# ---- Trainee (9) ----
+Emma     | Trainee
+Lookked  | Trainee
+Mei      | Trainee
+Milk     | Trainee
+Ping     | Trainee
+Kwan     | Trainee
+Lingling | Trainee
+Runma    | Trainee
+Preme    | Trainee

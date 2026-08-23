@@ -1,0 +1,31 @@
+# KLP48 — 21 member aktif
+# Format: Nama Latin | Team | Aksara Asli   (kolom ke-3 opsional)
+# Koreksi di file INI, bukan di asli/. Baris berawalan # diabaikan.
+# Hapus baris = hapus member. Nama Latin dipakai untuk search,
+# urutan A-Z, dan nama file foto img/<id>.jpg.
+#
+# Perlu keputusanmu:
+#   - pemisah titik (bukan koma): "TURYBSBEK AISHA. ALICE WONG VEI YEW" → TURYBSBEK AISHA + ALICE WONG VEI YEW
+
+# ---- (tanpa team) (21) ----
+Elley Amanda Wong
+Ann Drea Tey
+Made Devi Ranita Ningtara
+Shuen Hiu Yao
+Tan Zi Tong
+Salwa Sunanda
+Elvyone Tifanny Ticha Anak Donaldin
+Foo Yi Shyan
+Turybsbek Aisha
+Alice Wong Vei Yew
+Cindy Alexandria
+Diva Nurhaliza
+Sekar Wejayanti Mumtahanah
+Wee Xi Ting
+Jocelyna Marcelly
+Kei Annisa Adnan
+Maia Fae Chong
+Ueda Mashiro
+Sharifah Sharleez Binti Syed Affendi
+Kuak Shu Zhen
+Tara Tan

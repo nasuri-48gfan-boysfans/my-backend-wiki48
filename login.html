@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Masuk ke profil komunitas WIKI48." />
+  <title>Masuk - WIKI48</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff806b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" href="img/icon-192.svg" />
+</head>
+<body class="auth-page">
+  <header class="site-header"><div class="container header-inner">
+    <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
+    <a class="auth-home-link" href="index.html#hero">← Beranda</a>
+  </div></header>
+  <main class="auth-main"><section class="auth-card" aria-labelledby="loginTitle">
+    <div class="auth-mark" aria-hidden="true">♥</div>
+    <p class="eyebrow pink-eyebrow">Selamat datang kembali</p>
+    <h1 id="loginTitle">Masuk ke <span>WIKI48</span></h1>
+    <p class="auth-subtitle">Simpan oshi dan atur ruang personalmu sebagai bagian dari komunitas.</p>
+    <form id="loginForm" class="auth-form">
+      <label for="loginEmail">Email</label><input id="loginEmail" name="email" type="email" autocomplete="email" placeholder="nama@email.com" required />
+      <label for="loginPassword">Password</label><input id="loginPassword" name="password" type="password" autocomplete="current-password" placeholder="Minimal 4 karakter" minlength="4" required />
+      <p id="loginError" class="auth-error" role="alert"></p>
+      <button class="auth-submit" type="submit">Masuk <span>→</span></button>
+    </form>
+    <div class="auth-divider"><span>Belum punya akun?</span></div>
+    <form id="registerForm" class="auth-form register-form">
+      <label for="registerName">Nama tampilan</label><input id="registerName" name="name" type="text" autocomplete="name" placeholder="Nama kamu" minlength="2" required />
+      <label for="registerEmail">Email</label><input id="registerEmail" name="email" type="email" autocomplete="email" placeholder="nama@email.com" required />
+      <label for="registerPassword">Password</label><input id="registerPassword" name="password" type="password" autocomplete="new-password" placeholder="Minimal 4 karakter" minlength="4" required />
+      <p id="registerError" class="auth-error" role="alert"></p>
+      <button class="auth-submit auth-submit-secondary" type="submit">Buat akun <span>↗</span></button>
+    </form>
+    <p class="auth-note">Akun disimpan aman di database komunitas.</p><a class="access-request-link" href="access-request.html">Ajukan akses kontribusi ke wiki ↗</a>
+  </section></main>
+  <footer class="site-footer"><div class="container"><p>© <span id="year">2026</span> WIKI48</p></div></footer>
+  <script src="auth.js" defer></script><script src="pwa.js" defer></script>
+</body>
+</html>

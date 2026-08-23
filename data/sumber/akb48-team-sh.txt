@@ -1,0 +1,32 @@
+# AKB48-TEAM-SH — 15 member aktif
+# Format: Nama Latin | Team | Aksara Asli   (kolom ke-3 opsional)
+# Koreksi di file INI, bukan di asli/. Baris berawalan # diabaikan.
+# Hapus baris = hapus member. Nama Latin dipakai untuk search,
+# urutan A-Z, dan nama file foto img/<id>.jpg.
+
+# ---- Gen 1 (2) ----
+Ye ZhiEn    | Gen 1
+Zhou NianQi | Gen 1
+
+# ---- Gen 2 (2) ----
+Cheng AnZi | Gen 2
+Gui ChuChu | Gen 2
+
+# ---- Gen 3 (3) ----
+Qiu DiEr     | Gen 3
+Wang AnNi    | Gen 3
+Zhang JiaZhe | Gen 3
+
+# ---- Gen 4 (4) ----
+Chen JiaYi    | Gen 4
+Wang XiaoYang | Gen 4
+Wu Fan        | Gen 4
+Zhang YiLin   | Gen 4
+
+# ---- Gen 5 (2) ----
+Zhang ShiYu  | Gen 5
+Zheng YuShan | Gen 5
+
+# ---- Gen 6 (2) ----
+Huang ZhenXuan | Gen 6
+Wei XiaoYa     | Gen 6

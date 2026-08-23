@@ -1,0 +1,57 @@
+# NMB48 — daftar hasil baca, silakan koreksi
+# Satu member per baris. Kalau sudah tahu teamnya, tulis:  Nama | Team K
+# Baris berawalan # diabaikan importer.
+# Sumber pastemu belum memuat info team, jadi kolom team masih kosong.
+
+Abe Wakana
+Izumi Ayano
+Shiotsuki Keito
+Mizuta Shiori
+Shinzawa Nao
+Hirayama Mai
+Ike Honoka
+Kuroshima Sakura
+Sakashita Mako
+Sakata Misaki
+Sakamoto Risa
+Sakurada Ayaka
+Tatsumoto Yayoi
+Tanaka Yukino
+Fukuna Ami
+Matsuoka Sakura
+Matsumoto Mihina
+Aobara Yuuka
+Aobara Waka
+Ikeda Tenna
+Itagaki Koyori
+Kinugasa Ayami
+Tanaka Misora
+Nishi Yuma
+Nishijima Rio
+Nishida Honoka
+Haga Rei
+Funahashi Reina
+Miyamoto Ami
+Yoshimi Ayane
+Ishiyama Chihiro
+Uchida Aisha
+Kine Iroha
+Shibuya Asana
+Takahashi Kotone
+Takeda Kyoka
+Tanaka Miria
+Miyahara Konon
+Murai Yuri
+Yamaguchi Mio
+Akamatsu Sora
+Okagoshi Seira
+Sakurai Himari
+Zenke Yurika
+Takahashi
+Juna
+Tanaka Rei
+Taniguchi Shino
+Nishizumi Misaki
+Fukuhara Kotomi
+Yabuuchi Hinata
+Wada Kotone

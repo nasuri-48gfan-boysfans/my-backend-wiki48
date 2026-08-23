@@ -1,0 +1,202 @@
+# BIODATA TPE48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- tpe48-01  ·  Unit Daisy  ·  Chen Shih-ya
+Chen Shih-ya
+panggilan: Miyabi
+angkatan: AKB48 Taiwan Audition
+lahir: 1995-04-24
+asal: Taipei
+tinggi: 153
+darah: O
+gabung: 
+
+# --- tpe48-02  ·  Unit Daisy
+Lu Hsiang-yi
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- tpe48-03  ·  Unit Daisy  ·  Pan Tzu-yi
+Pan Tzu-yi
+panggilan: Mina
+angkatan: TPE48 1st Generation
+lahir: 1996-07-28
+asal: Taipei
+tinggi: 157
+darah: AB
+gabung: 
+
+# --- tpe48-04  ·  Unit Daisy  ·  Sin Tik-kei
+Sin Tik-kei
+panggilan: Stitch
+angkatan: TPE48 1st Generation
+lahir: 1999-02-13
+asal: Hong Kong
+tinggi: 165
+darah: 
+gabung: 
+
+# --- tpe48-05  ·  Unit Daisy  ·  Tsai Ya-en
+Tsai Ya-en
+panggilan: Soba
+angkatan: TPE48 1st Generation
+lahir: 2000-10-21
+asal: Keelung
+tinggi: 160
+darah: A
+gabung: 
+
+# --- tpe48-06  ·  Trainee  ·  Chia I-chen
+Chia I-chen
+panggilan: Rika
+angkatan: TPE48 1st Generation / AKB48 Team TP 1st Generation
+lahir: 1998-08-18
+asal: Hsinchu
+tinggi: 174
+darah: O
+gabung: 
+
+# --- tpe48-07  ·  Trainee  ·  Tung Zih-syuan
+Tung Zih-syuan
+panggilan: 安妮瑄
+angkatan: TPE48 1st Generation
+lahir: 2003-12-04
+asal: Taipei
+tinggi: 162
+darah: A
+gabung: 
+
+# --- tpe48-08  ·  Trainee  ·  Cheng Yu-wei
+Cheng Yu-wei
+panggilan: Xiongmei
+angkatan: TPE48 1st Generation
+lahir: 2003-11-11
+asal: Tainan
+tinggi: 171
+darah: A
+gabung: 
+
+# --- tpe48-09  ·  Trainee  ·  Chou Chia-an
+Chou Chia-an
+panggilan: 安安
+angkatan: AKB48 Team TP 2nd Generation
+lahir: 2003-10-09
+asal: Taichung
+tinggi: 158
+darah: O
+gabung: 
+
+# --- tpe48-10  ·  Trainee  ·  Lin Chia-ying
+Lin Chia-ying
+panggilan: Yururu
+angkatan: TPE48 1st Generation
+lahir: 2000-12-04
+asal: New Taipei
+tinggi: 160
+darah: B
+gabung: 
+
+# --- tpe48-11  ·  Trainee  ·  Yuan Tzu-chu
+Yuan Tzu-chu
+panggilan: Julie
+angkatan: AKB48 Team TP 2nd Generation
+lahir: 1999-05-07
+asal: New Taipei
+tinggi: 171
+darah: B
+gabung: 
+
+# --- tpe48-12  ·  Unit Bellflower  ·  Fujii Mayu
+Fujii Mayu
+panggilan: Mayu
+angkatan: TPE48 1st Generation
+lahir: 1998-11-30
+asal: Osaka
+tinggi: 163
+darah: B
+gabung: 
+
+# --- tpe48-13  ·  Unit Bellflower  ·  Lau Hiu-ching
+Lau Hiu-ching
+panggilan: Koharu
+angkatan: 1st Generation
+lahir: 2000-08-02
+asal: Hong Kong
+tinggi: 158
+darah: O
+gabung: 
+
+# --- tpe48-14  ·  Unit Bellflower  ·  Lee Meng-chun
+Li Meng-chun
+panggilan: Momo
+angkatan: TPE48 1st Generation
+lahir: 2002-06-04
+asal: Pingtung
+tinggi: 163
+darah: A
+gabung: 
+
+# --- tpe48-15  ·  Unit Bellflower  ·  Lin Chieh
+Lin Chieh
+panggilan: Rinjie
+angkatan: AKB48 Taiwan Audition
+lahir: 2001-02-14
+asal: Hsinchu
+tinggi: 165
+darah: B
+gabung: 
+
+# --- tpe48-16  ·  Unit Bellflower  ·  Chiu Pin-han
+Chiu Pin-han
+panggilan: PinHan
+angkatan: AKB48 Taiwan Audition
+lahir: 1999-12-24
+asal: Taipei
+tinggi: 153
+darah: O
+gabung: 
+
+# --- tpe48-17  ·  Unit Sakura  ·  Liu SiYu
+Liu Hsiao-ting
+panggilan: 早早
+angkatan: SNH48 23rd Generation
+lahir: 2007-04-17
+asal: Hubei
+tinggi: 161
+darah: O
+gabung: 
+
+# --- tpe48-18  ·  Unit Sakura  ·  Lin Yu-hsin
+Lin Yu-hsin
+panggilan: Reichi
+angkatan: TPE48 1st Generation
+lahir: 2002-01-14
+asal: Yilan
+tinggi: 163
+darah: O
+gabung: 
+
+# --- tpe48-19  ·  Unit Sakura  ·  Tseng Shih-yu
+Tseng Shih-yu
+panggilan: 羽喵
+angkatan: TPE48 1st Generation
+lahir: 1995-02-12
+asal: Yunlin
+tinggi: 155
+darah: 
+gabung: 
+
+# --- tpe48-20  ·  Unit Sakura  ·  Zhou JiaYi
+Zhou Jia-yi
+panggilan: 喧喧
+angkatan: SHY48 3rd Generation
+lahir: 
+asal: Liaoning
+tinggi: 157
+darah: O
+gabung: 
+

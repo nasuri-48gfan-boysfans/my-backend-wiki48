@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Member Directory lengkap AKB48 Group." />
+  <title>Member Directory - Idol Wiki</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff806b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" href="img/icon-192.svg" />
+</head>
+<body>
+  <header class="site-header"><div class="container header-inner">
+    <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
+    <button class="hamburger" id="menuToggle" type="button" aria-label="Buka menu navigasi" aria-controls="drawer" aria-expanded="false">☰</button>
+  </div></header>
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+  <nav class="drawer" id="drawer" aria-label="Menu utama" aria-hidden="true">
+    <div class="drawer-header"><span class="drawer-title">Menu</span><button class="drawer-close" id="menuClose" type="button" aria-label="Tutup menu">✕</button></div>
+    <ul class="drawer-nav"><li><a href="index.html#hero">🏠 Home</a></li><li><a href="members.html" aria-current="page">👥 Member Directory</a></li><li><a href="groups.html">🎤 Groups</a></li><li><a href="schedule.html">📅 Schedule</a></li><li><a href="news.html">📰 Berita resmi</a></li></ul>
+  </nav>
+  <main>
+    <section class="page-head"><div class="container">
+      <a class="back-link" href="index.html#hero">← Beranda</a>
+      <h1 class="page-title">Member <span class="gradient-text">Directory</span></h1>
+      <p class="page-subtitle">Profil, status live, stage, jadwal, dan pin oshi dalam satu daftar.</p>
+      <form class="search-bar" role="search" id="searchForm"><input class="search-input" id="searchInput" type="search" placeholder="Cari member atau grup..." aria-label="Cari member atau grup" autocomplete="off" /><button class="search-btn" type="submit">Search</button></form>
+    </div></section>
+    <section class="section directory-section"><div class="container">
+      <div class="section-head"><h2 class="section-title" id="directoryTitle">Semua member</h2><span class="section-count" id="memberCount"></span></div>
+      <div class="active-filter" id="activeFilter" hidden></div>
+      <div class="category-row scope-row" id="categoryRow"><label class="scope-field" for="categorySelect"><span class="scope-label">Kategori &amp; grup</span><span class="scope-shell"><select class="scope-select" id="categorySelect" aria-describedby="scopeHint"><option value="all">Semua kategori</option></select><span class="scope-arrow" aria-hidden="true">▾</span></span></label><p class="scope-hint" id="scopeHint">Pilih satu kategori, atau langsung satu grup untuk melompat ke rosternya.</p></div>
+      <div class="filter-row" id="filterRow" role="group" aria-label="Filter status member"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">Semua</button><button class="filter-chip" type="button" data-filter="live" aria-pressed="false">🔴 Sedang Live <span class="chip-count" data-count="live">0</span></button><button class="filter-chip" type="button" data-filter="stage" aria-pressed="false">🎤 Di Stage <span class="chip-count" data-count="stage">0</span></button></div>
+      <div class="member-directory-groups" id="memberGrid" aria-live="polite"></div>
+    </div></section>
+  </main>
+  <footer class="site-footer"><div class="container"><p>© <span id="year">2026</span> Idol &amp; Group Wiki Hub</p></div></footer>
+  <div class="toast-stack" id="toastStack" role="status" aria-live="polite"></div>
+  <script src="common.js" defer></script><script src="script.js" defer></script><script src="pwa.js" defer></script>
+</body>
+</html>

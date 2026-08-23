@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Profil member — biodata, team, dan rekan satu team." />
+  <!-- Judul diganti member.js begitu id di URL diketahui. -->
+  <title>Profil Member — Idol &amp; Group Wiki Hub</title>
+
+  <!-- ===== Google Fonts: Syne + Plus Jakarta Sans (Heading/Logo) & Inter (Body) ===== -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff806b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" href="img/icon-192.svg" />
+</head>
+
+<body>
+  <!-- ============================================================= -->
+  <!-- FIXED TOP HEADER                                              -->
+  <!-- ============================================================= -->
+  <header class="site-header">
+    <div class="container header-inner">
+      <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
+
+      <button
+        class="hamburger"
+        id="menuToggle"
+        type="button"
+        aria-label="Buka menu navigasi"
+        aria-controls="drawer"
+        aria-expanded="false"
+      >☰</button>
+    </div>
+  </header>
+
+  <!-- ============================================================= -->
+  <!-- SLIDE-IN DRAWER MENU + OVERLAY                                -->
+  <!-- ============================================================= -->
+  <div class="drawer-overlay" id="drawerOverlay" hidden></div>
+
+  <nav class="drawer" id="drawer" aria-label="Menu utama" aria-hidden="true">
+    <div class="drawer-header">
+      <span class="drawer-title">Menu</span>
+      <button class="drawer-close" id="menuClose" type="button" aria-label="Tutup menu">✕</button>
+    </div>
+    <ul class="drawer-nav">
+      <li><a href="index.html#hero">🏠 Home</a></li>
+      <li><a href="index.html#status">🔴 Live Status</a></li>
+      <li><a href="index.html#oshi">⭐ My Oshi</a></li>
+      <li><a href="index.html#directory" aria-current="page">👥 Member Directory</a></li>
+      <li><a href="groups.html">🎤 Groups</a></li>
+      <li><a href="#">📅 Schedule</a></li>
+    </ul>
+    <div class="drawer-footer">
+      <p>Idol &amp; Group Wiki Hub</p>
+    </div>
+  </nav>
+
+  <!-- ============================================================= -->
+  <!-- MAIN CONTENT — seluruhnya dirender member.js dari ?id=<id>     -->
+  <!-- ============================================================= -->
+  <main>
+    <div id="memberRoot" aria-live="polite">
+      <!-- Fallback tanpa JavaScript. member.js mengganti isi div ini,
+           jadi pesan di bawah hanya terlihat kalau JS mati atau gagal. -->
+      <section class="page-head">
+        <div class="container">
+          <a class="back-link" href="index.html#directory">← Member Directory</a>
+          <h1 class="page-title">Profil <span class="gradient-text">Member</span></h1>
+          <p class="page-subtitle">
+            Halaman ini membutuhkan JavaScript untuk memuat data member.
+          </p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <!-- ============================================================= -->
+  <!-- FOOTER                                                        -->
+  <!-- ============================================================= -->
+  <footer class="site-footer">
+    <div class="container">
+      <p>© <span id="year">2026</span> Idol &amp; Group Wiki Hub — dibuat untuk para fans.</p>
+    </div>
+  </footer>
+
+  <!-- common.js (data + util) HARUS dimuat sebelum member.js -->
+  <script src="common.js" defer></script>
+  <script src="member.js" defer></script><script src="pwa.js" defer></script>
+</body>
+</html>

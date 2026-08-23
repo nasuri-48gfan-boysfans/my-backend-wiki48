@@ -1,0 +1,9 @@
+ini CGM48 
+Team C (Anggota Resmi)
+	Captain: Chanyapak Nongbua (Kaning)
+	Members:
+		Gen 1: Izuta Rina (General Manager), Angel, Fortune, Kaiwan, Kaning, Marmink, Nenna, Nena, Punch, Sita.
+		Gen 2: Jingjing, Nana, Papang.
+Trainee (Anak Magang)
+	Gen 2: Emma, Lookked, Mei, Milk, Ping.
+	Gen 3: Kwan, Lingling, Runma, Preme.

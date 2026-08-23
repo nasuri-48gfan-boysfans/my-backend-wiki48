@@ -1,0 +1,392 @@
+# BIODATA HKT48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- hkt48-01  ·  Team H  ·  Ikuno Rina
+Ikuno Rina
+panggilan: Ikunochan
+angkatan: HKT48 6th Generation
+lahir: 2010-08-03
+asal: Fukuoka
+tinggi: 155
+darah: AB
+gabung: 
+
+# --- hkt48-02  ·  Team H  ·  Ishibashi Ibuki
+Ishibashi Ibuki
+panggilan: Ibuki
+angkatan: HKT48 5th Generation
+lahir: 2005-07-22
+asal: Fukuoka
+tinggi: 153
+darah: A
+gabung: 
+
+# --- hkt48-03  ·  Team H  ·  Ishimatsu Yuina
+Ishimatsu Yuina
+panggilan: Yuichan
+angkatan: HKT48 6th Generation
+lahir: 2012-01-28
+asal: Fukuoka
+tinggi: 147
+darah: A
+gabung: 
+
+# --- hkt48-04  ·  Team H  ·  Ichimura Airi
+Ichimura Airi
+panggilan: Aichii
+angkatan: HKT48 5th Generation
+lahir: 2001-02-13
+asal: Kanagawa
+tinggi: 156
+darah: **
+gabung: 
+
+# --- hkt48-05  ·  Team H  ·  Kitagawa Hiiro
+Kitagawa Hiiro
+panggilan: Hiiro
+angkatan: HKT48 6th Generation
+lahir: 2004-01-23
+asal: Fukuoka
+tinggi: 161
+darah: O
+gabung: 
+
+# --- hkt48-06  ·  Team H  ·  Kurihara Sae
+Kurihara Sae
+panggilan: Saechan
+angkatan: HKT48 3rd Generation
+lahir: 1996-06-20
+asal: Fukuoka
+tinggi: 164
+darah: O
+gabung: 
+
+# --- hkt48-07  ·  Team H  ·  Shibui Mina
+Shibui Mina
+panggilan: Shibuichan
+angkatan: HKT48 6th Generation
+lahir: 2009-03-23
+asal: Tokyo
+tinggi: 156
+darah: O
+gabung: 
+
+# --- hkt48-08  ·  Team H  ·  Toyonaga Aki
+Toyonaga Aki
+panggilan: Akichan
+angkatan: HKT48 4th Generation
+lahir: 1999-10-25
+asal: Fukuoka
+tinggi: 158
+darah: B
+gabung: 
+
+# --- hkt48-09  ·  Team H  ·  Nakano Minami
+Nakano Minami
+panggilan: Miina
+angkatan: HKT48 7th Generation
+lahir: 2008-12-29
+asal: Fukuoka
+tinggi: 160
+darah: B
+gabung: 
+
+# --- hkt48-10  ·  Team H  ·  Fujino Kokoha
+Fujino Kokoha
+panggilan: Kokoha
+angkatan: HKT48 6th Generation
+lahir: 2008-05-25
+asal: Fukuoka
+tinggi: 161
+darah: O
+gabung: 
+
+# --- hkt48-11  ·  Team H  ·  Fuchigami Mai
+Fuchigami Mai
+panggilan: Maichan
+angkatan: HKT48 2nd Generation
+lahir: 1996-09-21
+asal: Fukuoka
+tinggi: 157
+darah: A
+gabung: 
+
+# --- hkt48-12  ·  Team H  ·  Matsunaga Yui
+Matsunaga Yura
+panggilan: Yui
+angkatan: HKT48 7th Generation
+lahir: 2009-11-13
+asal: Fukuoka
+tinggi: 151
+darah: O
+gabung: 
+
+# --- hkt48-13  ·  Team H  ·  Yanase Reia
+Yanase Reia
+panggilan: Reia
+angkatan: HKT48 6th Generation
+lahir: 2006-06-29
+asal: Kanagawa
+tinggi: 170
+darah: B
+gabung: 
+
+# --- hkt48-14  ·  Team H  ·  Yamauchi Yuna
+Yamauchi Yuna
+panggilan: Yuuna
+angkatan: HKT48 3rd Generation
+lahir: 1999-07-06
+asal: Fukuoka
+tinggi: 157
+darah: A
+gabung: 
+
+# --- hkt48-15  ·  Team H  ·  Ryuto Ayane
+Ryuto Ayane
+panggilan: Ayachan
+angkatan: HKT48 7th Generation
+lahir: 2010-06-30
+asal: Nagasaki
+tinggi: 152
+darah: B
+gabung: 
+
+# --- hkt48-16  ·  Team KIV  ·  Akiyoshi Yuka
+Akiyoshi Yuka
+panggilan: Yukachan
+angkatan: HKT48 2nd Generation
+lahir: 2000-10-24
+asal: Fukuoka
+tinggi: 158
+darah: B
+gabung: 
+
+# --- hkt48-17  ·  Team KIV  ·  Izawa Miyu
+Izawa Miyu
+panggilan: Zawachan
+angkatan: HKT48 6th Generation
+lahir: 2006-08-14
+asal: Fukuoka
+tinggi: 161
+darah: B
+gabung: 
+
+# --- hkt48-18  ·  Team KIV  ·  Ishii Ayane
+Ishii Ayane
+panggilan: Aatan
+angkatan: HKT48 7th Generation
+lahir: 2006-11-27
+asal: Fukuoka
+tinggi: 153
+darah: O
+gabung: 
+
+# --- hkt48-19  ·  Team KIV  ·  Ihara Hanna
+Ihara Hanna
+panggilan: Hanchan
+angkatan: HKT48 6th Generation
+lahir: 2011-02-27
+asal: Oita
+tinggi: 148
+darah: B
+gabung: 
+
+# --- hkt48-20  ·  Team KIV  ·  Imamura Maria
+Imamura Maria
+panggilan: Maasan
+angkatan: 2nd Generation Draft Member
+lahir: 2003-09-14
+asal: Gunma
+tinggi: 157
+darah: **
+gabung: 
+
+# --- hkt48-21  ·  Team KIV  ·  Eura Yuka
+Eura Yuka
+panggilan: Yuka
+angkatan: HKT48 7th Generation
+lahir: 2011-05-03
+asal: Fukuoka
+tinggi: 154
+darah: **
+gabung: 
+
+# --- hkt48-22  ·  Team KIV  ·  Eguchi Kokoha
+Eguchi Kokoha
+panggilan: Koko
+angkatan: HKT48 6th Generation
+lahir: 2007-04-24
+asal: Nagasaki
+tinggi: 149
+darah: B
+gabung: 
+
+# --- hkt48-23  ·  Team KIV  ·  Oba Risaki
+Oba Risaki
+panggilan: Risaki
+angkatan: HKT48 6th Generation
+lahir: 2005-04-23
+asal: Fukuoka
+tinggi: 154
+darah: **
+gabung: 
+
+# --- hkt48-24  ·  Team KIV  ·  Kuriyama Rina
+Kuriyama Rina
+panggilan: Rina
+angkatan: HKT48 5th Generation
+lahir: 2000-12-30
+asal: Oita
+tinggi: 157
+darah: A
+gabung: 
+
+# --- hkt48-25  ·  Team KIV  ·  Takemoto Kurumi
+Takemoto Kurumi
+panggilan: Kurutan
+angkatan: HKT48 5th Generation
+lahir: 2004-02-22
+asal: Tokyo
+tinggi: 148
+darah: A
+gabung: 
+
+# --- hkt48-26  ·  Team KIV  ·  Tachibana Kokoro
+Tachibana Kokoro
+panggilan: Kokoppe
+angkatan: HKT48 6th Generation
+lahir: 2009-06-24
+asal: Fukuoka
+tinggi: 157
+darah: A
+gabung: 
+
+# --- hkt48-27  ·  Team KIV  ·  Tanaka Iori
+Tanaka Iori
+panggilan: Iiko
+angkatan: HKT48 5th Generation
+lahir: 2002-08-31
+asal: Kumamoto
+tinggi: 151
+darah: B
+gabung: 
+
+# --- hkt48-28  ·  Team KIV  ·  Fukui Karen
+Fukui Karen
+panggilan: Karenren
+angkatan: HKT48 6th Generation
+lahir: 2006-12-04
+asal: Nagasaki
+tinggi: 153
+darah: O
+gabung: 
+
+# --- hkt48-29  ·  Team KIV  ·  Morisaki Saaya
+Morisaki Saaya
+panggilan: Saachan
+angkatan: HKT48 6th Generation
+lahir: 2005-01-16
+asal: Kumamoto
+tinggi: 162
+darah: A
+gabung: 
+
+# --- hkt48-30  ·  Team KIV  ·  Yasui Hina
+Yasui Hina
+panggilan: Hinatan
+angkatan: HKT48 6th Generation
+lahir: 2011-02-09
+asal: Fukuoka
+tinggi: 142
+darah: A
+gabung: 
+
+# --- hkt48-31  ·  Kenkyuusei  ·  Aoki Hinako
+Aoki Hinako
+panggilan: Hina
+angkatan: HKT48 7th Generation
+lahir: 2008-07-16
+asal: Chiba
+tinggi: 160
+darah: O
+gabung: 
+
+# --- hkt48-32  ·  Kenkyuusei  ·  Ishikawa Amiyu
+Ishikawa Amiyu
+panggilan: Amiyun
+angkatan: HKT48 7th Generation
+lahir: 2011-12-15
+asal: Fukuoka
+tinggi: 153
+darah: A
+gabung: 
+
+# --- hkt48-33  ·  Kenkyuusei
+Inoshima Rirea
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- hkt48-34  ·  Kenkyuusei  ·  Kure Yuna
+Kure Yuna
+panggilan: Yuuchan
+angkatan: HKT48 7th Generation
+lahir: 2012-02-13
+asal: Fukuoka
+tinggi: 148
+darah: B
+gabung: 
+
+# --- hkt48-35  ·  Kenkyuusei  ·  Tsurukawa Nachi
+Tsurukawa Nachi
+panggilan: Nacchi
+angkatan: HKT48 7th Generation
+lahir: 2010-12-07
+asal: Fukuoka
+tinggi: 155
+darah: A
+gabung: 
+
+# --- hkt48-36  ·  Kenkyuusei  ·  Nagano Rara
+Nagano Rara
+panggilan: Rarapa
+angkatan: HKT48 7th Generation
+lahir: 2010-11-06
+asal: Nagasaki
+tinggi: 156
+darah: O
+gabung: 
+
+# --- hkt48-37  ·  Kenkyuusei  ·  Matsumoto Nodoka
+Matsumoto Maika
+panggilan: Nodoka
+angkatan: Baito AKB
+lahir: 1995-05-15
+asal: Fukuoka
+tinggi: 
+darah: **
+gabung: 
+
+# --- hkt48-38  ·  Kenkyuusei  ·  Yamakawa Maria
+Yamakawa Maria
+panggilan: Maritan
+angkatan: HKT48 7th Generation
+lahir: 2005-10-25
+asal: Fukuoka
+tinggi: 158
+darah: A
+gabung: 
+
+# --- hkt48-39  ·  Kenkyuusei  ·  Yoshida Mei
+Yoshida Mei
+panggilan: Meimei
+angkatan: HKT48 7th Generation
+lahir: 2009-05-07
+asal: Yamaguchi
+tinggi: 151
+darah: B
+gabung: 
+

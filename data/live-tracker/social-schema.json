@@ -1,0 +1,36 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "WIKI48 member live tracking mapping",
+  "type": "object",
+  "required": ["id", "member_name", "social"],
+  "properties": {
+    "id": { "type": "string", "pattern": "^[a-z0-9-]+$" },
+    "member_name": { "type": "string" },
+    "social": {
+      "type": "object",
+      "properties": {
+        "youtube": {
+          "type": "object",
+          "properties": {
+            "channel_id": { "type": ["string", "null"] },
+            "video_id": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "showroom": {
+          "type": "object",
+          "properties": {
+            "room_id": { "type": ["string", "null"] },
+            "room_url_key": { "type": ["string", "null"] }
+          },
+          "additionalProperties": false
+        },
+        "idn": { "type": ["string", "null"] },
+        "tiktok": { "type": ["string", "null"] },
+        "instagram": { "type": ["string", "null"] }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

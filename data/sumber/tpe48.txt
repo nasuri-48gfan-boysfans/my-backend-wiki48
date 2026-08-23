@@ -1,0 +1,33 @@
+# TPE48 — 20 member aktif
+# Format: Nama Latin | Team | Aksara Asli   (kolom ke-3 opsional)
+# Koreksi di file INI, bukan di asli/. Baris berawalan # diabaikan.
+# Hapus baris = hapus member. Nama Latin dipakai untuk search,
+# urutan A-Z, dan nama file foto img/<id>.jpg.
+
+# ---- Unit Daisy (5) ----
+Chen Shih-ya | Unit Daisy
+Lu Hsiang-yi | Unit Daisy
+Pan Tzu-yi   | Unit Daisy
+Sin Tik-kei  | Unit Daisy
+Tsai Ya-en   | Unit Daisy
+
+# ---- Trainee (6) ----
+Chia I-chen    | Trainee
+Tung Zih-syuan | Trainee
+Cheng Yu-wei   | Trainee
+Chou Chia-an   | Trainee
+Lin Chia-ying  | Trainee
+Yuan Tzu-chu   | Trainee
+
+# ---- Unit Bellflower (5) ----
+Fujii Mayu    | Unit Bellflower
+Lau Hiu-ching | Unit Bellflower
+Li Meng-chun  | Unit Bellflower
+Lin Chieh     | Unit Bellflower
+Chiu Pin-han  | Unit Bellflower
+
+# ---- Unit Sakura (4) ----
+Liu Hsiao-ting | Unit Sakura
+Lin Yu-hsin    | Unit Sakura
+Tseng Shih-yu  | Unit Sakura
+Zhou Jia-yi    | Unit Sakura

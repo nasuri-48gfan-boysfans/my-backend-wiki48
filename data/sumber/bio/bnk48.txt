@@ -1,0 +1,372 @@
+# BIODATA BNK48 — diambil dari infobox profil AKB48 Wiki.
+#
+# --- bnk48-01  ·  Team BIII
+Marine
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-02  ·  Team BIII
+Fame
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-03  ·  Team BIII
+Hoop
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-04  ·  Team BIII
+Janry
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-05  ·  Team BIII
+Luksorn
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-06  ·  Team BIII
+Mail
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-07  ·  Team BIII
+Micha
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-08  ·  Team BIII
+Monet
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-09  ·  Team BIII  ·  Pattra Theeravas
+Patt
+panggilan: Patt
+angkatan: 4th Generation}}
+lahir: 2008-06-17
+asal: Bangkok
+tinggi: 172
+darah: A
+gabung: 
+
+# --- bnk48-10  ·  Team BIII  ·  Praewa Siriwattanasakdikul
+Praew
+panggilan: Praew
+angkatan: 6th Generation}}
+lahir: 2008-05-23
+asal: Bangkok
+tinggi: 160
+darah: A
+gabung: 
+
+# --- bnk48-11  ·  Team BIII
+Wawa
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-12  ·  Team NV
+Emmy
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-13  ·  Team NV
+Arlee
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-14  ·  Team NV
+Berry
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-15  ·  Team NV
+Jew
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-16  ·  Team NV
+L
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-17  ·  Team NV
+Palmmy
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-18  ·  Team NV
+Pancake
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-19  ·  Team NV
+Proud
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-20  ·  Team NV
+Saonoi
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-21  ·  Team NV
+Sindy
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-22  ·  Team NV
+Yoghurt
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-23  ·  Trainee
+Galeya
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-24  ·  Trainee
+Khaimook
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-25  ·  Trainee
+Mayji
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-26  ·  Trainee  ·  Nalliya Wipakkit
+Nall
+panggilan: Nall
+angkatan: 5th Generation
+lahir: 2001-08-25
+asal: Chiang Mai
+tinggi: 160
+darah: O
+gabung: 
+
+# --- bnk48-27  ·  Trainee
+Nammonn
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-28  ·  Trainee
+Neen
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-29  ·  Trainee  ·  Chen NiYa
+Niya
+panggilan: 呀呀
+angkatan: CKG48 4th Generation
+lahir: 2004-03-25
+asal: Xinjiang
+tinggi: 170
+darah: O
+gabung: 
+
+# --- bnk48-30  ·  Trainee
+Blythe
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-31  ·  Trainee
+Cartoon
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-32  ·  Trainee
+Grape
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-33  ·  Trainee
+Inkcha
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-34  ·  Trainee
+Khowjow
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-35  ·  Trainee
+Mint
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-36  ·  Trainee
+Mirin
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
+# --- bnk48-37  ·  Trainee
+Rose
+panggilan: 
+angkatan: 
+lahir: 
+asal: 
+tinggi: 
+darah: 
+gabung: 
+
