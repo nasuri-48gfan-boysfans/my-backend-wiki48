@@ -10,15 +10,22 @@
 
      "start": "node index.js"
 
-   Yang membuat deploy lolos tanpa 502 ada di community-server.js:
-     - app.listen(PORT, '0.0.0.0', …)  ← bind semua antarmuka
-     - PORT = process.env.PORT || 5000 ← disuntikkan Railway
-     - GET /health → {"status":"ok","message":"Server is healthy"}
+   PENTING UNTUK RAILWAY:
+   Bila start() gagal (mis. port bentrok, env rusak), proses HARUS
+   mati total dengan exit code non-zero. Dulu di sini hanya
+   `process.exitCode = 1` — Node tetap hidup karena listener/worker
+   lain masih menahan event loop, akibatnya Railway membaca proses
+   zombie sebagai server yang "jalan" tapi tidak pernah merespons
+   → 502 Bad Gateway / Application failed to respond.
    ============================================================= */
 
 require('./server/community-server')
   .start()
   .catch((error) => {
-    console.error(`[INDEX] server gagal dimulai: ${error.message}`);
-    process.exitCode = 1;
+    console.error('[INDEX] server gagal dimulai:');
+    /* Objek error utuh, bukan cuma message → stack trace tercetak. */
+    console.error(error);
+    /* Kill total sekarang juga. Railway akan menandai deploy gagal
+       dan menampilkan log-nya, alih-alih menggantung jadi zombie. */
+    process.exit(1);
   });

@@ -4075,8 +4075,26 @@
       "category": "Kaigai",
       "idn_username": "jkt48_oniel",
       "last_live_at": "2026-08-25T05:38:17.047Z",
+      "is_live": false
+    },
+    {
+      "id": "idn-f001ba66-3c51-4849-9afa-13cf74eb1571",
+      "member_name": "Aralie JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_aralie",
+      "last_live_at": "2026-08-25T06:48:03.127Z",
+      "is_live": true
+    },
+    {
+      "id": "idn-9c32c2bc-f74e-4420-8be8-f4ac863b8064",
+      "member_name": "Olla JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_olla",
+      "last_live_at": "2026-08-25T06:52:09.624Z",
       "is_live": true
     }
   ],
-  "updated_at": "2026-08-25T06:41:54.480Z"
+  "updated_at": "2026-08-25T06:58:18.559Z"
 }

@@ -17,8 +17,9 @@ const { getOfficialSchedule, grupDidukung } = require('./schedule-proxy');
 const { butuhDatabase } = require('./rute-db');
 
 const app = express();
-/* Render menyuntikkan PORT sendiri; fallback 5000 untuk lokal tanpa .env. */
-const port = Number(process.env.PORT || 5000);
+/* Railway/Render menyuntikkan PORT sendiri; fallback 5000 untuk lokal
+   tanpa .env. Nama konstanta mengikuti standar env-nya (PORT). */
+const PORT = Number(process.env.PORT || 5000);
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
   ssl: process.env.DATABASE_SSL === 'true'
@@ -101,11 +102,12 @@ app.set('trust proxy', isProduction ? 1 : 0);
 
 /* =============================================================
     CORS — WAJIB paling atas, sebelum route & middleware lain.
-    Whitelist: localhost (dev) + FRONTEND_URL produksi (URL
-    Vercel; boleh banyak, pisahkan dengan koma di .env atau
-    dashboard Railway/Render). FRONTEND_ORIGIN masih dibaca
-    sebagai nama variabel lama agar deploy yang sudah jalan
-    tidak tiba-tiba kehilangan akses.
+
+    Aturan:
+    - FRONTEND_URL diset (URL Vercel; boleh banyak, pisahkan
+      dengan koma di .env / dashboard Railway) → mode whitelist:
+      hanya origin terdaftar yang mendapat header CORS.
+    - FRONTEND_URL TIDAK diset → fallback terbuka (semantik '*').
     ============================================================= */
 const DEFAULT_ALLOWED_ORIGINS = [
   'http://localhost:3000',              // frontend dev
@@ -116,12 +118,19 @@ const envOrigins = String(process.env.FRONTEND_URL || '')
   .map((origin) => origin.trim())
   .filter(Boolean);
 const legacyOrigin = process.env.FRONTEND_ORIGIN ? [process.env.FRONTEND_ORIGIN] : [];
+/* Fallback terbuka (semantik "*") HANYA bila tidak ada satu pun origin
+   produksi yang dikonfigurasi. Literal '*' tidak dipakai karena respons
+   memakai credentials: cookie — browser menolak '*' + credentials;
+   refleksi origin request adalah bentuk aman yang setara. */
+const corsTerbuka = envOrigins.length === 0 && legacyOrigin.length === 0;
 const ALLOWED_ORIGINS = [...new Set([...DEFAULT_ALLOWED_ORIGINS, ...legacyOrigin, ...envOrigins])];
 
 app.use(cors({
   origin(origin, callback) {
     /* Request tanpa Origin header = curl / UptimeRobot / health check → izinkan. */
     if (!origin) return callback(null, true);
+    /* FRONTEND_URL tidak diset → fallback terbuka (semantik "*"). */
+    if (corsTerbuka) return callback(null, true);
     if (ALLOWED_ORIGINS.includes(origin)) return callback(null, true);
     /* Mode dev: server statis lokal di port bebas & file:// tetap boleh. */
     if (!isProduction && (origin === 'null' || /^https?:\/\/(?:localhost|127\.0\.0\.1)(?::\d+)?$/i.test(origin))) {
@@ -830,8 +839,8 @@ async function start() {
      dan hasilnya 502 Bad Gateway padahal proses "jalan". */
   const HOST = '0.0.0.0';
   await new Promise((resolve, reject) => {
-    serverInstance.listener = app.listen(port, HOST, () => {
-      console.log(`WIKI48 community server listening on http://${HOST}:${port}`);
+    serverInstance.listener = app.listen(PORT, HOST, () => {
+      console.log(`WIKI48 community server listening on http://${HOST}:${PORT}`);
       resolve();
     });
     serverInstance.listener.on('error', reject);
@@ -842,7 +851,7 @@ async function start() {
      server: situs tetap harus bisa dibuka. */
   siapkanLive();
   const { statusSupabase } = require('./supabase');
-  console.log(`[START] port=${port} · env=${process.env.NODE_ENV || 'development'} · supabase=${statusSupabase().configured ? 'aktif' : 'tidak dikonfigurasi'} · worker: ${liveWorkerInProcess ? 'in-process' : 'eksternal (jalankan npm run live)'} · SSE: ${liveSseEnabled ? 'on' : 'off'} · redis: ${liveCache.status().host || '(memori)'}`);
+  console.log(`[START] port=${PORT} · env=${process.env.NODE_ENV || 'development'} · supabase=${statusSupabase().configured ? 'aktif' : 'tidak dikonfigurasi'} · worker: ${liveWorkerInProcess ? 'in-process' : 'eksternal (jalankan npm run live)'} · SSE: ${liveSseEnabled ? 'on' : 'off'} · redis: ${liveCache.status().host || '(memori)'}`);
   return serverInstance.listener;
 }
 
@@ -875,8 +884,11 @@ process.on('SIGINT', () => { matikanTeratur('SIGINT'); });
 
 if (require.main === module) {
   start().catch((error) => {
-    console.error(error.message);
-    process.exitCode = 1;
+    console.error('[SERVER] gagal dimulai:');
+    console.error(error);
+    /* Exit total, bukan exitCode: proses yang setengah mati dibaca
+       Railway sebagai zombie server → 502 Bad Gateway. */
+    process.exit(1);
   });
 }
 
