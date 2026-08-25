@@ -30,7 +30,15 @@ module.exports = async function handler(request, response) {
     });
   }
 
-  const target = `${base}${request.url}`;
+  /* Path asli WAJIB dimulai '/api'. Dulu vercel.json me-rewrite
+     /api/(.*) → /api sehingga req.url tinggal "/api" dan semua request
+     diteruskan ke {BACKEND_URL}/api → 404. Rewrite itu sudah dihapus;
+     penjaga ini hanya jaring pengaman. */
+  let pathAsli = request.url || '/api';
+  if (!pathAsli.startsWith('/api')) {
+    pathAsli = `/api${pathAsli === '/' ? '' : pathAsli}`;
+  }
+  const target = `${base}${pathAsli}`;
   const headers = {};
   for (const nama of HEADER_DITERUSKAN) {
     const nilai = request.headers[nama];
@@ -63,7 +71,7 @@ module.exports = async function handler(request, response) {
   } catch (error) {
     const sebab = error.name === 'AbortError' ? 'timeout menghubungi backend (25s)' : error.message;
     /* 502: masalah ada di jalur ke Railway, bukan di fungsi ini. */
-    return response.status(502).json({ error: `Backend tidak terjangkau: ${sebab}` });
+    return response.status(502).json({ error: `Backend tidak terjangkau: ${sebab}`, target });
   } finally {
     clearTimeout(timer);
   }

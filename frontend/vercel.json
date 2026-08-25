@@ -1,10 +1,6 @@
 {
-  "rewrites": [
-    { "source": "/api/(.*)", "destination": "/api" }
-  ],
   "redirects": [
     { "source": "/schedule", "destination": "/stage-schedule.html", "statusCode": 308 },
     { "source": "/schedule.html", "destination": "/stage-schedule.html", "statusCode": 308 }
   ]
 }
-
