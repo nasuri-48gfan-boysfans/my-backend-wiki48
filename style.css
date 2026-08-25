@@ -2618,6 +2618,34 @@ html[lang] .article-card p, html[lang] .rail-card p, html[lang] .community-card 
 }
 .member-table .name-item a:hover { color: var(--coral, #ff806b); }
 .member-table .tim-tag { color: #a98fa4; font-weight: 500; }
+
+/* =============================================================
+   ADMIN — kartu tools (trigger manual pembaruan data member)
+   ============================================================= */
+.admin-tools {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin: 0 0 14px;
+  padding: 18px 20px;
+  border: 1px solid var(--line, #eadfe5);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, .85);
+  box-shadow: 0 8px 22px rgba(99, 61, 94, .06);
+}
+.admin-tools-text h2 {
+  margin-bottom: 4px;
+  color: var(--ink, #33253d);
+  font: 700 1.05rem 'Fredoka', sans-serif;
+}
+.admin-tools-text p { margin: 0; color: #806d7c; font-size: .78rem; line-height: 1.5; }
+.admin-update-btn.is-busy { opacity: .6; cursor: wait; }
+#updateMembersStatus.is-ok { color: #1d7a4f; font-weight: 600; }
+#updateMembersStatus.is-error { color: #b3261e; font-weight: 600; }
+@media (max-width: 640px) {
+  .admin-tools { flex-direction: column; align-items: stretch; text-align: left; }
+}
 @media (max-width: 1080px) {
   /* Layar sempit: tabel kembali di bawah kartu, tidak sticky. */
   .directory-columns { grid-template-columns: 1fr; }

@@ -67,4 +67,26 @@ function statusSupabase() {
   };
 }
 
-module.exports = { getSupabase, statusSupabase, konfigurasiLengkap };
+/* simpanJsonKeStorage(jalur, objek) — taruh snapshot JSON ke Supabase
+   Storage (bucket 'wiki48') bila klien tersedia. TIDAK PERNAH throw:
+   statusnya berupa string agar pemanggil bisa melaporkan apa adanya.
+   Bucket perlu dibuat sekali di dashboard Supabase (public/private
+   sama saja — akses baca lewat dashboard/service key). */
+async function simpanJsonKeStorage(jalur, objek, { bucket = 'wiki48' } = {}) {
+  const klien = getSupabase();
+  if (!klien) return 'tanpa-klien';
+  try {
+    const isi = JSON.stringify(objek);
+    const { error } = await klien.storage.from(bucket).upload(jalur, isi, {
+      contentType: 'application/json',
+      upsert: true,
+    });
+    if (error) throw error;
+    return 'ok';
+  } catch (error) {
+    console.warn(`[SUPABASE] simpan ${jalur} gagal: ${error.message}`);
+    return `gagal: ${error.message}`;
+  }
+}
+
+module.exports = { getSupabase, statusSupabase, konfigurasiLengkap, simpanJsonKeStorage };

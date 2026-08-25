@@ -2400,8 +2400,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T07:43:22.636Z"
     },
     {
       "id": "jkt48-04",
@@ -2508,7 +2508,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T06:35:44.868Z"
     },
     {
@@ -4096,5 +4096,5 @@
       "is_live": true
     }
   ],
-  "updated_at": "2026-08-25T07:32:06.589Z"
+  "updated_at": "2026-08-25T07:51:35.784Z"
 }

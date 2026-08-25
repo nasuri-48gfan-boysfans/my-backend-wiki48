@@ -761,6 +761,98 @@ app.get('/api/cron/update-live', async (request, response) => {
 });
 
 /* -------------------------------------------------------------
+   POST/GET /api/cron/update-members — trigger manual/eksternal
+   -------------------------------------------------------------
+   Cron bawaan platform sering kena rate limit/kuota; endpoint ini
+   memungkinkan pembaruan data member dipicu KAPAN SAJA:
+     - tombol "Update Data Member" di panel admin (sesi admin),
+     - cron eksternal mana pun (cron-job.org, GitHub Actions, dsb.)
+       lewat header Bearer ATAU query ?key=CRON_SECRET.
+
+   Yang dikerjakan: satu siklus poll() worker live — mapping
+   member↔room diperbarui lalu disimpan ke JSON store (members.json
+   bila filesystem bisa ditulis) dan disalin ke Supabase Storage
+   bila dikonfigurasi. Respons mengikuti kontrak:
+     200 { success: true, message: "Member data updated successfully",
+           timestamp: <ISO>, ...detail }
+     401 salah kunci · 409 sedang berjalan · 500 gagal (tanpa crash)
+   ------------------------------------------------------------- */
+let pembaruanMemberBerjalan = false;
+
+async function jalankanPembaruanMember({ budgetMs } = {}) {
+  const mulai = Date.now();
+  const worker = createLiveWorker({ logger: console, cache: liveCache });
+  await liveCache.connect();
+  const hasil = await worker.poll({ budgetMs: budgetMs || CRON_BUDGET_MS });
+  const meta = hasil.snapshot.meta || {};
+
+  /* Salinan arsip ke Supabase Storage (opsional). Gagal di sini tidak
+     boleh menggagalkan pembaruan yang sudah sukses di JSON/Redis. */
+  let supabaseStatus;
+  try {
+    const { simpanJsonKeStorage } = require('./supabase');
+    supabaseStatus = await simpanJsonKeStorage('live-tracker/members.json', {
+      diperbarui_at: new Date().toISOString(),
+      members_count: hasil.members,
+      snapshot: hasil.snapshot,
+    });
+  } catch (error) {
+    supabaseStatus = `gagal: ${error.message}`;
+  }
+
+  return {
+    members: hasil.members,
+    live: hasil.snapshot.live.length,
+    started: hasil.transitions.filter((t) => t.type === 'started').length,
+    ended: hasil.transitions.filter((t) => t.type === 'ended').length,
+    truncated: Boolean(meta.truncated),
+    checked: meta.checked,
+    providers: meta.providers,
+    redis: liveCache.status(),
+    supabase: supabaseStatus,
+    duration_ms: Date.now() - mulai,
+  };
+}
+
+async function pembaruanMemberHandler(request, response) {
+  response.setHeader('cache-control', 'no-store');
+  /* Dua jalur sah: sesi admin (tombol dashboard) atau CRON_SECRET
+     (cron eksternal). Tanpa keduanya → 401. */
+  const lewatSesiAdmin = Boolean(request.session && request.session.adminId);
+  if (!lewatSesiAdmin && !cronSah(request)) {
+    return response.status(401).json({
+      success: false,
+      error: process.env.CRON_SECRET
+        ? 'Unauthorized — butuh sesi admin atau CRON_SECRET yang cocok.'
+        : 'CRON_SECRET belum diatur; endpoint hanya terbuka untuk admin.',
+    });
+  }
+  /* Kunci anti tumpang-tindih: dua trigger bersamaan jangan menjalankan
+     dua siklus fetch berat sekaligus. */
+  if (pembaruanMemberBerjalan) {
+    return response.status(409).json({ success: false, error: 'Pembaruan sedang berjalan; coba lagi beberapa saat.' });
+  }
+  pembaruanMemberBerjalan = true;
+  try {
+    const detail = await jalankanPembaruanMember({});
+    return response.status(200).json({
+      success: true,
+      message: 'Member data updated successfully',
+      timestamp: new Date(),
+      ...detail,
+    });
+  } catch (error) {
+    console.error(`[CRON-MEMBERS] gagal: ${error.message}`);
+    /* 500 tanpa crash: server tetap hidup untuk permintaan berikutnya. */
+    return response.status(500).json({ success: false, error: error.message });
+  } finally {
+    pembaruanMemberBerjalan = false;
+  }
+}
+app.post('/api/cron/update-members', pembaruanMemberHandler);
+app.get('/api/cron/update-members', pembaruanMemberHandler);   // kompatibilitas cron eksternal yang GET-only
+
+/* -------------------------------------------------------------
    GET /api/live-status — bentuk paling sederhana untuk klien
    -------------------------------------------------------------
    Hanya array member yang sedang live. Cache miss / Redis mati

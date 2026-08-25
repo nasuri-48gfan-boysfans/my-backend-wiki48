@@ -64,4 +64,45 @@ function initAdminPage() {
   loadRequests();
 }
 
-document.addEventListener('DOMContentLoaded', () => { initAdminLogin(); initAdminPage(); });
+/* Tombol "Update Data Member": memicu /api/cron/update-members dengan
+   sesi admin (tanpa CRON_SECRET di frontend — itu rahasia server). */
+function initUpdateMembers() {
+  const button = document.querySelector('#updateMembersBtn');
+  const status = document.querySelector('#updateMembersStatus');
+  if (!button || !status) return;
+
+  button.addEventListener('click', async () => {
+    if (button.disabled) return;
+    const labelAsli = button.textContent;
+    button.disabled = true;
+    button.classList.add('is-busy');
+    button.textContent = '⟳ Memperbarui…';
+    status.className = 'admin-message';
+    status.textContent = 'Mengambil data member terbaru dari sumber resmi…';
+
+    try {
+      const data = await adminApi('/api/cron/update-members', { method: 'POST' });
+      status.classList.add('is-ok');
+      const ringkas = [
+        `member: ${data.members}`,
+        `live: ${data.live}`,
+        `supabase: ${data.supabase}`,
+        `${data.duration_ms} ms`,
+      ].join(' · ');
+      status.textContent = `✅ ${data.message} (${ringkas})`;
+      if (window.showToast) window.showToast('Data member berhasil diperbarui.', 'ok');
+    } catch (error) {
+      status.classList.add('is-error');
+      status.textContent = error.message.includes('Login admin')
+        ? 'Sesi admin habis — muat ulang halaman untuk masuk kembali.'
+        : `❌ ${error.message}`;
+      if (window.showToast) window.showToast('Gagal memperbarui data member.', 'warn');
+    } finally {
+      button.disabled = false;
+      button.classList.remove('is-busy');
+      button.textContent = labelAsli;
+    }
+  });
+}
+
+document.addEventListener('DOMContentLoaded', () => { initAdminLogin(); initAdminPage(); initUpdateMembers(); });
