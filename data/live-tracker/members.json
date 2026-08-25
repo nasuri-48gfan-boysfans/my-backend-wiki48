@@ -1788,8 +1788,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T10:33:28.000Z"
     },
     {
       "id": "ngt48-17",
@@ -2130,8 +2130,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T10:32:40.000Z"
     },
     {
       "id": "stu48-19",
@@ -2247,7 +2247,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:00:47.000Z"
     },
     {
@@ -2265,7 +2265,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:00:54.000Z"
     },
     {
@@ -2328,8 +2328,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": "2026-08-24T09:59:16.000Z"
+      "is_live": true,
+      "last_live_at": "2026-08-25T10:14:43.000Z"
     },
     {
       "id": "stu48-41",
@@ -2337,7 +2337,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:16:09.000Z"
     },
     {
@@ -2697,7 +2697,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:21:49.211Z"
     },
     {
@@ -2724,7 +2724,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:21:49.211Z"
     },
     {
@@ -4102,7 +4102,7 @@
       "category": "Kaigai",
       "idn_username": "jkt48_nala",
       "last_live_at": "2026-08-25T09:21:49.211Z",
-      "is_live": true
+      "is_live": false
     },
     {
       "id": "idn-3c97d6a6-6fc2-4e2b-b7f6-e94ebe9c3e93",
@@ -4111,8 +4111,8 @@
       "category": "Kaigai",
       "idn_username": "jkt48_giaa",
       "last_live_at": "2026-08-25T09:44:25.968Z",
-      "is_live": true
+      "is_live": false
     }
   ],
-  "updated_at": "2026-08-25T10:15:12.218Z"
+  "updated_at": "2026-08-25T10:37:17.824Z"
 }
