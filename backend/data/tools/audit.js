@@ -24,7 +24,7 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(__dirname, '..', '..', '..', 'frontend');
 const JS_FILES = ['common.js', 'script.js', 'groups.js', 'member.js', 'news.js'];
 const HTML_FILES = ['index.html', 'groups.html', 'member.html', 'members.html', 'news.html'];
 const ACCENTS = ['pink', 'cyan', 'violet', 'amber'];

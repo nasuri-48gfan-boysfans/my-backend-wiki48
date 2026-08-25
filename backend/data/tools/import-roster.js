@@ -25,7 +25,7 @@
 const fs = require('fs');
 const path = require('path');
 
-const ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(__dirname, '..', '..', '..', 'frontend');
 const SRC_DIR = path.join(ROOT, 'data', 'sumber');
 const COMMON_JS = path.join(ROOT, 'common.js');
 

@@ -8,7 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(__dirname, '..', '..', '..', 'frontend');
 const COMMON_JS = path.join(ROOT, 'common.js');
 const BIO_DIR = path.join(ROOT, 'data', 'sumber', 'bio');
 const API = 'https://akb48.fandom.com/api.php';

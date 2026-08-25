@@ -1,4 +1,3 @@
-const path = require('node:path');
 const crypto = require('node:crypto');
 /* loadEnv() menggantikan dotenv.config(): dotenv hanya membaca `.env`,
    sementara kredensial Upstash biasanya ada di `.env.local`. Lihat env.js. */require('./env').loadEnv();
@@ -256,8 +255,9 @@ app.use(session({
   secure: isProduction,
   maxAge: 1000 * 60 * 60 * 24 * 30,
 }));
-app.use(express.static(path.join(__dirname, '..')));
-
+/* Static file hosting DINONAKTIFKAN: frontend terpisah ke folder ../frontend
+   dan dideploy di Vercel. Di lokal, jalankan frontend dengan:
+     cd frontend && npx serve . -l 3000 */
 /* -------------------------------------------------------------
    LIVE TRACKER — API di sini hanya PEMBACA snapshot.
    Sumbernya Redis, bukan event in-process: worker bisa hidup di host

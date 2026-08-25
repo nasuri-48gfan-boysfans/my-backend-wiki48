@@ -1,0 +1,13 @@
+{
+  "name": "wiki48-frontend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "WIKI48 frontend — situs statis (HTML/CSS/JS) + proxy API ke backend Railway",
+  "scripts": {
+    "dev": "npx --yes serve . -l 3000",
+    "start": "npx --yes serve . -l 3000"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

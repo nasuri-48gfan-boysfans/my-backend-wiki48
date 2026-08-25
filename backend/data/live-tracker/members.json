@@ -1,0 +1,23 @@
+{
+  "members": [
+    {
+      "id": "idn-147e83c8-f3ac-4680-9141-2f518b4b7810",
+      "member_name": "Virgi JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_virgi",
+      "last_live_at": "2026-08-25T11:08:06.117Z",
+      "is_live": false
+    },
+    {
+      "id": "idn-fe70498c-cb4c-4f98-9ad8-e0bd3fe2c453",
+      "member_name": "Jemima JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_jemima",
+      "last_live_at": "2026-08-25T11:08:06.117Z",
+      "is_live": false
+    }
+  ],
+  "updated_at": "2026-08-25T11:15:27.606Z"
+}

@@ -16,7 +16,7 @@ const fs = require('fs');
 const vm = require('vm');
 const path = require('path');
 
-const DIR = process.argv[2] || path.resolve(__dirname, '..', '..');
+const DIR = process.argv[2] || path.resolve(__dirname, '..', '..', '..', 'frontend');
 let gagal = 0;
 const cek = (nama, dapat, harap) => {
   const ok = JSON.stringify(dapat) === JSON.stringify(harap);

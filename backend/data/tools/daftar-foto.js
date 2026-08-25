@@ -23,7 +23,7 @@ const fs = require('fs');
 const path = require('path');
 const vm = require('vm');
 
-const ROOT = path.resolve(__dirname, '..', '..');
+const ROOT = path.resolve(__dirname, '..', '..', '..', 'frontend');
 const IMG_DIR = path.join(ROOT, 'img');
 const OUT = path.join(IMG_DIR, 'DAFTAR-FOTO.md');
 

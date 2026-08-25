@@ -27,6 +27,11 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '..');
+/* Setelah pemisahan repo, backend/ adalah Root Directory Railway
+   sementara berkas .env lokal kebiasaannya ada di ROOT REPO.
+   Berkas dicari BERDUA: yang lebih dekat (backend/) menang bila
+   sama-sama ada. */
+const ROOTS = [ROOT, path.resolve(ROOT, '..')];
 let sudah = false;
 
 /* Dicatat SEBELUM berkas apa pun dimuat, supaya bisa dibedakan mana yang
@@ -34,15 +39,18 @@ let sudah = false;
 const prosesAsli = new Set(Object.keys(process.env));
 
 function muatBerkas(nama, { bolehTimpa }) {
-  const file = path.join(ROOT, nama);
-  if (!fs.existsSync(file)) return false;
-  const dotenv = require('dotenv');
-  const parsed = dotenv.parse(fs.readFileSync(file));
-  Object.entries(parsed).forEach(([kunci, nilai]) => {
-    if (prosesAsli.has(kunci)) return;   // lingkungan asli tidak pernah ditimpa berkas
-    if (process.env[kunci] === undefined || bolehTimpa) process.env[kunci] = nilai;
-  });
-  return true;
+  for (const dir of ROOTS) {
+    const file = path.join(dir, nama);
+    if (!fs.existsSync(file)) continue;
+    const dotenv = require('dotenv');
+    const parsed = dotenv.parse(fs.readFileSync(file));
+    Object.entries(parsed).forEach(([kunci, nilai]) => {
+      if (prosesAsli.has(kunci)) return;   // lingkungan asli tidak pernah ditimpa berkas
+      if (process.env[kunci] === undefined || bolehTimpa) process.env[kunci] = nilai;
+    });
+    return true;
+  }
+  return false;
 }
 
 function aliasUpstash() {

@@ -71,7 +71,7 @@ if (typeof fetchAsli === 'function') {
 }
 
 const { app } = requireAsli.call(module, '../../server/community-server');
-const { butuhDatabase } = requireAsli.call(module, '../../server/vercel-handler');
+const { butuhDatabase } = requireAsli.call(module, '../../server/rute-db');
 let lulus = 0;
 let gagalTotal = 0;
 const kegagalan = [];

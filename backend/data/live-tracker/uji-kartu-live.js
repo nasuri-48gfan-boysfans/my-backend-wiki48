@@ -23,7 +23,7 @@ const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
 
-const AKAR = path.join(__dirname, '..', '..');
+const AKAR = path.join(__dirname, '..', '..', '..', 'frontend');
 const BAHASA = ['id', 'en', 'ja', 'th', 'zh-CN', 'zh-TW', 'ms'];
 const KUNCI_KEADAAN = ['liveNone', 'liveNeverChecked', 'liveStale', 'liveStaleLast', 'liveOffline', 'liveOfflineLast'];
 
