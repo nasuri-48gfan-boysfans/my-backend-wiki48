@@ -5,11 +5,6 @@
   "redirects": [
     { "source": "/schedule", "destination": "/stage-schedule.html", "statusCode": 308 },
     { "source": "/schedule.html", "destination": "/stage-schedule.html", "statusCode": 308 }
-  ],
-  "crons": [
-    {
-      "path": "/api/cron/update-live",
-      "schedule": "*/2 * * * *"
-    }
   ]
 }
+
