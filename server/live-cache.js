@@ -138,6 +138,23 @@ function createLiveCache({
     return { connected, mode: mode() };
   }
 
+  /* Nilai di Redis tersimpan sebagai STRING JSON. Parser ini toleran
+     terhadap satu kecelakaan umum: nilai ter-stringify dua kali
+     ('"{\"live\":…}"'). Bila tetap gagal, error MENCANTUMKAN KEY-nya —
+     dulu hanya "gagal membaca snapshot" tanpa petunjuk apa pun, sehingga
+     salah key antara dua deployment tidak ketahuan dari log. */
+  function uraiSnapshot(value) {
+    let teks = value;
+    if (typeof teks === 'string' && teks.startsWith('"') && teks.endsWith('"')) {
+      try { teks = JSON.parse(teks); } catch { /* bukan encode ganda */ }
+    }
+    const parsed = JSON.parse(teks);
+    if (!parsed || typeof parsed !== 'object' || !Array.isArray(parsed.live)) {
+      throw new Error('struktur snapshot tidak dikenali (field "live" hilang)');
+    }
+    return parsed;
+  }
+
   async function getSnapshot() {
     if (!connected || !driver) return memorySnapshot;
     try {
@@ -146,11 +163,11 @@ function createLiveCache({
          menulis belakangan ini. Snapshot memori dikembalikan apa adanya dan
          `stale` di lapisan API yang memberi tahu user. */
       if (!value) return memorySnapshot;
-      const parsed = JSON.parse(value);
+      const parsed = uraiSnapshot(value);
       memorySnapshot = parsed;
       return parsed;
     } catch (error) {
-      catatError(new Error(`gagal membaca snapshot: ${error.message}`));
+      catatError(new Error(`gagal membaca snapshot ${LIVE_KEY}: ${error.message}`));
       return memorySnapshot;
     }
   }
@@ -229,6 +246,9 @@ function createLiveCache({
       pubsub: Boolean(driver && driver.supportsPubsub),
       connected,
       host: driver ? driver.host : null,
+      /* Key persis yang dibaca endpoint — bandingkan dengan yang
+         ditulis platform lain lewat /api/diag bila data terasa basi. */
+      key: LIVE_KEY,
       ttl_seconds: ttlSeconds,
       last_error: lastError,
     };

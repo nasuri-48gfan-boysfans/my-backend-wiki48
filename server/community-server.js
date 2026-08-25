@@ -286,25 +286,25 @@ function sendLiveEvent(response, snapshot) {
   response.write(`event: live:update\ndata: ${JSON.stringify(livePayload(snapshot))}\n\n`);
 }
 
-/* CACHE CDN — bukan optimasi, tapi penjaga kuota.
-   Klien polling tiap 15 detik. Satu tab yang dibiarkan terbuka sehari
-   = ±5.760 request; kalau setiap request menembus ke Upstash, kuota
-   gratis (±10.000 perintah/hari) habis oleh SATU pengunjung.
+/* CACHE CDN — DEFAULT KINI no-store.
+   Dulu default-nya s-maxage=20/swr=60 untuk menjaga kuota Upstash,
+   tetapi itu membuat CDN Vercel boleh menyajikan respons sampai 60
+   detik lama — terasa seperti "data tidak mau berubah" padahal Redis
+   sudah diperbarui platform lain. Sesuai kebutuhan sekarang (data
+   harus selalu termutakhir), default dibalik:
 
-   s-maxage menyuruh CDN Vercel menjawab dari tepi tanpa membangunkan
-   fungsi, jadi jumlah pembaca tidak lagi menentukan jumlah perintah
-   Redis. stale-while-revalidate membuat pembaca tidak pernah menunggu
-   saat cache diperbarui di belakang.
-
-   Angkanya sengaja lebih kecil dari interval cron: kalau CDN menahan
-   lebih lama dari jarak antar siklus, snapshot baru tidak akan pernah
-   terlihat dan fitur ini jadi terasa macet. */
-const LIVE_CDN_S_MAXAGE = Number(process.env.LIVE_CDN_S_MAXAGE || 20);
+     LIVE_CDN_S_MAXAGE tidak diset / 0 → 'no-store' (selalu segar)
+     LIVE_CDN_S_MAXAGE > 0            → edge cache menyala kembali;
+                                        sadari kuota Upstash naik
+                                        (±10.000 perintah/hari gratis). */
+const LIVE_CDN_S_MAXAGE = Number(process.env.LIVE_CDN_S_MAXAGE || 0);
 const LIVE_CDN_SWR = Number(process.env.LIVE_CDN_SWR || 60);
 
 function setCacheLive(response) {
   if (LIVE_CDN_S_MAXAGE <= 0) {
-    response.setHeader('cache-control', 'no-store');
+    /* Persis kontrak yang diminta: CDN dan browser tidak boleh
+       menyimpan respons live sama sekali. */
+    response.setHeader('cache-control', 'no-store, max-age=0');
     return;
   }
   /* max-age=0 supaya browser tetap bertanya (statusnya harus terasa

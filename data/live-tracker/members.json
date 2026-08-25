@@ -1816,7 +1816,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-25T08:32:07.000Z"
     },
     {
       "id": "ngt48-20",
@@ -1987,7 +1987,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-25T09:06:24.000Z"
     },
     {
       "id": "stu48-03",
@@ -2032,7 +2032,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-25T09:00:21.000Z"
     },
     {
       "id": "stu48-08",
@@ -2059,7 +2059,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": "2026-08-24T09:00:22.000Z"
+      "last_live_at": "2026-08-25T08:46:03.000Z"
     },
     {
       "id": "stu48-11",
@@ -2103,8 +2103,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:00:04.000Z"
     },
     {
       "id": "stu48-16",
@@ -2121,8 +2121,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:00:20.000Z"
     },
     {
       "id": "stu48-18",
@@ -2140,7 +2140,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": "2026-08-24T11:27:33.000Z"
+      "last_live_at": "2026-08-25T08:41:29.000Z"
     },
     {
       "id": "stu48-20",
@@ -2211,8 +2211,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T10:11:54.000Z"
     },
     {
       "id": "stu48-28",
@@ -2247,8 +2247,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": "2026-08-24T10:00:03.000Z"
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:00:47.000Z"
     },
     {
       "id": "stu48-32",
@@ -2265,8 +2265,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": "2026-08-24T10:00:32.000Z"
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:00:54.000Z"
     },
     {
       "id": "stu48-34",
@@ -2293,7 +2293,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-25T09:30:39.000Z"
     },
     {
       "id": "stu48-37",
@@ -2302,7 +2302,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-25T08:24:32.000Z"
     },
     {
       "id": "stu48-38",
@@ -2337,8 +2337,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:16:09.000Z"
     },
     {
       "id": "stu48-42",
@@ -2355,8 +2355,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:55:50.000Z"
     },
     {
       "id": "stu48-44",
@@ -2400,7 +2400,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T07:43:22.636Z"
     },
     {
@@ -2697,8 +2697,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:21:49.211Z"
     },
     {
       "id": "jkt48-37",
@@ -2724,8 +2724,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:21:49.211Z"
     },
     {
       "id": "jkt48-40",
@@ -2742,8 +2742,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:43:21.928Z"
     },
     {
       "id": "jkt48-42",
@@ -2796,8 +2796,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T09:47:47.207Z"
     },
     {
       "id": "jkt48-48",
@@ -4084,7 +4084,7 @@
       "category": "Kaigai",
       "idn_username": "jkt48_aralie",
       "last_live_at": "2026-08-25T06:48:03.127Z",
-      "is_live": true
+      "is_live": false
     },
     {
       "id": "idn-9c32c2bc-f74e-4420-8be8-f4ac863b8064",
@@ -4093,8 +4093,26 @@
       "category": "Kaigai",
       "idn_username": "jkt48_olla",
       "last_live_at": "2026-08-25T06:52:09.624Z",
+      "is_live": false
+    },
+    {
+      "id": "idn-8fc7ad64-f7be-492b-97b6-2dae3378dfe2",
+      "member_name": "Nala JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_nala",
+      "last_live_at": "2026-08-25T09:21:49.211Z",
+      "is_live": true
+    },
+    {
+      "id": "idn-3c97d6a6-6fc2-4e2b-b7f6-e94ebe9c3e93",
+      "member_name": "Giaa JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_giaa",
+      "last_live_at": "2026-08-25T09:44:25.968Z",
       "is_live": true
     }
   ],
-  "updated_at": "2026-08-25T07:51:35.784Z"
+  "updated_at": "2026-08-25T10:15:12.218Z"
 }

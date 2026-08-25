@@ -45,7 +45,7 @@ function stageScheduleUrl() {
 }
 
 async function muatJadwal() {
-  const response = await fetch(stageScheduleUrl(), { headers: { accept: 'application/json' } });
+  const response = await fetch(stageScheduleUrl(), { headers: { accept: 'application/json' }, cache: 'no-store' });
   let payload = null;
   try { payload = await response.json(); } catch (error) { /* ditangani lewat cek di bawah */ }
   if (!response.ok || !payload || !Array.isArray(payload.items)) {

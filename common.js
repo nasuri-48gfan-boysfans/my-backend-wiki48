@@ -5240,7 +5240,7 @@ async function fetchLiveTrackerSnapshot() {
   let pesan = 'tidak ada endpoint live yang bisa dihubungi';
   for (const url of kandidat) {
     try {
-      const response = await fetch(url, { headers: { accept: 'application/json' } });
+      const response = await fetch(url, { headers: { accept: 'application/json' }, cache: 'no-store' });
       if (!response.ok) throw new Error(`Live tracker HTTP ${response.status}`);
       const isi = await response.json();
       if (!Array.isArray(isi.live)) throw new Error('Respons live tracker tidak valid');

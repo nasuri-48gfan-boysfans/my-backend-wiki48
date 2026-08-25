@@ -129,7 +129,9 @@ async function main() {
   });
   await uji('cache CDN terpasang di /api/live', async () => {
     const r = await minta(server, '/api/live');
-    assert.match(r.headers['cache-control'] || '', /s-maxage=\d+/);
+    /* Default kini no-store (data harus selalu termutakhir); edge cache
+       hanya menyala bila LIVE_CDN_S_MAXAGE > 0. */
+    assert.match(r.headers['cache-control'] || '', /no-store/);
   });
   await uji('SSE dimatikan: 501, bukan koneksi menggantung', async () => {
     const r = await minta(server, '/api/live/events');
@@ -187,9 +189,8 @@ async function main() {
   await uji('header cache CDN terpasang (penjaga kuota Upstash)', async () => {
     const r = await minta(server, '/api/live-status');
     const cc = r.headers['cache-control'] || '';
-    assert.match(cc, /s-maxage=\d+/, `cache-control: ${cc}`);
-    assert.match(cc, /stale-while-revalidate=\d+/);
-    assert.match(cc, /max-age=0/, 'browser harus tetap bertanya, CDN yang menahan');
+    /* Default no-store: respons live tidak boleh disimpan CDN/browser. */
+    assert.match(cc, /no-store/, `cache-control: ${cc}`);
   });
 
   console.log('\n/api/live — sesudah satu siklus cron');
