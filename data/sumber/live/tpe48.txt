@@ -1,0 +1,46 @@
+# Mapping live TPE48 — data/sumber/live/tpe48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js tpe48 --write
+
+Chang Shao Tong  | - | - | -   # Team TIII
+Lau Hiu Ching    | - | - | -   # Team TIII
+Lin Yu Hsin      | - | - | -   # Team TIII
+Yi Pin           | - | - | -   # Team TIII
+Chang Yu Ling    | - | - | -   # Team TIII
+Su Heng Yu       | - | - | -   # Team TIII
+Chen Zhao Ni     | - | - | -   # Team TIII
+Chen Yi Ling     | - | - | -   # Team TIII
+Tang Ching       | - | - | -   # Team TIII
+Chen Jia Yi      | - | - | -   # Team TIII
+Liu Zi Fei       | - | - | -   # Team TIII
+Hu Yung Ching    | - | - | -   # Team TIII
+Yang Chia Yi     | - | - | -   # Team TIII
+Yu Zi Lei        | - | - | -   # Team TIII
+Lu Hsin En       | - | - | -   # Team TIII
+Lin Yi Yun       | - | - | -   # Team P
+Meng Ting Yun    | - | - | -   # Team P
+Tsai Ya En       | - | - | -   # Team P
+Huang Yi Lin     | - | - | -   # Team P
+Chen Ying Zhen   | - | - | -   # Team P
+Huang Yu Yan     | - | - | -   # Team P
+Chen Tai Ling    | - | - | -   # Team P
+Tsai Chiao Yin   | - | - | -   # Team P
+Chen Chiao Yi    | - | - | -   # Team P
+Yang Ya Yun      | - | - | -   # Team P
+Lin Yun Hsi      | - | - | -   # Team P
+Xu Chun Yuan     | - | - | -   # Team P
+Chang Hsin Chiao | - | - | -   # Team P
+Liu Yan Ning     | - | - | -   # Team P
+Wong Mann Ling   | - | - | -   # Draft
+Lin Wei Ting     | - | - | -   # Draft
+Chiu Yi Ching    | - | - | -   # Draft
+Peng Yu Ting     | - | - | -   # Draft

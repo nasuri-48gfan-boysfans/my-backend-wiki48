@@ -10,9 +10,10 @@ async function adminApi(url, options) {
 }
 
 function requestCard(item) {
-  const countryNames = { ID: 'Indonesia', JP: 'Jepang', TH: 'Thailand', CN: 'Tiongkok', TW: 'Taiwan', MY: 'Malaysia', OTHER: 'Lainnya' };
-  const levels = { reader: 'Pembaca', contributor: 'Kontributor', editor: 'Editor' };
-  return `<article class="request-card"><div class="request-card-head"><div><span class="request-country">${countryNames[item.country_code] || item.country_code}</span><h2>${escapeAdmin(item.name)}</h2><a href="mailto:${escapeAdmin(item.email)}">${escapeAdmin(item.email)}</a></div><span class="request-status request-status-${item.status}">${item.status}</span></div><dl><div><dt>Akses</dt><dd>${levels[item.access_level] || item.access_level}</dd></div><div><dt>Diajukan</dt><dd>${new Date(item.created_at).toLocaleString('id-ID')}</dd></div></dl><p class="request-reason">${escapeAdmin(item.reason)}</p>${item.experience ? `<p class="request-experience"><strong>Pengalaman:</strong> ${escapeAdmin(item.experience)}</p>` : ''}<div class="request-actions"><button data-id="${item.id}" data-status="approved" type="button">Setujui</button><button data-id="${item.id}" data-status="rejected" type="button">Tolak</button></div></article>`;
+  const countryNames = { ID: uiCardText('optID'), JP: uiCardText('optJP'), TH: uiCardText('optTH'), CN: uiCardText('optCN'), TW: uiCardText('optTW'), MY: uiCardText('optMY'), OTHER: uiCardText('optOther') };
+  const levels = { reader: uiCardText('levelReader'), contributor: uiCardText('levelContributor'), editor: uiCardText('levelEditor') };
+  const locale = { id: 'id-ID', en: 'en-GB', ja: 'ja-JP', th: 'th-TH', 'zh-CN': 'zh-CN', 'zh-TW': 'zh-TW', ms: 'ms-MY' }[currentUiCode()] || 'id-ID';
+  return `<article class="request-card"><div class="request-card-head"><div><span class="request-country">${countryNames[item.country_code] || item.country_code}</span><h2>${escapeAdmin(item.name)}</h2><a href="mailto:${escapeAdmin(item.email)}">${escapeAdmin(item.email)}</a></div><span class="request-status request-status-${item.status}">${item.status}</span></div><dl><div><dt>${escapeAdmin(uiCardText('accessLabel'))}</dt><dd>${levels[item.access_level] || item.access_level}</dd></div><div><dt>${escapeAdmin(uiCardText('submittedLabel'))}</dt><dd>${new Date(item.created_at).toLocaleString(locale)}</dd></div></dl><p class="request-reason">${escapeAdmin(item.reason)}</p>${item.experience ? `<p class="request-experience"><strong>${escapeAdmin(uiCardText('experiencePrefix'))}</strong> ${escapeAdmin(item.experience)}</p>` : ''}<div class="request-actions"><button data-id="${item.id}" data-status="approved" type="button">${escapeAdmin(uiCardText('approveBtn'))}</button><button data-id="${item.id}" data-status="rejected" type="button">${escapeAdmin(uiCardText('rejectBtn'))}</button></div></article>`;
 }
 
 function escapeAdmin(value) {
@@ -23,10 +24,10 @@ async function loadRequests() {
   const list = document.querySelector('#requestList');
   if (!list) return;
   const status = document.querySelector('#requestStatus').value;
-  list.innerHTML = '<p class="community-loading">Memuat pengajuan...</p>';
+  list.innerHTML = `<p class="community-loading">${escapeAdmin(uiCardText('loadingRequests'))}</p>`;
   try {
     const data = await adminApi(`/api/admin/access-requests?status=${status}`);
-    list.innerHTML = data.requests.length ? data.requests.map(requestCard).join('') : '<p class="community-loading">Tidak ada pengajuan pada status ini.</p>';
+    list.innerHTML = data.requests.length ? data.requests.map(requestCard).join('') : `<p class="community-loading">${escapeAdmin(uiCardText('noRequestsStatus'))}</p>`;
   } catch (error) {
     if (error.message.includes('Login admin')) window.location.href = 'admin-login.html';
     list.innerHTML = `<p class="admin-message is-error">${escapeAdmin(error.message)}</p>`;
@@ -59,6 +60,7 @@ function initAdminPage() {
     } catch (error) { document.querySelector('#adminMessage').textContent = error.message; }
   });
   document.querySelector('#adminLogout').addEventListener('click', () => adminApi('/api/admin/logout', { method: 'POST' }).finally(() => { window.location.href = 'admin-login.html'; }));
+  document.addEventListener('wiki48-language-change', loadRequests);
   loadRequests();
 }
 

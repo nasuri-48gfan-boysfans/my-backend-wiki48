@@ -18,17 +18,17 @@
 </head>
 <body class="profile-page">
   <header class="site-header"><div class="container header-inner">
-    <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
+    <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i><img class="logo-mascot" src="img/mascot-logo.svg" alt="" aria-hidden="true" /></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
     <nav class="profile-nav" aria-label="Navigasi profil"><a href="members.html">Member Directory</a><a href="index.html#hero">Beranda</a></nav>
   </div></header>
   <main id="profilePage" class="profile-main"><section class="profile-hero" aria-labelledby="profileTitle">
-    <div class="profile-avatar" aria-hidden="true">🐰</div>
-    <div><p class="eyebrow pink-eyebrow">Ruang personalmu</p><h1 id="profileTitle">Halo, <span data-profile-name>Wiki Fan</span>!</h1><p class="profile-email" data-profile-email></p></div>
+    <div class="profile-avatar-wrap"><div class="profile-avatar" id="profileAvatar" aria-hidden="true">🐰</div><label class="profile-picture-button" for="profilePicture" data-i18n="changePhoto">Ganti foto</label><input id="profilePicture" type="file" accept="image/jpeg,image/png,image/webp" hidden /></div>
+    <div><p class="eyebrow pink-eyebrow" data-i18n="personalSpace">Ruang personalmu</p><h1 id="profileTitle"><span data-i18n="helloBefore">Halo,</span> <span data-profile-name>Wiki Fan</span><span data-i18n="helloAfter">!</span></h1><p class="profile-email" data-profile-email></p></div>
   </section>
-  <div class="profile-content"><section class="profile-card profile-edit-card" aria-labelledby="editTitle"><p class="eyebrow coral-eyebrow">Identitas</p><h2 id="editTitle">Edit profil</h2><form id="profileForm" class="profile-form"><label for="profileName">Nama tampilan</label><input id="profileName" type="text" maxlength="40" required /><button class="auth-submit" type="submit">Simpan perubahan <span>→</span></button><p id="profileSaved" class="profile-saved" hidden>Profil berhasil diperbarui.</p></form></section>
-    <aside class="profile-card profile-summary"><p class="eyebrow lilac-eyebrow">Member sejak</p><strong data-profile-joined></strong><p>Oshi yang kamu pin akan tetap tersimpan di perangkat ini.</p><a class="profile-link" href="members.html">Kelola oshi <span>→</span></a><button id="logoutButton" class="logout-button" type="button">Keluar dari akun</button></aside>
+  <div class="profile-content"><section class="profile-card profile-edit-card" aria-labelledby="editTitle"><p class="eyebrow coral-eyebrow" data-i18n="identityEyebrow">Identitas</p><h2 id="editTitle" data-i18n="editBioTitle">Edit biodata fans</h2><form id="profileForm" class="profile-form"><label for="profileName" data-i18n="nameLabel">Nama tampilan</label><input id="profileName" type="text" maxlength="40" required /><p class="profile-privacy" data-i18n="privacyNote">Data pribadi dipseudonimkan dengan kode acak dan foto diperiksa formatnya sebelum disimpan.</p><button class="auth-submit" type="submit"><span data-i18n="saveChanges">Simpan perubahan</span> <span aria-hidden="true">→</span></button><p id="profileSaved" class="profile-saved" hidden data-i18n="profileSavedMsg">Profil berhasil diperbarui.</p></form></section>
+    <aside class="profile-card profile-summary"><p class="eyebrow lilac-eyebrow" data-i18n="sinceEyebrow">Member sejak</p><strong data-profile-joined></strong><p data-i18n="oshiStoredNote">My Oshi dan alasan pilihanmu tersimpan di akunmu.</p><div id="profileOshi" class="profile-oshi-list"></div><a class="profile-link" href="members.html"><span data-i18n="manageOshi">Kelola My Oshi</span> <span aria-hidden="true">→</span></a><button id="logoutButton" class="logout-button" type="button" data-i18n="logoutBtn">Keluar dari akun</button></aside>
   </div></main>
   <footer class="site-footer"><div class="container"><p>© <span id="year">2026</span> WIKI48</p></div></footer>
-  <script src="api-config.js?v=6" defer></script><script src="auth.js?v=6" defer></script><script src="pwa.js?v=6" defer></script>
+  <script src="api-config.js?v=6" defer></script><script src="common.js?v=6" defer></script><script src="auth.js?v=6" defer></script><script src="pwa.js?v=6" defer></script>
 </body>
 </html>

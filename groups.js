@@ -140,8 +140,8 @@ function renderGroups() {
     grid.innerHTML = `
       <div class="empty-state">
         <span class="empty-icon" aria-hidden="true">🔍</span>
-        <p class="empty-title">Tidak ada hasil</p>
-        <p class="empty-sub">Tidak ada grup yang cocok dengan “${esc(groupState.query)}”.</p>
+        <p class="empty-title">${esc(uiCardText('noResultTitle'))}</p>
+        <p class="empty-sub">${esc(uiCardText('groupsNoMatchTpl').replace('{q}', groupState.query))}</p>
       </div>`;
   } else {
     // Urutan blok mengikuti GROUP_ORDER di common.js (domestic → kaigai).

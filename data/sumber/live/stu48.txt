@@ -1,0 +1,58 @@
+# Mapping live STU48 — data/sumber/live/stu48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js stu48 --write
+
+Kai Cocoa        | - | - | -   # Gen 1
+Taniguchi Mahina | - | - | -   # Gen 1
+Hyodo Aoi        | - | - | -   # Gen 1
+Fukuda Akari     | - | - | -   # Gen 1
+Shinano Soraha   | - | - | -   # Gen 1
+Nakamura Mai     | - | - | -   # Gen 1
+Ikeda Yura       | - | - | -   # Gen 2
+Utsumi Rine      | - | - | -   # Gen 2
+Osaki Serika     | - | - | -   # Gen 2
+Kawamata Yuuna   | - | - | -   # Gen 2
+Kudo Riko        | - | - | -   # Gen 2
+Sako Himeka      | - | - | -   # Gen 2
+Takao Sayaka     | - | - | -   # Gen 2
+Harada Sayaka    | - | - | -   # Gen 2
+Muneyuki Rika    | - | - | -   # Gen 2
+Yoshida Sara     | - | - | -   # Gen 2
+Watanabe Natsuki | - | - | -   # Gen 2
+Okada Azumi      | - | - | -   # Gen 2.5
+Okamura Rio      | - | - | -   # Gen 2.5
+Kurushima Yuka   | - | - | -   # Gen 2.5
+Morokuzu Noa     | - | - | -   # Gen 2.5
+Arai Ria         | - | - | -   # Gen 3
+Ishihara Yuuna   | - | - | -   # Gen 3
+Okuda Yuina      | - | - | -   # Gen 3
+Kitazawa Ichigo  | - | - | -   # Gen 3
+Hamada Hibiki    | - | - | -   # Gen 3
+Morisue Himena   | - | - | -   # Gen 3
+Ishimatsu Haruna | - | - | -   # Gen 4
+Inoue Kurea      | - | - | -   # Gen 4
+Kabutake Mana    | - | - | -   # Gen 4
+Kihara Hinayo    | - | - | -   # Gen 4
+Komatsu Nayu     | - | - | -   # Gen 4
+Sakaki Towana    | - | - | -   # Gen 4
+Sakazaki Ai      | - | - | -   # Gen 4
+Shimada Sayaka   | - | - | -   # Gen 4
+Sogabe Ako       | - | - | -   # Gen 4
+Takamura Shiori  | - | - | -   # Gen 4
+Tanaka Nanako    | - | - | -   # Gen 4
+Douho Runa       | - | - | -   # Gen 4
+Nonaka Rio       | - | - | -   # Gen 4
+Hamada Mii       | - | - | -   # Gen 4
+Fujita Amu       | - | - | -   # Gen 4
+Miyoshi Maaya    | - | - | -   # Gen 4
+Yagi Yuuna       | - | - | -   # Gen 4
+Yokoi Yuina      | - | - | -   # Gen 4

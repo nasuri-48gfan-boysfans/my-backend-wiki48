@@ -15,7 +15,7 @@ function normalizeFetchError(error, url) {
   return error;
 }
 
-async function request(url, { headers = {}, limiter, timeoutMs = 15000, dispatcher, parse = 'json' } = {}) {
+async function request(url, { headers = {}, limiter, timeoutMs = 15000, dispatcher, parse = 'json', cache } = {}) {
   const run = async () => {
     const controller = new AbortController();
     const timer = setTimeout(() => controller.abort(), timeoutMs);
@@ -24,6 +24,7 @@ async function request(url, { headers = {}, limiter, timeoutMs = 15000, dispatch
         headers: { accept: 'application/json', 'user-agent': 'IdolWikiLiveTracker/1.0', ...headers },
         signal: controller.signal,
         ...(dispatcher ? { dispatcher } : {}),
+        ...(cache ? { cache } : {}),
       });
       if (!response.ok) throw requestError(`HTTP ${response.status} dari ${url}`, response.status, response.status === 408 || response.status === 429 || response.status >= 500);
       try { return parse === 'text' ? await response.text() : await response.json(); } catch (error) {

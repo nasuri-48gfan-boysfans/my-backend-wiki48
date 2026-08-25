@@ -1,0 +1,34 @@
+# Mapping live KLP48 — data/sumber/live/klp48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js klp48 --write
+
+Elley Amanda Wong                    | - | - | -
+Ann Drea Tey                         | - | - | -
+Made Devi Ranita Ningtara            | - | - | -
+Shuen Hiu Yao                        | - | - | -
+Tan Zi Tong                          | - | - | -
+Salwa Sunanda                        | - | - | -
+Elvyone Tifanny Ticha Anak Donaldin  | - | - | -
+Foo Yi Shyan                         | - | - | -
+Turysbek Aisha                       | - | - | -
+Alice Wong Vei Yew                   | - | - | -
+Cindy Alexandria                     | - | - | -
+Diva Nurhaliza                       | - | - | -
+Sekar Wejayanti Mumtahanah           | - | - | -
+Wee Xi Ting                          | - | - | -
+Jocelyna Marcelly                    | - | - | -
+Kei Annisa Adnan                     | - | - | -
+Maia Fae Chong                       | - | - | -
+Ueda Mashiro                         | - | - | -
+Sharifah Sharleez Binti Syed Affendi | - | - | -
+Kuak Shu Zhen                        | - | - | -
+Tara Tan                             | - | - | -

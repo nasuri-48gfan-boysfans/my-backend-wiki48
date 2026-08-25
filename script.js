@@ -150,8 +150,8 @@ function memberCardHTML(member) {
   // diklik supaya toast bisa menjelaskan alasannya.
   const locked = !isFav && oshiIsFull();
   const favLabel = isFav
-    ? `${uiCardText('unpin')} ${member.name} dari oshi`
-      : `${uiCardText('pin')} ${member.name} sebagai oshi`;
+    ? `Hapus ${member.name} dari My Oshi`
+      : `Tambahkan ${member.name} ke My Oshi`;
 
   const watchBtn = (member.isLive && hasLiveUrl)
     ? `<a class="watch-live" href="${esc(member.liveUrl)}"
@@ -263,8 +263,8 @@ function renderCards(data, containerElement, emptyState) {
   if (!Array.isArray(data) || data.length === 0) {
     const s = emptyState || {
       icon: '🔍',
-      title: 'Tidak ada hasil',
-      sub: 'Coba kata kunci atau filter lain.',
+      title: uiCardText('noResultTitle'),
+      sub: uiCardText('noMemberFilter'),
     };
     container.innerHTML = `
       <div class="empty-state">
@@ -323,17 +323,9 @@ function renderDirectory() {
   const container = $('#memberGrid');
   if (container) {
     if (!list.length) {
-      // Sebutkan penyebabnya: dengan dua filter aktif, pesan generik membuat
-      // user mengira datanya hilang, bukan tersaring.
-      const sebab = [];
-      if (q) sebab.push(`cocok dengan “${q}”`);
-      if (scopeLabel) sebab.push(`di ${scopeLabel}`);
-      if (state.statusFilter === 'live') sebab.push('yang sedang live');
-      if (state.statusFilter === 'stage') sebab.push('yang sedang stage');
-      const sub = sebab.length
-        ? `Tidak ada member ${sebab.join(' ')}.`
-        : 'Tidak ada member pada filter ini.';
-      container.innerHTML = `<div class="empty-state"><span class="empty-icon" aria-hidden="true">🔍</span><p class="empty-title">Tidak ada hasil</p><p class="empty-sub">${esc(sub)}</p></div>`;
+      // Filter aktif sudah dijelaskan chip "active filter" di atas grid,
+      // jadi pesan kosong cukup satu kalimat generik yang mudah diterjemahkan.
+      container.innerHTML = `<div class="empty-state"><span class="empty-icon" aria-hidden="true">🔍</span><p class="empty-title">${esc(uiCardText('noResultTitle'))}</p><p class="empty-sub">${esc(uiCardText('noMemberFilter'))}</p></div>`;
     } else {
       const sections = GROUPS.map((group) => {
         const members = list.filter((member) => member.groupId === group.id);
@@ -341,7 +333,7 @@ function renderDirectory() {
         return `<section class="member-group" aria-labelledby="member-group-${esc(group.id)}">
           <div class="section-head member-group-head">
             <h3 class="section-title" id="member-group-${esc(group.id)}">${esc(group.name)}</h3>
-            <span class="section-count">${members.length} member</span>
+            <span class="section-count">${uiCardText('countTpl').replace('{n}', members.length)}</span>
           </div>
           <div class="member-grid">${members.map(memberCardHTML).join('')}</div>
         </section>`;
@@ -355,20 +347,131 @@ function renderDirectory() {
   if (count) {
     const isFiltered = q || state.statusFilter !== 'all' || pecahScope(state.scopeFilter).jenis !== 'all';
     count.textContent = isFiltered
-      ? `${list.length} dari ${MEMBERS.length} member`
-      : `${MEMBERS.length} member`;
+      ? uiCardText('countFromTpl').replace('{a}', list.length).replace('{b}', MEMBERS.length)
+      : uiCardText('countTpl').replace('{n}', MEMBERS.length);
   }
 
   // Judul section ikut scope — "Semua member" jadi bohong begitu user memilih
   // satu grup, dan hitungan di sebelahnya tidak cukup menjelaskan.
   const title = $('#directoryTitle');
-  if (title) title.textContent = scopeLabel ? `Member ${scopeLabel}` : 'Semua member';
+  if (title) title.textContent = scopeLabel
+    ? uiCardText('dirScopedTpl').replace('{scope}', scopeLabel)
+    : uiCardText('allMembers');
 
   // Tandai dropdown saat daftar sedang dipersempit (lihat .scope-select.is-active).
   const sel = $('#categorySelect');
   if (sel) sel.classList.toggle('is-active', pecahScope(state.scopeFilter).jenis !== 'all');
 
   renderActiveFilter();
+}
+
+/* -------------------------------------------------------------
+   8b. RENDER: TABEL MEMBER PER GRUP (Gen | Nama Member)
+   Panel di kanan grid kartu. Satu baris = satu generasi;
+   nama member ditulis dengan timnya dalam kurung,
+   contoh: Fiony Alveria Tantri (Love).
+   ------------------------------------------------------------- */
+const TIM_AWALAN = /^team\s/i;
+
+function grupPakaiTim(daftar) {
+  return daftar.some((m) => TIM_AWALAN.test(String(m.team || '')));
+}
+
+/* Label tim pendek untuk kurung setelah nama:
+   "Team Love" → "(Love)", "Trainee"/"Draft" apa adanya.
+   Member grup bertim tanpa nilai tim = trainee/kenkyuusei
+   (nilai seperti "Gen 7" pada roster SKE48 itu angkatan kks). */
+function labelTimPendek(member) {
+  const t = String(member.team || '').trim();
+  if (TIM_AWALAN.test(t)) return t.replace(TIM_AWALAN, '');
+  if (/^(trainee|kenkyuusei|draft)/i.test(t)) return t;
+  return 'Kenkyuusei';
+}
+
+/* Teks gen mentah dibersihkan dari artefak wiki ("}}", "/ (April, 2014)"). */
+function teksGenMentah(member) {
+  return String((member.bio && member.bio.gen) || '')
+    .replace(/}}+/g, '')
+    .replace(/\s*\/\s*\([^)]*\)\s*/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+}
+
+/* Kunci & label generasi. "JKT48 11th Generation" dan "11th Generation"
+   digabung jadi satu baris "Gen 11". Angka yang awalannya cocok dengan
+   nama grup dipilih lebih dulu (mis. "JKT48 4th / KLP48 1st" di KLP48).
+   Label non-standar (Team 8, Draft, New Wave…) tampil apa adanya. */
+function infoGen(member, namaGrup) {
+  const mentah = teksGenMentah(member);
+  if (!mentah) return { urut: Number.POSITIVE_INFINITY, kunci: 'zz', label: '—' };
+
+  const kataGrup = String(namaGrup || '').toLowerCase().split(/\s+/);
+  const kecil = mentah.toLowerCase();
+  /* Ordinal dicocokkan TANPA menelan prefiks: regex lama membiarkan
+     "[a-z0-9]+" menghisah "1" dari "12th" sehingga "JKT48 12th" terbaca
+     "Gen 2". Di sini angka dicari mandiri, lalu awalannya diambil dari
+     kata tepat di depannya untuk dicocokkan dengan nama grup. */
+  const re = /(\d+(?:\.\d+)?)\s*(?:st|nd|rd|th)\s*-?\s*gen(?:eration)?/g;
+  let m;
+  let terpilih = null;
+  while ((m = re.exec(kecil))) {
+    /* "abc12th" (digit menempel huruf tanpa spasi) bukan ordinal sah. */
+    const charSebelum = m.index > 0 ? kecil[m.index - 1] : '';
+    if (charSebelum && /[a-z0-9]/.test(charSebelum)) continue;
+    const kataAkhir = kecil.slice(0, m.index).trim().split(/[^a-z0-9.]+/).pop() || '';
+    const kandidat = { num: parseFloat(m[1]), awalan: kataAkhir };
+    if (!terpilih) terpilih = kandidat;
+    if (kandidat.awalan && kataGrup.includes(kandidat.awalan)) {
+      terpilih = kandidat;
+      break;
+    }
+  }
+  if (terpilih) {
+    const nomor = String(terpilih.num).replace(/\.0$/, '');
+    return { urut: terpilih.num, kunci: `gen:${nomor}`, label: `Gen ${nomor}` };
+  }
+  return {
+    urut: 10000,
+    kunci: `raw:${mentah.toLowerCase()}`,
+    label: mentah.length > 34 ? `${mentah.slice(0, 33)}…` : mentah,
+  };
+}
+
+function renderMemberTables() {
+  const container = $('#memberTableList');
+  if (!container) return;
+
+  container.innerHTML = GROUPS.map((group, index) => {
+    const members = MEMBERS.filter((m) => m.groupId === group.id);
+    if (!members.length) return '';
+
+    const withTim = grupPakaiTim(members);
+    /* Kelompokkan member per generasi, lalu urutkan: Gen kecil → besar,
+       label non-standar sesudahnya, yang tanpa data paling bawah. */
+    const barisMap = new Map();
+    members.forEach((m) => {
+      const info = infoGen(m, group.name);
+      if (!barisMap.has(info.kunci)) barisMap.set(info.kunci, { urut: info.urut, label: info.label, anggota: [] });
+      barisMap.get(info.kunci).anggota.push({ m, tim: withTim ? labelTimPendek(m) : '' });
+    });
+    const baris = [...barisMap.values()]
+      .sort((a, b) => a.urut - b.urut || a.label.localeCompare(b.label))
+      .map((b) => ({ ...b, anggota: b.anggota.slice().sort((x, y) => x.m.name.localeCompare(y.m.name)) }));
+
+    const isiBaris = baris.map((b) => `
+      <tr>
+        <td class="td-gen">${esc(b.label)}</td>
+        <td class="td-names">${b.anggota.map(({ m, tim }) => `<span class="name-item"><a href="${esc(memberUrl(m.id))}">${esc(m.name)}${tim ? ` <span class="tim-tag">(${esc(tim)})</span>` : ''}</a></span>`).join(' ')}</td>
+      </tr>`).join('');
+
+    return `<details class="group-table-block"${index === 0 ? ' open' : ''}>
+      <summary><span>${esc(group.name)}</span><span class="group-table-count">${members.length} member</span></summary>
+      <div class="member-table-wrap"><table class="member-table">
+        <thead><tr><th scope="col">Gen</th><th scope="col">Nama Member</th></tr></thead>
+        <tbody>${isiBaris}</tbody>
+      </table></div>
+    </details>`;
+  }).join('');
 }
 
 /* -------------------------------------------------------------
@@ -382,13 +485,13 @@ function renderOshi() {
 
   renderCards(favs, '#oshiContainer', {
     icon: '⭐',
-    title: 'Belum ada oshi',
-    sub: `Tekan 🤍 pada member favoritmu untuk quick-view di sini (maksimal ${OSHI_LIMIT}).`,
+    title: uiCardText('emptyOshiTitle'),
+    sub: uiCardText('emptyOshiSubTpl').replace('{n}', OSHI_LIMIT),
   });
 
   const counter = $('#oshiCounter');
   if (counter) {
-    counter.textContent = `${favs.length} dipin`;
+    counter.textContent = uiCardText('pinnedCountTpl').replace('{n}', favs.length);
     counter.classList.remove('is-full');
   }
 }
@@ -404,25 +507,40 @@ function toggleOshi(memberId) {
   const member = memberById(memberId);
   if (!member) return false;
 
+  if (!isOshi(memberId)) {
+    const reason = window.prompt(uiCardText('oshiPromptTpl').replace('{name}', member.name));
+    if (reason === null) return false;
+    if (reason.trim().length < 3) {
+      showToast(uiCardText('toastReasonMin'), 'warn');
+      return false;
+    }
+    const reasons = loadOshiReasons();
+    reasons[memberId] = reason.trim().slice(0, 240);
+    saveOshiReasons(reasons);
+  }
+
   const hasil = setOshi(memberId);
 
   if (hasil === 'removed') {
-    showToast(`${member.name} dilepas dari oshi.`, 'neutral');
+    const reasons = loadOshiReasons();
+    delete reasons[memberId];
+    saveOshiReasons(reasons);
+    showToast(uiCardText('toastOshiRemovedTpl').replace('{name}', member.name), 'neutral');
   } else if (hasil === 'full') {
     showToast(
-      `Maksimal ${OSHI_LIMIT} oshi. Lepas salah satu dulu untuk menambah ${member.name}.`,
+      uiCardText('toastOshiFullTpl').replace('{n}', OSHI_LIMIT).replace('{name}', member.name),
       'warn',
     );
     return false;
   } else if (hasil === 'added') {
-    showToast(`${member.name} dipin sebagai oshi (${oshiList.length}).`, 'ok');
+    showToast(uiCardText('toastOshiAddedTpl').replace('{name}', member.name).replace('{n}', oshiList.length), 'ok');
   } else {
     return false;
   }
 
   if (!saveOshiList() && !storageWarned) {
     storageWarned = true;
-    showToast('Browser ini memblokir penyimpanan lokal — pin hanya bertahan selama tab terbuka.', 'warn');
+    showToast(uiCardText('toastStorageWarn'), 'warn');
   }
 
   renderDirectory();
@@ -481,7 +599,7 @@ function stageScheduleHTML(list) {
     const s = m.stage;
     const detail = s
       ? [s.title, s.time, s.venue].filter(Boolean).join(' · ')
-      : 'Detail jadwal menyusul';
+      : uiCardText('stageDetailTbd');
     return `
       <li class="stage-item">
         <span class="stage-item-name">${esc(m.name)}</span>
@@ -511,6 +629,10 @@ function syncMemberCardStates() {
 function updateStatusBanners() {
   const live = prioritizePinnedLive(liveMembers());
   const stage = stageMembers();
+  /* Keputusan "apa yang layak dikatakan" diambil di common.js
+     (liveTrackerCardState) supaya bisa diuji tanpa browser. Di sini
+     tinggal menempelkannya ke DOM. */
+  const keadaanLive = liveTrackerCardState(liveTrackerHealth, live.length);
 
   /* --- Kartu LIVE --- */
   const liveCard = $('#liveStatusCard');
@@ -518,18 +640,25 @@ function updateStatusBanners() {
   const liveLinks = $('#liveLinks');
   const livePill = $('#liveCountPill');
 
-  if (livePill) livePill.textContent = live.length;
+  /* Saat tracker tidak bisa dipercaya, angkanya diganti "?" — menulis "0"
+     di situ sama dengan menyatakan tidak ada yang live, padahal yang
+     terjadi adalah kita tidak tahu. */
+  if (livePill) livePill.textContent = keadaanLive.nada === 'peringatan' && live.length === 0 ? '?' : live.length;
   if (liveBadge) {
-    liveBadge.innerHTML = live.length ? badgeHTML('🔴 LIVE NOW', 'live') : '';
+    liveBadge.innerHTML = live.length ? badgeHTML(uiCardText('labelLive'), 'live') : '';
     liveBadge.hidden = live.length === 0;
   }
   if (liveCard) {
     const value = liveCard.querySelector('.status-value');
     if (value) {
-      value.textContent = live.length ? joinNames(live) : 'Belum ada yang live';
+      value.textContent = keadaanLive.tampilkanNama && live.length
+        ? (keadaanLive.kode === 'live' ? joinNames(live) : `${joinNames(live)} — ${uiCardText(keadaanLive.kunci)}`)
+        : uiCardText(keadaanLive.kunci);
     }
-    liveCard.classList.toggle('is-placeholder', live.length === 0);
-    liveCard.classList.toggle('is-active-live', live.length > 0);
+    liveCard.classList.toggle('is-placeholder', keadaanLive.kode === 'kosong');
+    liveCard.classList.toggle('is-active-live', keadaanLive.kode === 'live');
+    liveCard.classList.toggle('is-unknown', keadaanLive.nada === 'peringatan');
+    liveCard.dataset.liveState = keadaanLive.kode;
   }
   if (liveLinks) liveLinks.innerHTML = liveLinksHTML(live);
 
@@ -541,13 +670,13 @@ function updateStatusBanners() {
 
   if (stagePill) stagePill.textContent = stage.length;
   if (stageBadge) {
-    stageBadge.innerHTML = stage.length ? badgeHTML('🎭 PERFORMING TODAY', 'stage') : '';
+    stageBadge.innerHTML = stage.length ? badgeHTML(uiCardText('labelStage'), 'stage') : '';
     stageBadge.hidden = stage.length === 0;
   }
   if (stageCard) {
     const value = stageCard.querySelector('.status-value');
     if (value) {
-      value.textContent = stage.length ? joinNames(stage) : 'Belum ada jadwal stage';
+      value.textContent = stage.length ? joinNames(stage) : uiCardText('noStageSchedule');
     }
     stageCard.classList.toggle('is-placeholder', stage.length === 0);
     stageCard.classList.toggle('is-active-stage', stage.length > 0);
@@ -563,7 +692,7 @@ function updateStatusBanners() {
   /* --- Indikator sinkronisasi --- */
   const syncText = $('#syncText');
   const syncInd = $('#syncIndicator');
-  if (syncText) syncText.textContent = `${live.length} live · ${stage.length} stage`;
+  if (syncText) syncText.textContent = uiCardText('syncSummaryTpl').replace('{a}', live.length).replace('{b}', stage.length);
   if (syncInd) syncInd.classList.add('is-ready');
 
   syncMemberCardStates();
@@ -576,13 +705,9 @@ function renderStatus() {
   return updateStatusBanners();
 }
 
-function timeLabel(date) {
-  try {
-    return date.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' });
-  } catch (err) {
-    return String(date.getHours()).padStart(2, '0') + ':' + String(date.getMinutes()).padStart(2, '0');
-  }
-}
+/* timeLabel() dihapus: pemformatan jam sekarang ada di liveTrackerStampText()
+   (common.js) supaya cap waktu di beranda dan halaman jadwal tidak bisa
+   berbeda format. Tidak ada lagi yang memanggilnya. */
 
 /* Sidik jari status — dipakai untuk mendeteksi perubahan roster live/stage
    sehingga grid hanya ditulis ulang saat benar-benar ada perubahan. */
@@ -594,13 +719,25 @@ function statusSignature() {
 let lastStatusSignature = '';
 let livePollTimer = 0;
 let liveEventSource = null;
+let liveSseRetry = 0;
+let liveSseTimer = 0;
 
+/* SSE hanya berguna kalau server memang mendukungnya. Di Vercel
+   /api/live/events menjawab 501 (Upstash REST tidak punya pub/sub, jadi
+   tidak ada yang bisa didorong), dan payload /api/live mengabarkan itu
+   lewat tracker.sse. Tanpa pengecekan ini, setiap kali tab kembali
+   terlihat browser membuka koneksi yang sudah pasti ditolak. */
 function startLiveEvents() {
   if (!window.EventSource || liveEventSource) return;
-  liveEventSource = new EventSource(LIVE_TRACKER_EVENTS_URL);
+  if (liveTrackerHealth.sse === false) return;
+  if (liveSseTimer) return;
+
+  liveEventSource = new EventSource(liveEndpoint('/api/live/events'));
   liveEventSource.addEventListener('live:update', (event) => {
     try {
       const snapshot = JSON.parse(event.data);
+      liveSseRetry = 0;                 // sambungan sehat → hitungan mundur direset
+      catatKesehatanLive(snapshot);
       applyLiveSnapshot(snapshot.live);
       const changed = statusSignature() !== lastStatusSignature;
       lastStatusSignature = statusSignature();
@@ -608,12 +745,23 @@ function startLiveEvents() {
       if (changed) { renderDirectory(); renderOshi(); }
       state.lastSync = new Date(snapshot.checked_at || Date.now());
       const stamp = $('#statusUpdated');
-      if (stamp) stamp.textContent = `Diperbarui ${timeLabel(state.lastSync)} · real-time`;
+      if (stamp) stamp.textContent = liveTrackerStampText(liveTrackerHealth, { realtime: true });
     } catch (error) {
       if (window.console && console.warn) console.warn(`Live SSE tidak valid: ${error.message}`);
     }
   });
-  liveEventSource.onerror = () => { liveEventSource.close(); liveEventSource = null; };
+
+  /* Koneksi putus itu normal (tab tidur, proxy, deploy ulang). Yang tidak
+     normal adalah mencoba lagi secepat mungkin tanpa henti: itu membebani
+     server justru saat server sedang bermasalah. Jadi jedanya digandakan,
+     dibatasi 30 detik, dan polling tetap jalan sebagai jaring pengaman. */
+  liveEventSource.onerror = () => {
+    if (liveEventSource) { liveEventSource.close(); liveEventSource = null; }
+    if (liveSseRetry >= 5 || liveTrackerHealth.sse === false) return;
+    const jeda = Math.min(30000, 2000 * (2 ** liveSseRetry));
+    liveSseRetry += 1;
+    liveSseTimer = window.setTimeout(() => { liveSseTimer = 0; startLiveEvents(); }, jeda);
+  };
 }
 
 /* SEAM API: saat data live diambil dari server, ganti isi fungsi ini
@@ -651,19 +799,30 @@ async function refreshStatus(options) {
   state.lastSync = new Date();
   const stamp = $('#statusUpdated');
   if (stamp) {
-    stamp.textContent = `Diperbarui ${timeLabel(state.lastSync)} · otomatis tiap ${Math.round(LIVE_POLL_MS / 1000)} detik`;
+    stamp.textContent = liveTrackerStampText(liveTrackerHealth, { intervalMs: LIVE_POLL_MS });
   }
 
   if (opts.announce && changed && !opts.firstRun) {
-    showToast('Status live & stage diperbarui.', 'ok');
+    showToast(uiCardText('toastStatusRefreshed'), 'ok');
   }
 
   return changed;
 }
 
-function startLiveTracker() {
+async function startLiveTracker() {
   // Tandai kondisi awal supaya tick pertama tidak menulis ulang grid.
-  refreshStatus({ firstRun: true });
+  /* Ditunggu (await) sebelum SSE dinyalakan: balasan pertama itu yang
+     mengabarkan apakah server mendukung SSE. Kalau tidak ditunggu, kita
+     selalu membuka satu koneksi yang di Vercel pasti ditolak.
+
+     Dibungkus try/catch karena sekarang ada `await` di sini: satu
+     kesalahan pada render pertama tidak boleh membuat timer polling
+     gagal dipasang — halaman akan berhenti mencoba selamanya. */
+  try {
+    await refreshStatus({ firstRun: true });
+  } catch (error) {
+    if (window.console && console.warn) console.warn(`Render status pertama gagal: ${error.message}`);
+  }
   startLiveEvents();
 
   const tick = () => refreshStatus();
@@ -684,8 +843,10 @@ function startLiveTracker() {
   document.addEventListener('visibilitychange', () => {
     if (document.hidden) {
       stop();
+      if (liveSseTimer) { window.clearTimeout(liveSseTimer); liveSseTimer = 0; }
       if (liveEventSource) { liveEventSource.close(); liveEventSource = null; }
     } else {
+      liveSseRetry = 0;      // kembali ke tab = niat baru, bukan lanjutan kegagalan lama
       refreshStatus();
       startLiveEvents();
       start();
@@ -697,12 +858,12 @@ function initRefreshButton() {
   const btn = $('#refreshStatus');
   if (!btn) return;
 
-  btn.addEventListener('click', () => {
+  btn.addEventListener('click', async () => {
     btn.classList.add('is-busy');
     btn.disabled = true;
 
-    const changed = refreshStatus({ announce: true });
-    if (!changed) showToast('Status sudah paling baru.', 'neutral');
+    const changed = await refreshStatus({ announce: true });
+    if (!changed) showToast(uiCardText('toastStatusFresh'), 'neutral');
 
     window.setTimeout(() => {
       btn.classList.remove('is-busy');
@@ -803,7 +964,7 @@ function initStatusChips() {
    "seluruh kategori" harus punya opsinya sendiri di dalam grup itu.
    ------------------------------------------------------------- */
 function opsiScopeHTML() {
-  const opsi = [`<option value="all">Semua kategori · ${MEMBERS.length} member</option>`];
+  const opsi = [`<option value="all">${esc(uiCardText('allCategories'))} · ${MEMBERS.length}</option>`];
 
   kategoriTerurut().forEach((key) => {
     const label = kategoriLabel(key);
@@ -871,10 +1032,10 @@ function renderActiveFilter() {
 
   box.hidden = false;
   box.innerHTML = `
-    <span class="active-filter-label">Filter aktif</span>
+    <span class="active-filter-label">${esc(uiCardText('activeFilterLabel'))}</span>
     <span class="active-filter-value">${esc(q)}</span>
     <button class="active-filter-clear" type="button" id="clearFilter"
-            aria-label="Hapus filter ${esc(q)}">✕</button>`;
+            aria-label="${esc(uiCardText('clearFilterAriaTpl').replace('{q}', q))}">✕</button>`;
 }
 
 function clearFilter() {
@@ -945,6 +1106,7 @@ function init() {
 
   updateStatusBanners();
   renderDirectory();
+  renderMemberTables();  // tabel Gen | Nama | Team per grup (members.html)
   renderOshi();          // dari oshiList yang sudah dibaca dari localStorage
   applyCardTranslations();
 
@@ -957,6 +1119,8 @@ function init() {
       categorySelect.innerHTML = opsiScopeHTML();
       categorySelect.value = state.scopeFilter;
     }
+    updateStatusBanners();
+    renderOshi();
     renderDirectory();
     applyCardTranslations();
   });

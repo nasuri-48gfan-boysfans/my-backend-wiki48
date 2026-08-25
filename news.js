@@ -10,10 +10,10 @@ function officialNewsUrl(group) {
 function newsCard(group) {
   const count = membersOfGroup(group.id).length;
   return `<article class="news-card" data-accent="${esc(group.accent)}">
-    <div class="news-card-top"><span class="news-mark">${esc(monogramOf(group.name))}</span><span class="news-source">Sumber resmi</span></div>
+    <div class="news-card-top"><span class="news-mark">${esc(monogramOf(group.name))}</span><span class="news-source">${esc(uiCardText('officialSource'))}</span></div>
     <h2>${esc(group.name)}</h2>
     <p>${esc(group.tagline)}</p>
-    <div class="news-meta"><span>${count} member terdaftar</span><a href="${esc(officialNewsUrl(group))}" target="_blank" rel="noopener noreferrer">Buka berita →</a></div>
+    <div class="news-meta"><span>${esc(uiCardText('membersListedTpl').replace('{n}', count))}</span><a href="${esc(officialNewsUrl(group))}" target="_blank" rel="noopener noreferrer">${esc(uiCardText('openNews'))} →</a></div>
   </article>`;
 }
 
@@ -21,7 +21,9 @@ function initNewsPage() {
   setFooterYear();
   initI18n();
   initDrawer();
-  $('#newsGrid').innerHTML = GROUPS.map(newsCard).join('');
+  const render = () => { $('#newsGrid').innerHTML = GROUPS.map(newsCard).join(''); };
+  render();
+  document.addEventListener('wiki48-language-change', render);
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initNewsPage);

@@ -17,30 +17,39 @@
 </head>
 <body>
   <header class="site-header"><div class="container header-inner">
-    <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
+    <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i><img class="logo-mascot" src="img/mascot-logo.svg" alt="" aria-hidden="true" /></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
     <button class="hamburger" id="menuToggle" type="button" aria-label="Buka menu navigasi" aria-controls="drawer" aria-expanded="false">☰</button>
   </div></header>
   <div class="drawer-overlay" id="drawerOverlay" hidden></div>
   <nav class="drawer" id="drawer" aria-label="Menu utama" aria-hidden="true">
-    <div class="drawer-header"><span class="drawer-title">Menu</span><button class="drawer-close" id="menuClose" type="button" aria-label="Tutup menu">✕</button></div>
-    <ul class="drawer-nav"><li><a href="index.html#hero">🏠 Home</a></li><li><a href="members.html" aria-current="page">👥 Member Directory</a></li><li><a href="groups.html">🎤 Groups</a></li><li><a href="schedule.html">📅 Schedule</a></li><li><a href="news.html">📰 Berita resmi</a></li></ul>
+    <div class="drawer-header"><img class="drawer-mascot" src="img/mascot-logo.svg" alt="" aria-hidden="true" /><span class="drawer-title">Menu</span><button class="drawer-close" id="menuClose" type="button" aria-label="Tutup menu">✕</button></div>
+    <ul class="drawer-nav"><li><a href="index.html#hero">🏠 Home</a></li><li><a href="members.html" aria-current="page">👥 Member Directory</a></li><li><a href="groups.html">🎤 Groups</a></li><li><a href="stage-schedule.html">🗓️ Jadwal Stage</a></li><li><a href="news.html">📰 Berita resmi</a></li></ul>
   </nav>
   <main>
     <section class="page-head"><div class="container">
       <a class="back-link" href="index.html#hero">← Beranda</a>
-      <h1 class="page-title">Member <span class="gradient-text">Directory</span></h1>
-      <p class="page-subtitle">Profil, status live, stage, jadwal, dan pin oshi dalam satu daftar.</p>
+      <h1 class="page-title" data-i18n-html="directoryTitleHtml">Member <span class="gradient-text">Directory</span></h1>
+      <p class="page-subtitle" data-i18n="membersSubtitle">Profil, status live, stage, jadwal, dan My Oshi dalam satu daftar.</p>
       <form class="search-bar" role="search" id="searchForm"><input class="search-input" id="searchInput" type="search" placeholder="Cari member atau grup..." aria-label="Cari member atau grup" autocomplete="off" /><button class="search-btn" type="submit">Search</button></form>
     </div></section>
     <section class="section directory-section"><div class="container">
-      <div class="section-head"><h2 class="section-title" id="directoryTitle">Semua member</h2><span class="section-count" id="memberCount"></span></div>
-      <div class="active-filter" id="activeFilter" hidden></div>
-      <div class="category-row scope-row" id="categoryRow"><label class="scope-field" for="categorySelect"><span class="scope-label">Kategori &amp; grup</span><span class="scope-shell"><select class="scope-select" id="categorySelect" aria-describedby="scopeHint"><option value="all">Semua kategori</option></select><span class="scope-arrow" aria-hidden="true">▾</span></span></label><p class="scope-hint" id="scopeHint">Pilih satu kategori, atau langsung satu grup untuk melompat ke rosternya.</p></div>
-      <div class="filter-row" id="filterRow" role="group" aria-label="Filter status member"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true">Semua</button><button class="filter-chip" type="button" data-filter="live" aria-pressed="false">🔴 Sedang Live <span class="chip-count" data-count="live">0</span></button><button class="filter-chip" type="button" data-filter="stage" aria-pressed="false">🎤 Di Stage <span class="chip-count" data-count="stage">0</span></button></div>
-      <div class="member-directory-groups" id="memberGrid" aria-live="polite"></div>
+      <div class="section-head"><h2 class="section-title" id="directoryTitle" data-i18n="allMembers">Semua member</h2><span class="section-count" id="memberCount"></span></div>
+      <div class="directory-columns">
+        <div class="directory-main">
+          <div class="active-filter" id="activeFilter" hidden></div>
+          <div class="category-row scope-row" id="categoryRow"><label class="scope-field" for="categorySelect"><span class="scope-label" data-i18n="scopeLabel">Kategori &amp; grup</span><span class="scope-shell"><select class="scope-select" id="categorySelect" aria-describedby="scopeHint"><option value="all" data-i18n="allCategories">Semua kategori</option></select><span class="scope-arrow" aria-hidden="true">▾</span></span></label><p class="scope-hint" id="scopeHint" data-i18n="scopeHint">Pilih satu kategori, atau langsung satu grup untuk melompat ke rosternya.</p></div>
+          <div class="filter-row" id="filterRow" role="group" aria-label="Filter status member"><button class="filter-chip is-active" type="button" data-filter="all" aria-pressed="true"><span data-i18n="filterAll">Semua</span></button><button class="filter-chip" type="button" data-filter="live" aria-pressed="false"><span data-i18n="filterLive">🔴 Sedang Live</span> <span class="chip-count" data-count="live">0</span></button><button class="filter-chip" type="button" data-filter="stage" aria-pressed="false"><span data-i18n="filterStage">🎤 Di Stage</span> <span class="chip-count" data-count="stage">0</span></button></div>
+          <div class="member-directory-groups" id="memberGrid" aria-live="polite"></div>
+        </div>
+        <aside class="table-panel" aria-label="Tabel member per grup">
+          <h2 class="panel-title">Tabel Member</h2>
+          <p class="table-hint">Dikelompokkan per generasi · angka dalam kurung = tim.</p>
+          <div class="group-table-list" id="memberTableList"></div>
+        </aside>
+      </div>
     </div></section>
   </main>
-  <footer class="site-footer"><div class="container"><p>© <span id="year">2026</span> Idol &amp; Group Wiki Hub</p></div></footer>
+  <footer class="site-footer"><div class="container"><p>© <span id="year">2026</span> <span data-i18n="footerHub">Idol &amp; Group Wiki Hub</span></p></div></footer>
   <div class="toast-stack" id="toastStack" role="status" aria-live="polite"></div>
   <script src="api-config.js" defer></script><script src="common.js" defer></script><script src="script.js" defer></script><script src="pwa.js" defer></script>
 </body>

@@ -1,0 +1,52 @@
+# Mapping live HKT48 — data/sumber/live/hkt48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js hkt48 --write
+
+Ikuno Rina       | - | - | -   # Team H
+Ishibashi Ibuki  | - | - | -   # Team H
+Ishimatsu Yuina  | - | - | -   # Team H
+Ichimura Airi    | - | - | -   # Team H
+Kitagawa Hiiro   | - | - | -   # Team H
+Kurihara Sae     | - | - | -   # Team H
+Shibui Mina      | - | - | -   # Team H
+Toyonaga Aki     | - | - | -   # Team H
+Nakano Minami    | - | - | -   # Team H
+Fujino Kokoha    | - | - | -   # Team H
+Fuchigami Mai    | - | - | -   # Team H
+Matsunaga Yui    | - | - | -   # Team H
+Yanase Reia      | - | - | -   # Team H
+Yamauchi Yuna    | - | - | -   # Team H
+Ryuto Ayane      | - | - | -   # Team H
+Akiyoshi Yuka    | - | - | -   # Team KIV
+Izawa Miyu       | - | - | -   # Team KIV
+Ishii Ayane      | - | - | -   # Team KIV
+Ihara Hanna      | - | - | -   # Team KIV
+Imamura Maria    | - | - | -   # Team KIV
+Eura Yuka        | - | - | -   # Team KIV
+Eguchi Kokoha    | - | - | -   # Team KIV
+Oba Risaki       | - | - | -   # Team KIV
+Kuriyama Rina    | - | - | -   # Team KIV
+Takemoto Kurumi  | - | - | -   # Team KIV
+Tachibana Kokoro | - | - | -   # Team KIV
+Tanaka Iori      | - | - | -   # Team KIV
+Fukui Karen      | - | - | -   # Team KIV
+Morisaki Saaya   | - | - | -   # Team KIV
+Yasui Hina       | - | - | -   # Team KIV
+Aoki Hinako      | - | - | -   # Kenkyuusei
+Ishikawa Amiyu   | - | - | -   # Kenkyuusei
+Ijima Riria      | - | - | -   # Kenkyuusei
+Kure Yuna        | - | - | -   # Kenkyuusei
+Tsurukawa Nachi  | - | - | -   # Kenkyuusei
+Nagano Rara      | - | - | -   # Kenkyuusei
+Matsumoto Moka   | - | - | -   # Kenkyuusei
+Yamakawa Maria   | - | - | -   # Kenkyuusei
+Yoshida Mei      | - | - | -   # Kenkyuusei

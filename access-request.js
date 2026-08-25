@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
     result.className = 'access-request-status';
-    result.textContent = 'Mengirim pengajuan...';
+    result.textContent = uiCardText('sendingRequest');
     const formData = new FormData(form);
     try {
       await submitAccessRequest({
@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', () => {
       });
       form.reset();
       result.className = 'access-request-status is-success';
-      result.textContent = 'Pengajuan diterima. Kami akan meninjaunya secara manual.';
+      result.textContent = uiCardText('requestReceived');
     } catch (error) {
       result.className = 'access-request-status is-error';
       result.textContent = error.message;

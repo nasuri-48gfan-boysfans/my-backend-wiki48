@@ -151,15 +151,13 @@ function kartuRekanHTML(m) {
    ------------------------------------------------------------- */
 function renderTidakDitemukan(id) {
   const petunjuk = id
-    ? `<p class="page-subtitle">Tidak ada member dengan id <code>${esc(id)}</code>.
-         Mungkin roster sudah berubah atau tautannya salah.</p>`
-    : `<p class="page-subtitle">Alamat halaman ini butuh parameter
-         <code>?id=</code>, misalnya <code>member.html?id=jkt48-01</code>.</p>`;
+    ? `<p class="page-subtitle">${esc(uiCardText('notFoundIdTpl').replace('{id}', id))}</p>`
+    : `<p class="page-subtitle">${uiCardText('notFoundNeedId')}</p>`;
 
   return `<section class="page-head">
       <div class="container">
         <a class="back-link" href="index.html#directory">← Member Directory</a>
-        <h1 class="page-title">Member <span class="gradient-text">tidak ditemukan</span></h1>
+        <h1 class="page-title">${uiCardText('notFoundTitleHtml')}</h1>
         ${petunjuk}
         <p class="profile-actions">
           <a class="btn-primary" href="index.html#directory">Buka Member Directory</a>
@@ -255,7 +253,7 @@ function renderMember(member) {
           </div>
           <div class="profile-schedule">
             <h2 class="profile-subtitle">Jadwal</h2>
-            ${agenda.length ? `<ul class="member-agenda-list">${agenda.map((event) => `<li>${esc([event.date, event.time, event.title, event.venue].filter(Boolean).join(' · '))}</li>`).join('')}</ul>` : '<p class="schedule-empty">Belum ada agenda lokal. Buka jadwal resmi grup untuk agenda terbaru.</p>'}
+            ${agenda.length ? `<ul class="member-agenda-list">${agenda.map((event) => `<li>${esc([event.date, event.time, event.title, event.venue].filter(Boolean).join(' · '))}</li>`).join('')}</ul>` : `<p class="schedule-empty">${esc(uiCardText('agendaLocalEmpty'))}</p>`}
             ${jadwal}
           </div>
         </div>
@@ -308,13 +306,13 @@ function syncTombolOshi(id, pesan) {
   btn.classList.toggle('is-locked', penuh);
   btn.setAttribute('aria-pressed', String(aktif));
   btn.innerHTML = aktif
-    ? '<span aria-hidden="true">💖</span> Lepas dari oshi'
-    : '<span aria-hidden="true">🤍</span> Pin sebagai oshi';
-  btn.setAttribute('title', aktif ? `Lepas ${member.name} dari oshi` : `Pin ${member.name} sebagai oshi`);
+    ? '<span aria-hidden="true">💖</span> Lepas dari My Oshi'
+    : '<span aria-hidden="true">🤍</span> Tambah ke My Oshi';
+  btn.setAttribute('title', aktif ? `Lepas ${member.name} dari My Oshi` : `Tambah ${member.name} ke My Oshi`);
 
   const info = $('#oshiInfo');
   if (info) {
-    info.textContent = pesan || `${oshiList.length} oshi dipin.`;
+    info.textContent = pesan || `${oshiList.length} My Oshi tersimpan.`;
     info.classList.toggle('is-warn', Boolean(pesan) && penuh);
   }
 }
@@ -331,19 +329,33 @@ function initTombolOshi(id) {
   btn.parentNode.insertAdjacentElement('afterend', info);
 
   btn.addEventListener('click', () => {
-    const hasil = setOshi(id);
     const member = memberById(id);
+    if (!isOshi(id)) {
+      const reason = window.prompt(`Kenapa kamu ingin menambahkan ${member.name} sebagai My Oshi?`);
+      if (reason === null) return;
+      if (reason.trim().length < 3) {
+        syncTombolOshi(id, 'Tulis alasan singkat, minimal 3 karakter.');
+        return;
+      }
+      const reasons = loadOshiReasons();
+      reasons[id] = reason.trim().slice(0, 240);
+      saveOshiReasons(reasons);
+    }
+    const hasil = setOshi(id);
     let pesan = '';
 
     if (hasil === 'added') {
-      pesan = `${member.name} dipin sebagai oshi (${oshiList.length}).`;
+      pesan = `${member.name} ditambahkan ke My Oshi (${oshiList.length}).`;
     } else if (hasil === 'removed') {
-      pesan = `${member.name} dilepas dari oshi.`;
+      const reasons = loadOshiReasons();
+      delete reasons[id];
+      saveOshiReasons(reasons);
+      pesan = `${member.name} dilepas dari My Oshi.`;
     }
 
     if (hasil === 'added' || hasil === 'removed') {
       if (!saveOshiList()) {
-        pesan += ' Penyimpanan lokal diblokir browser — pin hanya bertahan selama tab terbuka.';
+        pesan += ' Penyimpanan lokal diblokir browser — pilihan hanya bertahan selama tab terbuka.';
       }
     }
     syncTombolOshi(id, pesan);
@@ -371,8 +383,12 @@ function initMemberPage() {
   const member = id ? memberById(id) : null;
 
   if (!member) {
-    root.innerHTML = renderTidakDitemukan(id);
-    document.title = 'Member tidak ditemukan — Idol & Group Wiki Hub';
+    const renderKosong = () => {
+      root.innerHTML = renderTidakDitemukan(id);
+      document.title = 'Member tidak ditemukan — Idol & Group Wiki Hub';
+    };
+    renderKosong();
+    document.addEventListener('wiki48-language-change', renderKosong);
     return;
   }
 

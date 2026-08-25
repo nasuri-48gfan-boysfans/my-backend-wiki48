@@ -1,0 +1,61 @@
+# Mapping live NMB48 — data/sumber/live/nmb48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js nmb48 --write
+
+Izumi Ayano      | - | - | -
+Shiotsuki Keito  | - | - | -
+Mizuta Shiori    | - | - | -
+Shinzawa Nao     | - | - | -
+Hirayama Mai     | - | - | -
+Ike Honoka       | - | - | -
+Kuroshima Sakura | - | - | -
+Sakashita Mako   | - | - | -
+Sakata Misaki    | - | - | -
+Sakurada Ayaka   | - | - | -
+Tatsumoto Yayoi  | - | - | -
+Fukuna Ami       | - | - | -
+Matsuoka Sakura  | - | - | -
+Matsumoto Mihina | - | - | -
+Aobara Yuuka     | - | - | -
+Ikeda Tenna      | - | - | -
+Itagaki Koyori   | - | - | -
+Kinugasa Ayami   | - | - | -
+Tanaka Misora    | - | - | -
+Nishijima Rio    | - | - | -
+Nishida Honoka   | - | - | -
+Haga Rei         | - | - | -
+Miyamoto Ami     | - | - | -
+Yoshimi Ayane    | - | - | -
+Ishiyama Chihiro | - | - | -
+Uchida Aisha     | - | - | -
+Kine Iroha       | - | - | -
+Shibuya Asana    | - | - | -
+Takahashi Kotone | - | - | -
+Takeda Kyoka     | - | - | -
+Tanaka Miria     | - | - | -
+Miyahara Konon   | - | - | -
+Murai Yuri       | - | - | -
+Yamaguchi Mio    | - | - | -
+Akamatsu Sora    | - | - | -
+Okagoshi Seira   | - | - | -
+Sakurai Himari   | - | - | -
+Zenke Yurika     | - | - | -
+Takahashi Juna   | - | - | -
+Tanaka Rei       | - | - | -
+Taniguchi Shino  | - | - | -
+Nishizumi Misaki | - | - | -
+Fukuhara Kotomi  | - | - | -
+Yabuuchi Hinata  | - | - | -
+Wada Kotone      | - | - | -
+Nakagawa Tomoka  | - | - | -
+Mikamo Kurumi    | - | - | -
+Miyazaki Sae     | - | - | -

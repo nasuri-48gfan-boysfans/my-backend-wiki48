@@ -28,7 +28,7 @@
   <!-- ============================================================= -->
   <header class="site-header">
     <div class="container header-inner">
-      <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
+      <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i><img class="logo-mascot" src="img/mascot-logo.svg" alt="" aria-hidden="true" /></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
 
       <button
         class="hamburger"
@@ -47,8 +47,7 @@
   <div class="drawer-overlay" id="drawerOverlay" hidden></div>
 
   <nav class="drawer" id="drawer" aria-label="Menu utama" aria-hidden="true">
-    <div class="drawer-header">
-      <span class="drawer-title">Menu</span>
+    <div class="drawer-header"><img class="drawer-mascot" src="img/mascot-logo.svg" alt="" aria-hidden="true" /><span class="drawer-title">Menu</span>
       <button class="drawer-close" id="menuClose" type="button" aria-label="Tutup menu">✕</button>
     </div>
     <ul class="drawer-nav">
@@ -57,7 +56,7 @@
       <li><a href="index.html#oshi">⭐ My Oshi</a></li>
       <li><a href="index.html#directory">👥 Member Directory</a></li>
       <li><a href="groups.html" aria-current="page">🎤 Groups</a></li>
-      <li><a href="schedule.html">📅 Schedule</a></li>
+      <li><a href="stage-schedule.html">🗓️ Jadwal Stage</a></li>
       <li><a href="news.html">📰 Berita resmi</a></li>
     </ul>
     <div class="drawer-footer">
@@ -74,10 +73,10 @@
       <div class="container">
         <a class="back-link" href="index.html#hero">← Beranda</a>
 
-        <h1 class="page-title">
+        <h1 class="page-title" data-i18n-html="groupsTitleHtml">
           Semua <span class="gradient-text">Grup</span>
         </h1>
-        <p class="page-subtitle">
+        <p class="page-subtitle" data-i18n="groupsSubtitle">
           12 grup AKB48 Group — dikelompokkan menjadi domestik (Jepang) dan
           kaigai (luar Jepang). Pilih satu grup untuk melihat daftar membernya.
         </p>
@@ -96,6 +95,7 @@
             placeholder="Cari nama grup atau member…"
             aria-label="Cari nama grup atau member"
             autocomplete="off"
+            data-i18n-placeholder="searchGroupsPh"
           />
           <button class="search-btn" type="submit">Search</button>
         </form>
@@ -106,7 +106,7 @@
     <section class="section groups-section" id="groups">
       <div class="container">
         <div class="section-head">
-          <h2 class="section-title">Group Directory</h2>
+          <h2 class="section-title" data-i18n="groupDirectory">Group Directory</h2>
           <span class="section-count" id="groupCount"></span>
         </div>
 
@@ -121,7 +121,7 @@
   <!-- ============================================================= -->
   <footer class="site-footer">
     <div class="container">
-      <p>© <span id="year">2026</span> Idol &amp; Group Wiki Hub — dibuat untuk para fans.</p>
+      <p>© <span id="year">2026</span> <span data-i18n="footerHub">Idol &amp; Group Wiki Hub — dibuat untuk para fans.</span></p>
     </div>
   </footer>
 

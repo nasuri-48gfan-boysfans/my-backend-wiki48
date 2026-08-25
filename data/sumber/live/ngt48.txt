@@ -1,0 +1,47 @@
+# Mapping live NGT48 — data/sumber/live/ngt48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js ngt48 --write
+
+Seiji Reina      | - | - | -   # Gen 1
+Nishigata Marina | - | - | -   # Gen 2
+Otsuka Nanami    | - | - | -   # Gen 2
+Mimura Hino      | - | - | -   # Gen 2
+Sato Kairi       | - | - | -   # Gen 3
+Isobe Rua        | - | - | -   # Gen 3
+Kita Hanae       | - | - | -   # Gen 3
+Kitamura Yuha    | - | - | -   # Gen 3
+Suizu Natsuki    | - | - | -   # Gen 3
+Sugimoto Moe     | - | - | -   # Gen 3
+Isozaki Nana     | - | - | -   # Gen 4
+Kimoto Anna      | - | - | -   # Gen 4
+Sato Hiroka      | - | - | -   # Gen 4
+Shinzawa Aoi     | - | - | -   # Gen 4
+Takashima Yua    | - | - | -   # Gen 4
+Nishikawa Haruna | - | - | -   # Gen 4
+Azama Yui        | - | - | -   # Gen 5
+Adachi Yume      | - | - | -   # Gen 5
+Omachi Yuka      | - | - | -   # Gen 5
+Kai Mizuki       | - | - | -   # Gen 5
+Kitazawa Mone    | - | - | -   # Gen 5
+Sato Yuuka       | - | - | -   # Gen 5
+Suto Rinka       | - | - | -   # Gen 5
+Taniguchi Haruka | - | - | -   # Gen 5
+Nakata Asami     | - | - | -   # Gen 5
+Minagawa Hiyori  | - | - | -   # Gen 5
+Aiki Maaya       | - | - | -   # Gen 6
+Inomata Sana     | - | - | -   # Gen 6
+Ohashi Ayano     | - | - | -   # Gen 6
+Katayama Shuri   | - | - | -   # Gen 6
+Kuga Mirei       | - | - | -   # Gen 6
+Sato Honoka      | - | - | -   # Gen 6
+Hirai Yuzuha     | - | - | -   # Gen 6
+Hosoya Naho      | - | - | -   # Gen 6

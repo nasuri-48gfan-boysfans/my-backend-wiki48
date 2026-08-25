@@ -2,13 +2,23 @@
   "version": 2,
   "functions": {
     "api/index.js": {
-      "maxDuration": 30
+      "maxDuration": 60
     },
     "api/[...path].js": {
-      "maxDuration": 30
+      "maxDuration": 60
     }
   },
   "rewrites": [
     { "source": "/api/(.*)", "destination": "/api" }
+  ],
+  "redirects": [
+    { "source": "/schedule", "destination": "/stage-schedule.html", "statusCode": 308 },
+    { "source": "/schedule.html", "destination": "/stage-schedule.html", "statusCode": 308 }
+  ],
+  "crons": [
+    {
+      "path": "/api/cron/update-live",
+      "schedule": "*/2 * * * *"
+    }
   ]
 }

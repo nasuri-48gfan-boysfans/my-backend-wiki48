@@ -8,6 +8,40 @@
    ============================================================= */
 
 /* -------------------------------------------------------------
+   LOADER BUKA PANGGUNG — animasi tiap halaman dibuka/direload.
+   Ditempatkan paling awal supaya overlay terpasang sebelum
+   konten sempat tergambar. Lewati bila pengunjung memakai
+   prefers-reduced-motion; pengaman waktu mencegah loader
+   menahan halaman lebih dari 2,6 detik.
+   ------------------------------------------------------------- */
+(function stageLoader() {
+  const gerakDikurangi = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (gerakDikurangi || !document.body || document.querySelector('.wiki-loader')) return;
+  const bahasa = String(document.documentElement.lang || 'id').slice(0, 2).toLowerCase();
+  const petunjuk = {
+    id: 'Menyiapkan panggung…', en: 'Setting up the stage…', ja: 'ステージを準備中…',
+    th: 'กำลังเตรียมเวที…', zh: '正在准备舞台…', ms: 'Menyediakan pentas…',
+  }[bahasa] || 'Setting up the stage…';
+  const loader = document.createElement('div');
+  loader.className = 'wiki-loader';
+  loader.setAttribute('role', 'status');
+  loader.innerHTML = `<div class="wiki-loader-card"><img class="wiki-loader-hero" src="img/mascot-wiki48.svg" alt="" aria-hidden="true" /><span class="wiki-loader-badge" aria-hidden="true"><b class="wiki-loader-heart">♥</b><i>WIKI<strong>48</strong></i></span><span class="wiki-loader-bar" aria-hidden="true"><b></b></span><p>${petunjuk}</p></div><span class="wiki-loader-star s1" aria-hidden="true">✦</span><span class="wiki-loader-star s2" aria-hidden="true">✧</span><span class="wiki-loader-star s3" aria-hidden="true">✦</span><span class="wiki-loader-float f1" aria-hidden="true">♥</span><span class="wiki-loader-float f2" aria-hidden="true">✿</span><span class="wiki-loader-float f3" aria-hidden="true">♥</span><span class="wiki-loader-float f4" aria-hidden="true">✿</span>`;
+  document.body.appendChild(loader);
+  let tertutup = false;
+  function tutup() {
+    if (tertutup) return;
+    tertutup = true;
+    loader.classList.add('is-done');
+    window.setTimeout(() => loader.remove(), 480);
+  }
+  const mulai = Date.now();
+  const jadwalTutup = () => window.setTimeout(tutup, Math.max(0, 700 - (Date.now() - mulai)));
+  if (document.readyState === 'complete') jadwalTutup();
+  else window.addEventListener('load', jadwalTutup, { once: true });
+  window.setTimeout(tutup, 2600);
+})();
+
+/* -------------------------------------------------------------
    1. DATA GRUP
    accent: "pink" | "cyan" | "violet" | "amber"
    slug  : dipakai di URL → members.html?group=<slug>#directory
@@ -5057,7 +5091,19 @@ function liveMembers() {
 }
 
 const LIVE_TRACKER_API_URL = window.location.protocol === 'file:' ? 'http://localhost:8787/api/live' : (window.wiki48ApiUrl ? window.wiki48ApiUrl('/api/live') : '/api/live');
-const LIVE_TRACKER_EVENTS_URL = window.location.protocol === 'file:' ? 'http://localhost:8787/api/live/events' : (window.wiki48ApiUrl ? window.wiki48ApiUrl('/api/live/events') : '/api/live/events');
+/* Kandidat alamat API untuk mode dev lintas-origin: halaman boleh dibuka
+   dari file:// atau Live Server sementara API hidup di localhost:3000.
+   Base yang berhasil diwajibkan diingat agar request berikutnya tidak
+   mengulang pencarian. */
+let liveBaseAktif = null;
+function liveApiBase() {
+  if (liveBaseAktif !== null) return liveBaseAktif;
+  const kandidat = Array.isArray(window.WIKI48_API_CANDIDATES) ? window.WIKI48_API_CANDIDATES : [''];
+  return kandidat[0] || '';
+}
+function liveEndpoint(pathname) {
+  return `${liveApiBase().replace(/\/$/, '')}${pathname}`;
+}
 
 function applyLiveSnapshot(results) {
   const liveById = new Map((Array.isArray(results) ? results : []).map((item) => [item.id, item]));
@@ -5065,6 +5111,7 @@ function applyLiveSnapshot(results) {
     const live = liveById.get(member.id);
     member.isLive = Boolean(live);
     if (live) {
+      live.startedAt = safeLiveTimestamp(live);
       if (live.live_url) member.liveUrl = live.live_url;
       if (live.platform) {
         member.livePlatform = live.platform === 'showroom' ? 'SHOWROOM'
@@ -5074,11 +5121,145 @@ function applyLiveSnapshot(results) {
   });
 }
 
+function safeLiveTimestamp(item) {
+  const rawTime = item?.started_at || item?.live_at || item?.created_at || item?.date || Date.now();
+  if (rawTime instanceof Date) return Number.isNaN(rawTime.getTime()) ? Date.now() : rawTime.getTime();
+  if (typeof rawTime === 'number' || /^\d+(?:\.\d+)?$/.test(String(rawTime).trim())) {
+    const numeric = Number(rawTime);
+    if (!Number.isFinite(numeric) || numeric <= 0) return Date.now();
+    return numeric < 10000000000 ? numeric * 1000 : numeric;
+  }
+  const parsed = Date.parse(String(rawTime));
+  return Number.isFinite(parsed) && parsed > 0 ? parsed : Date.now();
+}
+
+/* -------------------------------------------------------------
+   KESEHATAN TRACKER
+
+   Dipisah dari daftar live karena keduanya menjawab pertanyaan yang
+   berbeda: "siapa yang live" vs "apakah jawaban itu masih bisa
+   dipercaya". Sebelum ini frontend hanya membaca `data.live` dan
+   membuang `stale` / `tracker.has_snapshot`, jadi tracker yang mati
+   tampil sebagai "Belum ada yang live" — keliru, dan terdengar yakin.
+   Itu jenis kesalahan yang paling sulit dilacak: halamannya terlihat
+   sehat, jadi tidak ada yang curiga pada backend-nya.
+   ------------------------------------------------------------- */
+const liveTrackerHealth = {
+  reachable: false,    // permintaan terakhir berhasil?
+  hasSnapshot: false,  // pernah ada worker yang menulis snapshot?
+  stale: true,         // snapshot terakhir sudah kedaluwarsa?
+  ageMs: null,
+  checkedAt: null,
+  sse: null,           // null = belum tahu; false = server bilang tidak didukung
+  error: null,
+};
+
+function catatKesehatanLive(payload) {
+  const tracker = (payload && payload.tracker) || {};
+  liveTrackerHealth.reachable = true;
+  liveTrackerHealth.hasSnapshot = Boolean(tracker.has_snapshot);
+  liveTrackerHealth.stale = payload.stale !== false;
+  liveTrackerHealth.ageMs = typeof payload.age_ms === 'number' ? payload.age_ms : null;
+  liveTrackerHealth.checkedAt = payload.checked_at || null;
+  if (typeof tracker.sse === 'boolean') liveTrackerHealth.sse = tracker.sse;
+  liveTrackerHealth.error = null;
+  return liveTrackerHealth;
+}
+
+function catatGagalLive(pesan) {
+  liveTrackerHealth.reachable = false;
+  liveTrackerHealth.error = String(pesan || 'tidak diketahui');
+  return liveTrackerHealth;
+}
+
+/* Fungsi MURNI — sengaja tanpa DOM dan tanpa i18n supaya bisa diuji di
+   node (lihat data/live-tracker/uji-kartu-live.js). Yang dikembalikan
+   hanya keputusan; pemilihan kata diserahkan ke uiCardText(). */
+function liveTrackerCardState(health, jumlahLive) {
+  const h = health || {};
+  const jumlah = Number(jumlahLive) || 0;
+
+  /* Tidak terjangkau: daftar terakhir TIDAK dihapus dari layar. Nama yang
+     tadi live kemungkinan besar masih live; yang hilang cuma kepastiannya,
+     jadi yang diubah adalah labelnya, bukan datanya. */
+  if (!h.reachable) {
+    return jumlah > 0
+      ? { kode: 'takTerjangkau', kunci: 'liveOfflineLast', nada: 'peringatan', tampilkanNama: true }
+      : { kode: 'takTerjangkau', kunci: 'liveOffline', nada: 'peringatan', tampilkanNama: false };
+  }
+  /* Terjangkau tapi belum pernah ada snapshot = poller/cron belum pernah
+     jalan. Ini beda dari "sudah dicek, hasilnya kosong", dan bedanya
+     penting: yang pertama salahmu, yang kedua memang sedang sepi. */
+  if (!h.hasSnapshot) {
+    return { kode: 'belumPernah', kunci: 'liveNeverChecked', nada: 'peringatan', tampilkanNama: false };
+  }
+  if (h.stale) {
+    return jumlah > 0
+      ? { kode: 'kedaluwarsa', kunci: 'liveStaleLast', nada: 'peringatan', tampilkanNama: true }
+      : { kode: 'kedaluwarsa', kunci: 'liveStale', nada: 'peringatan', tampilkanNama: false };
+  }
+  if (jumlah === 0) {
+    return { kode: 'kosong', kunci: 'liveNone', nada: 'netral', tampilkanNama: false };
+  }
+  return { kode: 'live', kunci: null, nada: 'ok', tampilkanNama: true };
+}
+
+/* Teks kecil di bawah kartu. Juga murni. */
+function liveTrackerStampText(health, opsi) {
+  const h = health || {};
+  const o = opsi || {};
+  const locale = { id: 'id-ID', en: 'en-GB', ja: 'ja-JP', th: 'th-TH', 'zh-CN': 'zh-CN', 'zh-TW': 'zh-TW', ms: 'ms-MY' }[currentUiCode()] || 'id-ID';
+  const jam = (nilai) => {
+    const d = nilai instanceof Date ? nilai : new Date(nilai);
+    if (Number.isNaN(d.getTime())) return null;
+    try { return d.toLocaleTimeString(locale, { hour: '2-digit', minute: '2-digit' }); }
+    catch (err) { return `${String(d.getHours()).padStart(2, '0')}:${String(d.getMinutes()).padStart(2, '0')}`; }
+  };
+  if (!h.reachable) {
+    const terakhir = h.checkedAt ? jam(h.checkedAt) : null;
+    return terakhir
+      ? `${uiCardText('stampUnreachable')} · ${uiCardText('stampDataAt').replace('{t}', terakhir)}`
+      : uiCardText('stampUnreachable');
+  }
+  if (!h.hasSnapshot) return uiCardText('liveNeverChecked');
+  const dicek = jam(h.checkedAt) || jam(new Date());
+  const sumber = o.realtime
+    ? uiCardText('stampRealtime')
+    : (o.intervalMs ? uiCardText('stampAutoEveryTpl').replace('{n}', Math.round(o.intervalMs / 1000)) : null);
+  const dasar = uiCardText('stampCheckedTpl').replace('{t}', dicek);
+  if (h.stale) return `${dasar} · ${uiCardText('stampStaleSuffix')}`;
+  return sumber ? `${dasar} · ${sumber}` : dasar;
+}
+
 async function fetchLiveTrackerSnapshot() {
-  const response = await fetch(LIVE_TRACKER_API_URL, { headers: { accept: 'application/json' } });
-  if (!response.ok) throw new Error(`Live tracker HTTP ${response.status}`);
-  const data = await response.json();
-  if (!Array.isArray(data.live)) throw new Error('Respons live tracker tidak valid');
+  const kandidat = liveBaseAktif !== null
+    ? [liveEndpoint('/api/live')]
+    : (Array.isArray(window.WIKI48_API_CANDIDATES) ? window.WIKI48_API_CANDIDATES : [''])
+      .map((base) => `${String(base).replace(/\/$/, '')}/api/live`);
+  let data = null;
+  let pesan = 'tidak ada endpoint live yang bisa dihubungi';
+  for (const url of kandidat) {
+    try {
+      const response = await fetch(url, { headers: { accept: 'application/json' } });
+      if (!response.ok) throw new Error(`Live tracker HTTP ${response.status}`);
+      const isi = await response.json();
+      if (!Array.isArray(isi.live)) throw new Error('Respons live tracker tidak valid');
+      data = isi;
+      liveBaseAktif = url.slice(0, -'/api/live'.length);
+      break;
+    } catch (error) {
+      /* Kegagalan dicatat DULU, baru dilempar: pemanggil bebas menelan
+         error-nya (halaman tetap terbuka), tapi status kesehatannya tidak
+         ikut hilang — itu yang dipakai UI untuk berhenti mengklaim
+         "belum ada yang live". */
+      pesan = error.message;
+    }
+  }
+  if (!data) {
+    catatGagalLive(pesan);
+    throw new Error(pesan);
+  }
+  catatKesehatanLive(data);
   applyLiveSnapshot(data.live);
   return data.live;
 }
@@ -5162,6 +5343,7 @@ function sortedMembersOfGroup(groupId) {
    tidak permanen) alih-alih mati total.
    ------------------------------------------------------------- */
 const OSHI_STORAGE_KEY = 'oshiList'; // key localStorage sesuai spesifikasi
+const OSHI_REASON_STORAGE_KEY = 'oshiReasons';
 const OSHI_LIMIT = Infinity;         // pin tidak dibatasi jumlahnya
 
 const oshiStore = (function detectStorage() {
@@ -5225,6 +5407,26 @@ function saveOshiList() {
   }
 }
 
+function loadOshiReasons() {
+  if (!oshiStore) return {};
+  try {
+    const parsed = JSON.parse(oshiStore.getItem(OSHI_REASON_STORAGE_KEY) || '{}');
+    return parsed && typeof parsed === 'object' && !Array.isArray(parsed) ? parsed : {};
+  } catch (err) {
+    return {};
+  }
+}
+
+function saveOshiReasons(reasons) {
+  if (!oshiStore) return false;
+  try {
+    oshiStore.setItem(OSHI_REASON_STORAGE_KEY, JSON.stringify(reasons));
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
 function isOshi(id) {
   return oshiList.indexOf(id) !== -1;
 }
@@ -5256,6 +5458,8 @@ function setOshi(id) {
    memakai logika yang sama tanpa duplikasi listener.
    ------------------------------------------------------------- */
 function initDrawer() {
+  if (initDrawer.booted) return;
+  initDrawer.booted = true;
   const toggle = $('#menuToggle');
   const drawer = $('#drawer');
   const overlay = $('#drawerOverlay');
@@ -5311,13 +5515,230 @@ const UI_LANGUAGES = [
   ['zh-CN', '简体中文'], ['zh-TW', '繁體中文'], ['ms', 'Bahasa Melayu'],
 ];
 const UI_COPY = {
-  id: { home: 'Beranda', members: 'Direktori Member', groups: 'Info Grup', gallery: 'Galeri Media', schedule: 'Jadwal', community: 'Komunitas', updates: 'Pembaruan Wiki', search: 'Cari di Wiki...', menu: 'Menu', back: '← Beranda', official: 'Resmi' },
-  en: { home: 'Home', members: 'Member Directory', groups: 'Group Info', gallery: 'Media Gallery', schedule: 'Schedule', community: 'Community', updates: 'Wiki Updates', search: 'Search Wiki...', menu: 'Menu', back: '← Home', official: 'Official' },
-  ja: { home: 'ホーム', members: 'メンバーディレクトリ', groups: 'グループ情報', gallery: 'メディア', schedule: 'スケジュール', community: 'コミュニティ', updates: 'Wiki更新', search: 'Wikiを検索...', menu: 'メニュー', back: '← ホーム', official: '公式' },
-  th: { home: 'หน้าแรก', members: 'สมาชิก', groups: 'ข้อมูลกลุ่ม', gallery: 'แกลเลอรี', schedule: 'ตารางเวลา', community: 'ชุมชน', updates: 'อัปเดต Wiki', search: 'ค้นหา Wiki...', menu: 'เมนู', back: '← หน้าแรก', official: 'ทางการ' },
-  'zh-CN': { home: '首页', members: '成员目录', groups: '组合信息', gallery: '媒体画廊', schedule: '日程', community: '社区', updates: 'Wiki更新', search: '搜索 Wiki...', menu: '菜单', back: '← 首页', official: '官方' },
-  'zh-TW': { home: '首頁', members: '成員目錄', groups: '團體資訊', gallery: '媒體圖庫', schedule: '行程', community: '社群', updates: 'Wiki更新', search: '搜尋 Wiki...', menu: '選單', back: '← 首頁', official: '官方' },
-  ms: { home: 'Laman Utama', members: 'Direktori Ahli', groups: 'Info Kumpulan', gallery: 'Galeri Media', schedule: 'Jadual', community: 'Komuniti', updates: 'Kemas Kini Wiki', search: 'Cari Wiki...', menu: 'Menu', back: '← Laman Utama', official: 'Rasmi' },
+  id: {
+    home: 'Beranda', members: 'Direktori Member', groups: 'Info Grup', gallery: 'Galeri Media', schedule: 'Jadwal', community: 'Komunitas', updates: 'Pembaruan Wiki', search: 'Cari di Wiki...', menu: 'Menu', back: '← Beranda', official: 'Resmi',
+    liveStatusNav: 'Live Status', openMenuAria: 'Buka menu navigasi', closeMenuAria: 'Tutup menu', searchBtn: 'Cari', profileNav: 'Profil saya', notificationsAria: 'Notifikasi',
+    footerHub: 'Idol & Group Wiki Hub — dibuat untuk para fans.', footerSpark: 'dibuat dengan sparkles untuk fans 48 Group.', backDirectory: '← Member Directory',
+    heroEyebrow: 'Semesta 48 Group penuh warnamu', heroTitleHtml: 'Jelajahi dunia <em>ajaib</em><br />48 Group!', heroLede: 'Ensiklopedia super lucu seputar member, grup, live stream, dan semua momen yang layak diingat.', ctaMembers: 'Kenali membernya', ctaGroups: 'Jelajahi grup',
+    freshEyebrow: 'Baru dari wiki', featuredTitle: '★ Artikel Pilihan ★', viewAll: 'Lihat semua', shelfEyebrow: 'Rak pribadimu', oshiTitle: 'Idol favoritku', manage: 'Kelola',
+    liveEyebrow: 'Sedang terjadi sekarang', liveTitleHtml: 'Siapa yang sedang <em>live?</em> <span>♥</span>', loveEyebrow: 'Kirim sedikit cinta', birthdaysTitle: 'Ulang tahun', seeAll: 'Lihat semua',
+    readingEyebrow: 'Dibaca para fans', trendingTitle: 'Artikel populer', trend1: 'Panduan lengkap etika theater', trend2: '12 grup saudari, satu keluarga besar', trend3: 'Cara menemukan oshi barumu',
+    syncingTracker: 'Menyinkronkan tracker...', checkingStreams: 'Memeriksa siaran...', birthdayEmpty: 'Data ulang tahun sedang dimpercantik.',
+    directoryTitleHtml: 'Member <span class="gradient-text">Directory</span>', membersSubtitle: 'Profil, status live, stage, jadwal, dan My Oshi dalam satu daftar.', searchMembersPh: 'Cari member atau grup...', allMembers: 'Semua member',
+    scopeLabel: 'Kategori & grup', allCategories: 'Semua kategori', scopeHint: 'Pilih satu kategori, atau langsung satu grup untuk melompat ke rosternya.', filterGroupAria: 'Filter status member', filterAll: 'Semua', filterLive: '🔴 Sedang Live', filterStage: '🎤 Di Stage',
+    groupsTitleHtml: 'Semua <span class="gradient-text">Grup</span>', groupsSubtitle: '12 grup AKB48 Group — dikelompokkan menjadi domestik (Jepang) dan kaigai (luar Jepang). Pilih satu grup untuk melihat daftar membernya.', searchGroupsPh: 'Cari nama grup atau member…', groupDirectory: 'Direktori Grup',
+    newsTitleHtml: 'Berita <span class="gradient-text">Resmi</span>', newsSubtitle: 'Akses halaman berita resmi setiap grup dari sumber aslinya.',
+    scheduleTitleHtml: 'Live &amp; <span class="gradient-text">Schedule</span>', scheduleSubtitle: 'Pantau member yang sedang live, berada di stage, dan jadwal yang sudah dicatat.', loadingStatus: 'Memuat status...', refreshLabel: 'Perbarui', labelLive: 'Sedang Live', labelStage: 'Di Stage', agendaTitle: 'Agenda resmi',
+    accountLink: 'Profil saya ↗', meetEyebrow: 'Ruang bertemu para fans', communityTitleHtml: 'WIKI48 <span class="gradient-text">Community</span>', communitySubtitle: 'Bagikan lagu favorit, temukan obrolan baru, dan rayakan momen kecil dari 48 Group bersama fans lain.',
+    qdayEyebrow: 'Questions of the day', hubTitle: 'Obrolan berdasarkan negara', hubDesc: 'Pilih ruang negara supaya percakapan tetap nyaman dan mudah diikuti.', roomLabel: 'Ruang', loadingQuestions: 'Memuat pertanyaan hari ini...',
+    ideaEyebrow: 'Punya ide obrolan?', askTitle: 'Buat pertanyaan untuk fans', askDesc: 'Bagikan pertanyaan yang spesifik dan ramah untuk ruang negara pilihanmu.', countryLabel: 'Negara', topicLabel: 'Topik', questionLabel: 'Pertanyaan', topicPh: 'Musik, member, theater...', questionPh: 'Tulis pertanyaanmu untuk fans...', submitQuestion: 'Kirim pertanyaan', voteNow: 'Vote sekarang', syncSummaryTpl: '{a} live · {b} stage', stageDetailTbd: 'Detail jadwal menyusul', activeFilterLabel: 'Filter aktif', clearFilterAriaTpl: 'Hapus filter {q}', oshiPromptTpl: 'Kenapa kamu ingin menambahkan {name} sebagai My Oshi?', toastReasonMin: 'Tulis alasan singkat, minimal 3 karakter.', toastOshiRemovedTpl: '{name} dilepas dari My Oshi.', toastOshiFullTpl: 'Maksimal {n} oshi. Lepas salah satu dulu untuk menambah {name}.', toastOshiAddedTpl: '{name} ditambahkan ke My Oshi ({n}).', toastStorageWarn: 'Browser ini memblokir penyimpanan lokal — pin hanya bertahan selama tab terbuka.', toastStatusRefreshed: 'Status live & stage diperbarui.', toastStatusFresh: 'Status sudah paling baru.', stampCheckedTpl: 'Dicek {t}', stampAutoEveryTpl: 'otomatis tiap {n} detik', stampRealtime: 'real-time', stampStaleSuffix: 'data kedaluwarsa', stampUnreachable: 'Tracker tidak terjangkau', stampDataAt: 'data {t}', notFoundTitleHtml: 'Member <span class="gradient-text">tidak ditemukan</span>', notFoundIdTpl: 'Tidak ada member dengan id {id}. Mungkin roster sudah berubah atau tautannya salah.', notFoundNeedId: 'Alamat halaman ini butuh parameter <code>?id=</code>, misalnya <code>member.html?id=jkt48-01</code>.', noStageMarked: 'Belum ada member yang ditandai stage.', noLocalAgendaTitle: 'Belum ada agenda lokal', noLocalAgendaSub: 'Agenda terbaru dibaca langsung dari situs resmi masing-masing grup.', liveUrlPending: 'URL live belum dicatat', agendaCountTpl: '{n} agenda tercatat', qEmptyRoom: 'Belum ada pertanyaan untuk ruang ini.', qShared: 'Pertanyaanmu sudah dibagikan ke ruang negara ini.', qLoginNeeded: 'Login diperlukan untuk membuat pertanyaan.', pollPickFirst: 'Pilih satu lagu dulu, superstar.', pollVotedTpl: 'Vote kamu untuk {song} sudah tercatat.', todayLabel: 'Hari ini', membersListedTpl: '{n} member terdaftar', openNews: 'Buka berita', levelReader: 'Pembaca', levelContributor: 'Kontributor', levelEditor: 'Editor', accessLabel: 'Akses', submittedLabel: 'Diajukan', experiencePrefix: 'Pengalaman:', approveBtn: 'Setujui', rejectBtn: 'Tolak', noRequestsStatus: 'Tidak ada pengajuan pada status ini.', sendingRequest: 'Mengirim pengajuan...', requestReceived: 'Pengajuan diterima. Kami akan meninjaunya secara manual.', photoRejected: 'Foto ditolak: gunakan JPEG, PNG, atau WebP maksimal 1,8 MB dan tanpa konten 18+.',
+    weekEyebrow: 'Question of the week', pollQuestion: 'Lagu JKT48 mana yang paling sering kamu putar?', pollNote: 'Pilih satu jawaban. Hasil sementara akan muncul setelah kamu vote.',
+    picksEyebrow: 'Obrolan pilihan', topicsTitle: 'Topik yang sedang ramai', joinChat: 'Ikut ngobrol',
+    d1Meta: 'JKT48 · 24 balasan', d1Title: 'Setlist theater mana yang ingin kamu tonton langsung?', d1Author: 'Dimulai oleh Rara · 2 jam lalu',
+    d2Meta: 'AKB48 · 18 balasan', d2Title: 'Rekomendasi member untuk pendengar baru?', d2Author: 'Dimulai oleh Kiki · 5 jam lalu',
+    d3Meta: '48 Group · 11 balasan', d3Title: 'Bagikan momen fanmeeting paling berkesanmu', d3Author: 'Dimulai oleh Nao · kemarin',
+    cornerEyebrow: 'From the fan corner', fanartTitle: 'Recent fan art', openGallery: 'Buka galeri',
+    storyEyebrow: 'Punya cerita?', joinTitle: 'Ruang ini milik semua fans.', joinDesc: 'Login untuk menyimpan profil dan ikut membangun komunitas WIKI48.', requestAccess: 'Ajukan akses',
+    welcomeBack: 'Selamat datang kembali', loginTitleHtml: 'Masuk ke <span>WIKI48</span>', loginSubtitle: 'Simpan oshi dan atur ruang personalmu sebagai bagian dari komunitas.', emailLabel: 'Email', passwordLabel: 'Password', minCharsPh: 'Minimal 4 karakter', loginSubmit: 'Masuk', haveAccount: 'Belum punya akun?', nameLabel: 'Nama tampilan', namePh: 'Nama kamu', registerSubmit: 'Buat akun', authNote: 'Akun disimpan aman di database komunitas.', accessLink: 'Ajukan akses kontribusi ke wiki ↗',
+    changePhoto: 'Ganti foto', personalSpace: 'Ruang personalmu', helloBefore: 'Halo,', helloAfter: '!', identityEyebrow: 'Identitas', editBioTitle: 'Edit biodata fans', privacyNote: 'Data pribadi dipseudonimkan dengan kode acak dan foto diperiksa formatnya sebelum disimpan.', saveChanges: 'Simpan perubahan', profileSavedMsg: 'Profil berhasil diperbarui.', sinceEyebrow: 'Member sejak', oshiStoredNote: 'My Oshi dan alasan pilihanmu tersimpan di akunmu.', manageOshi: 'Kelola My Oshi', logoutBtn: 'Keluar dari akun',
+    requestEyebrow: 'Permohonan akses', accessTitleHtml: 'Bantu rawat <span>WIKI48</span>', accessSubtitle: 'Ceritakan kontribusi yang ingin kamu lakukan. Pemilik wiki akan meninjau setiap pengajuan secara manual.', fullNameLabel: 'Nama', contactEmailLabel: 'Email untuk dihubungi', chooseRoom: 'Pilih ruang', optID: 'Indonesia', optJP: 'Jepang', optTH: 'Thailand', optCN: 'Tiongkok', optTW: 'Taiwan', optMY: 'Malaysia', optOther: 'Lainnya',
+    accessTypeLabel: 'Jenis akses yang diminta', chooseAccess: 'Pilih akses', optReader: 'Pembaca terverifikasi', optContributor: 'Kontributor data/artikel', optEditor: 'Editor komunitas', helpLabel: 'Apa yang ingin kamu bantu?', reasonPh: 'Contoh: memperbarui profil member dan sumber resmi JKT48...', experienceLabel: 'Pengalaman atau contoh kontribusi', optionalLabel: '(opsional)', experiencePh: 'Link atau ringkasan pengalaman yang relevan', consentText: 'Saya bersedia mengikuti aturan komunitas, mencantumkan sumber, dan tidak mengubah data secara sembarangan.', submitRequest: 'Kirim pengajuan', sensitiveNote: 'Jangan kirim password, nomor identitas, atau data sensitif di formulir ini.',
+    privateWs: 'Private workspace', reviewTitleHtml: 'Review <span>access request</span>', reviewDesc: 'Nilai pengajuan secara manual sebelum memberikan akses wiki.', filterStatusAria: 'Filter status pengajuan', optPending: 'Pending', optApproved: 'Approved', optRejected: 'Rejected', loadingRequests: 'Memuat pengajuan...',
+    adminLoginTitleHtml: 'WIKI48 <span>Admin</span>', adminOnlyNote: 'Area ini hanya untuk pengelola wiki.', adminEmailLabel: 'Email admin', loginPanelBtn: 'Masuk ke panel', backToWiki: '← Kembali ke WIKI48',
+    noResultTitle: 'Tidak ada hasil', noMemberFilter: 'Tidak ada member pada filter ini.', emptyOshiTitle: 'Belum ada oshi', pinnedCountTpl: '{n} dipin', noStageSchedule: 'Belum ada jadwal stage', groupsNoMatchTpl: 'Tidak ada grup yang cocok dengan “{q}”.', memberNotFoundTpl: 'Tidak ada member dengan id {id}.', agendaLocalEmpty: 'Belum ada agenda lokal. Buka jadwal resmi grup untuk agenda terbaru.', officialSource: 'Sumber resmi', emptyOshiSubTpl: 'Tekan 🤍 pada member favoritmu untuk quick-view di sini (maksimal {n}).', countFromTpl: '{a} dari {b} member', countTpl: '{n} member', dirScopedTpl: 'Member {scope}',
+  },
+  en: {
+    home: 'Home', members: 'Member Directory', groups: 'Group Info', gallery: 'Media Gallery', schedule: 'Schedule', community: 'Community', updates: 'Wiki Updates', search: 'Search Wiki...', menu: 'Menu', back: '← Home', official: 'Official',
+    liveStatusNav: 'Live Status', openMenuAria: 'Open navigation menu', closeMenuAria: 'Close menu', searchBtn: 'Search', profileNav: 'My profile', notificationsAria: 'Notifications',
+    footerHub: 'Idol & Group Wiki Hub — made for the fans.', footerSpark: 'made with sparkles for 48 Group fans.', backDirectory: '← Member Directory',
+    heroEyebrow: 'Your colorful 48 Group universe', heroTitleHtml: 'Explore the <em>magical</em><br />world of 48 Group!', heroLede: 'Your super cute encyclopedia for members, groups, live streams, and all the moments worth remembering.', ctaMembers: 'Meet the members', ctaGroups: 'Explore groups',
+    freshEyebrow: 'Fresh from the wiki', featuredTitle: '★ Featured Articles ★', viewAll: 'View all', shelfEyebrow: 'Your personal shelf', oshiTitle: 'My favorite idols', manage: 'Manage',
+    liveEyebrow: 'Happening right now', liveTitleHtml: 'Who’s live <em>now?</em> <span>♥</span>', loveEyebrow: 'Send a little love', birthdaysTitle: 'Birthdays', seeAll: 'See all',
+    readingEyebrow: 'Fans are reading', trendingTitle: 'Trending articles', trend1: 'The complete guide to theater etiquette', trend2: '12 sister groups, one giant family', trend3: 'How to find your next oshi',
+    syncingTracker: 'Syncing tracker...', checkingStreams: 'Checking streams...', birthdayEmpty: 'Birthday data is getting a sparkle-up.',
+    directoryTitleHtml: 'Member <span class="gradient-text">Directory</span>', membersSubtitle: 'Profiles, live status, stage, schedules, and My Oshi in one list.', searchMembersPh: 'Search members or groups...', allMembers: 'All members',
+    scopeLabel: 'Category & group', allCategories: 'All categories', scopeHint: 'Pick one category, or jump straight to a group’s roster.', filterGroupAria: 'Filter member status', filterAll: 'All', filterLive: '🔴 Live now', filterStage: '🎤 On stage',
+    groupsTitleHtml: 'All <span class="gradient-text">Groups</span>', groupsSubtitle: 'The 12 AKB48 Group teams — split into domestic (Japan) and kaigai (international). Pick a group to view its roster.', searchGroupsPh: 'Search a group or member name…', groupDirectory: 'Group Directory',
+    newsTitleHtml: 'Official <span class="gradient-text">News</span>', newsSubtitle: 'Reach every group’s official news page straight from the source.',
+    scheduleTitleHtml: 'Live &amp; <span class="gradient-text">Schedule</span>', scheduleSubtitle: 'Track who is live, who is on stage, and every schedule we logged.', loadingStatus: 'Loading status...', refreshLabel: 'Refresh', labelLive: 'Live now', labelStage: 'On stage', agendaTitle: 'Official agenda',
+    accountLink: 'My profile ↗', meetEyebrow: 'Where fans meet', communityTitleHtml: 'WIKI48 <span class="gradient-text">Community</span>', communitySubtitle: 'Share favorite songs, find new chats, and celebrate small 48 Group moments with fellow fans.',
+    qdayEyebrow: 'Questions of the day', hubTitle: 'Chats by country', hubDesc: 'Pick a country room to keep conversations comfy and easy to follow.', roomLabel: 'Room', loadingQuestions: 'Loading today’s questions...',
+    ideaEyebrow: 'Got a chat idea?', askTitle: 'Ask the fans a question', askDesc: 'Share specific, friendly questions for your chosen country room.', countryLabel: 'Country', topicLabel: 'Topic', questionLabel: 'Question', topicPh: 'Music, members, theater...', questionPh: 'Write your question for the fans...', submitQuestion: 'Send question', voteNow: 'Vote now', syncSummaryTpl: '{a} live · {b} on stage', stageDetailTbd: 'Schedule details to follow', activeFilterLabel: 'Active filter', clearFilterAriaTpl: 'Clear filter {q}', oshiPromptTpl: 'Why do you want to add {name} as your My Oshi?', toastReasonMin: 'Write a short reason, at least 3 characters.', toastOshiRemovedTpl: '{name} removed from My Oshi.', toastOshiFullTpl: 'Maximum {n} oshi. Remove one before adding {name}.', toastOshiAddedTpl: '{name} added to My Oshi ({n}).', toastStorageWarn: 'This browser blocks local storage — pins last only for this tab.', toastStatusRefreshed: 'Live & stage status refreshed.', toastStatusFresh: 'Status is already up to date.', stampCheckedTpl: 'Checked {t}', stampAutoEveryTpl: 'auto every {n}s', stampRealtime: 'real-time', stampStaleSuffix: 'data out of date', stampUnreachable: 'Tracker unreachable', stampDataAt: 'last data {t}', notFoundTitleHtml: 'Member <span class="gradient-text">not found</span>', notFoundIdTpl: 'No member with id {id}. The roster may have changed or the link is wrong.', notFoundNeedId: 'This page needs a <code>?id=</code> parameter, e.g. <code>member.html?id=jkt48-01</code>.', noStageMarked: 'Nobody is marked as on stage yet.', noLocalAgendaTitle: 'No local events yet', noLocalAgendaSub: 'Latest events are read directly from each group’s official site.', liveUrlPending: 'Live URL not recorded yet', agendaCountTpl: '{n} events listed', qEmptyRoom: 'No questions for this room yet.', qShared: 'Your question was shared to this country room.', qLoginNeeded: 'Log in is required to post a question.', pollPickFirst: 'Pick one song first, superstar.', pollVotedTpl: 'Your vote for {song} has been recorded.', todayLabel: 'Today', membersListedTpl: '{n} members listed', openNews: 'Open news', levelReader: 'Reader', levelContributor: 'Contributor', levelEditor: 'Editor', accessLabel: 'Access', submittedLabel: 'Submitted', experiencePrefix: 'Experience:', approveBtn: 'Approve', rejectBtn: 'Reject', noRequestsStatus: 'No requests with this status.', sendingRequest: 'Sending request...', requestReceived: 'Request received. It will be reviewed manually.', photoRejected: 'Photo rejected: use JPEG, PNG, or WebP up to 1.8 MB with no adult content.',
+    weekEyebrow: 'Question of the week', pollQuestion: 'Which JKT48 song do you play the most?', pollNote: 'Pick one answer. Preliminary results appear after you vote.',
+    picksEyebrow: 'Featured chats', topicsTitle: 'Hot topics right now', joinChat: 'Join the chat',
+    d1Meta: 'JKT48 · 24 replies', d1Title: 'Which theater setlist would you watch live?', d1Author: 'Started by Rara · 2 hours ago',
+    d2Meta: 'AKB48 · 18 replies', d2Title: 'Member recommendations for new listeners?', d2Author: 'Started by Kiki · 5 hours ago',
+    d3Meta: '48 Group · 11 replies', d3Title: 'Share your most memorable fanmeeting moment', d3Author: 'Started by Nao · yesterday',
+    cornerEyebrow: 'From the fan corner', fanartTitle: 'Recent fan art', openGallery: 'Open gallery',
+    storyEyebrow: 'Got a story?', joinTitle: 'This space belongs to every fan.', joinDesc: 'Log in to save your profile and help build the WIKI48 community.', requestAccess: 'Request access',
+    welcomeBack: 'Welcome back', loginTitleHtml: 'Sign in to <span>WIKI48</span>', loginSubtitle: 'Save your oshi and set up your personal space in the community.', emailLabel: 'Email', passwordLabel: 'Password', minCharsPh: 'At least 4 characters', loginSubmit: 'Sign in', haveAccount: 'No account yet?', nameLabel: 'Display name', namePh: 'Your name', registerSubmit: 'Create account', authNote: 'Accounts are stored safely in the community database.', accessLink: 'Apply for wiki contributor access ↗',
+    changePhoto: 'Change photo', personalSpace: 'Your personal space', helloBefore: 'Hi,', helloAfter: '!', identityEyebrow: 'Identity', editBioTitle: 'Edit fan bio', privacyNote: 'Personal data is pseudonymized with random codes and photos are format-checked before saving.', saveChanges: 'Save changes', profileSavedMsg: 'Profile updated.', sinceEyebrow: 'Member since', oshiStoredNote: 'Your My Oshi picks and reasons are stored on your account.', manageOshi: 'Manage My Oshi', logoutBtn: 'Log out',
+    requestEyebrow: 'Access request', accessTitleHtml: 'Help curate <span>WIKI48</span>', accessSubtitle: 'Tell us what you want to contribute. Every request is reviewed manually by the wiki owner.', fullNameLabel: 'Name', contactEmailLabel: 'Contact email', chooseRoom: 'Choose a room', optID: 'Indonesia', optJP: 'Japan', optTH: 'Thailand', optCN: 'China', optTW: 'Taiwan', optMY: 'Malaysia', optOther: 'Other',
+    accessTypeLabel: 'Requested access level', chooseAccess: 'Choose access', optReader: 'Verified reader', optContributor: 'Data/article contributor', optEditor: 'Community editor', helpLabel: 'What do you want to help with?', reasonPh: 'Example: updating member profiles and official JKT48 sources...', experienceLabel: 'Experience or sample contributions', optionalLabel: '(optional)', experiencePh: 'Links or a summary of relevant experience', consentText: 'I agree to follow the community rules, cite sources, and never alter data carelessly.', submitRequest: 'Send request', sensitiveNote: 'Don’t send passwords, ID numbers, or sensitive data through this form.',
+    privateWs: 'Private workspace', reviewTitleHtml: 'Review <span>access requests</span>', reviewDesc: 'Evaluate requests manually before granting wiki access.', filterStatusAria: 'Filter request status', optPending: 'Pending', optApproved: 'Approved', optRejected: 'Rejected', loadingRequests: 'Loading requests...',
+    adminLoginTitleHtml: 'WIKI48 <span>Admin</span>', adminOnlyNote: 'This area is for wiki managers only.', adminEmailLabel: 'Admin email', loginPanelBtn: 'Enter panel', backToWiki: '← Back to WIKI48',
+    noResultTitle: 'No results', noMemberFilter: 'No members match this filter.', emptyOshiTitle: 'No oshi yet', pinnedCountTpl: '{n} pinned', noStageSchedule: 'No upcoming stage', groupsNoMatchTpl: 'No group matches “{q}”.', memberNotFoundTpl: 'No member with id {id}.', agendaLocalEmpty: 'No local events yet. Check the group’s official schedule for the latest.', officialSource: 'Official source', emptyOshiSubTpl: 'Tap 🤍 on your favorite members to quick-view them here (max {n}).', countFromTpl: '{a} of {b} members', countTpl: '{n} members', dirScopedTpl: '{scope} members',
+  },
+  ja: {
+    home: 'ホーム', members: 'メンバーディレクトリ', groups: 'グループ情報', gallery: 'メディア', schedule: 'スケジュール', community: 'コミュニティ', updates: 'Wiki更新', search: 'Wikiを検索...', menu: 'メニュー', back: '← ホーム', official: '公式',
+    liveStatusNav: 'ライブ状況', openMenuAria: 'ナビゲーションメニューを開く', closeMenuAria: 'メニューを閉じる', searchBtn: '検索', profileNav: 'マイプロフィール', notificationsAria: '通知',
+    footerHub: 'Idol & Group Wiki Hub — ファンのために作られました。', footerSpark: '48グループのファンへ、キラキラを込めて。', backDirectory: '← メンバーディレクトリ',
+    heroEyebrow: 'カラフルな48グループの世界', heroTitleHtml: '<em>魔法</em>のような<br />48グループの世界を探検しよう！', heroLede: 'メンバー、グループ、ライブ配信、思い出の瞬間をまとめた超かわいい百科事典。', ctaMembers: 'メンバーに会いに行く', ctaGroups: 'グループを探検',
+    freshEyebrow: 'Wikiの最新記事', featuredTitle: '★ 注目の記事 ★', viewAll: 'すべて見る', shelfEyebrow: 'あなたの個人コレクション', oshiTitle: '推しのアイドル', manage: '管理する',
+    liveEyebrow: '今まさに開催中', liveTitleHtml: '今<em>ライブ中？</em> <span>♥</span>', loveEyebrow: '愛を届けよう', birthdaysTitle: '誕生日', seeAll: 'すべて見る',
+    readingEyebrow: 'ファンが読んでいる', trendingTitle: '人気の記事', trend1: '劇場マナー完全ガイド', trend2: '姉妹グループ12組、一つの大家族', trend3: '次の推しの見つけ方',
+    syncingTracker: 'トラッカーを同期中...', checkingStreams: '配信を確認中...', birthdayEmpty: '誕生日データは準備中です。',
+    directoryTitleHtml: 'メンバー<span class="gradient-text">ディレクトリ</span>', membersSubtitle: 'プロフィール、ライブ状況、ステージ、予定、推しをひとまとめで。', searchMembersPh: 'メンバーかグループを検索...', allMembers: 'すべてのメンバー',
+    scopeLabel: 'カテゴリーとグループ', allCategories: 'すべてのカテゴリー', scopeHint: 'カテゴリーを選ぶか、グループ名簿へ直接移動できます。', filterGroupAria: 'メンバー状態フィルター', filterAll: 'すべて', filterLive: '🔴 配信中', filterStage: '🎤 ステージ中',
+    groupsTitleHtml: 'すべての<span class="gradient-text">グループ</span>', groupsSubtitle: 'AKB48グループ全12派 — 国内と海外に分かれています。グループを選ぶと名簿が見られます。', searchGroupsPh: 'グループ名かメンバー名を検索…', groupDirectory: 'グループ一覧',
+    newsTitleHtml: '公式<span class="gradient-text">ニュース</span>', newsSubtitle: '各グループの公式ニュースページへ、元ソースからアクセスできます。',
+    scheduleTitleHtml: 'ライブ＆<span class="gradient-text">スケジュール</span>', scheduleSubtitle: 'ライブ中・ステージ中のメンバーと、記録済みの予定をチェックできます。', loadingStatus: 'ステータスを読み込み中...', refreshLabel: '更新', labelLive: '配信中', labelStage: 'ステージ中', agendaTitle: '公式予定',
+    accountLink: 'マイプロフィール ↗', meetEyebrow: 'ファンが集う場所', communityTitleHtml: 'WIKI48 <span class="gradient-text">コミュニティ</span>', communitySubtitle: '好きな曲を共有し、新しい会話を見つけて、48グループの小さな瞬間をファンと一緒に祝いましょう。',
+    qdayEyebrow: '今日のお題', hubTitle: '国ごとのチャット', hubDesc: '国のルームを選んで、会話を快適でわかりやすく保ちましょう。', roomLabel: 'ルーム', loadingQuestions: '今日の質問を読み込み中...',
+    ideaEyebrow: '話題のアイデアはある？', askTitle: 'ファンへの質問を作る', askDesc: '選んだ国のルームへ、具体的で親しみやすい質問をどうぞ。', countryLabel: '国', topicLabel: 'トピック', questionLabel: '質問', topicPh: '音楽、メンバー、劇場...', questionPh: 'ファンへの質問を書いてください...', submitQuestion: '質問を送る', voteNow: '今すぐ投票', syncSummaryTpl: '配信{a}・ステージ{b}', stageDetailTbd: 'スケジュールの詳細は後日', activeFilterLabel: '適用中のフィルター', clearFilterAriaTpl: '{q}のフィルターを解除', oshiPromptTpl: '{name}を推しに追加したい理由は？', toastReasonMin: '短い理由を3文字以上で書いてください。', toastOshiRemovedTpl: '{name}を推しから外しました。', toastOshiFullTpl: '推しは最太{n}人です。{name}を追加する前に1人外してください。', toastOshiAddedTpl: '{name}を推しに追加しました（{n}）。', toastStorageWarn: 'このブラウザはローカル保存をブロックしています。ピンはこのタブのみ有効です。', toastStatusRefreshed: '配信・ステージ状況を更新しました。', toastStatusFresh: '状況は最新です。', stampCheckedTpl: '{t}に確認', stampAutoEveryTpl: '{n}秒ごとに自動', stampRealtime: 'リアルタイム', stampStaleSuffix: '情報が古いです', stampUnreachable: 'トラッカーに接続できません', stampDataAt: '最終情報 {t}', notFoundTitleHtml: 'メンバーが<span class="gradient-text">見つかりません</span>', notFoundIdTpl: 'id「{id}」のメンバーはいません。ロスターが変わったか、リンクが違う可能性があります。', notFoundNeedId: 'このページには <code>?id=</code> パラメーターが必要です。例: <code>member.html?id=jkt48-01</code>', noStageMarked: 'まだステージ清ちのメンバーはいません。', noLocalAgendaTitle: 'ローカル予定はまだありません', noLocalAgendaSub: '最新の予定は各グループの公式サイトから直接取得しています。', liveUrlPending: '配信URLは未登録', agendaCountTpl: '予定{n}件', qEmptyRoom: 'このルームにはまだ質問がありません。', qShared: 'あなたの質問をこのルームに共有しました。', qLoginNeeded: '質問するにはログインが必要です。', pollPickFirst: 'まず曲を1つ選んでね、スーパースター！', pollVotedTpl: '{song}への投票を記録しました。', todayLabel: '今日', membersListedTpl: '登録メンバー{n}人', openNews: 'ニュースを見る', levelReader: 'リーダー', levelContributor: 'コントリビューター', levelEditor: '編集者', accessLabel: 'アクセス', submittedLabel: '申請日', experiencePrefix: '経験：', approveBtn: '承認', rejectBtn: '卻下', noRequestsStatus: 'このステータスの申請はありません。', sendingRequest: '申請を送信中...', requestReceived: '申請を受け付けました。手動で確認します。', photoRejected: '写真が却下されました：JPEG・PNG・WebP、1.8MB以下で錯感的な内容なしのものをご利用ください。',
+    weekEyebrow: '今週のお題', pollQuestion: '一番よく聴くJKT48の曲は？', pollNote: 'ひとつ選んでください。投票すると途中結果が表示されます。',
+    picksEyebrow: '注目の会話', topicsTitle: '今、話題のトピック', joinChat: '会話に参加',
+    d1Meta: 'JKT48 · 返信24件', d1Title: '劇場のセットリスト、どれを生で観たい？', d1Author: 'Raraが開始 · 2時間前',
+    d2Meta: 'AKB48 · 返信18件', d2Title: '初心者へのおすすめメンバーは？', d2Author: 'Kikiが開始 · 5時間前',
+    d3Meta: '48 Group · 返信11件', d3Title: '一番印象に残ったファンミの瞬間をシェアして', d3Author: 'Naoが開始 · 昨日',
+    cornerEyebrow: 'ファンコーナーから', fanartTitle: '最近のファンアート', openGallery: 'ギャラリーを開く',
+    storyEyebrow: '何か語りたいことは？', joinTitle: 'この場所は全ファンのもの。', joinDesc: 'ログインしてプロフィールを保存し、WIKI48コミュニティを一緒に作りましょう。', requestAccess: 'アクセスを申請',
+    welcomeBack: 'おかえりなさい', loginTitleHtml: '<span>WIKI48</span>にログイン', loginSubtitle: '推しを保存して、コミュニティの中の自分の居場所を整えましょう。', emailLabel: 'メールアドレス', passwordLabel: 'パスワード', minCharsPh: '4文字以上', loginSubmit: 'ログイン', haveAccount: 'アカウントをお持ちでない方', nameLabel: '表示名', namePh: 'あなたの名前', registerSubmit: 'アカウント作成', authNote: 'アカウントはコミュニティのデータベースに安全に保存されます。', accessLink: 'Wikiへの寄稿アクセスを申請 ↗',
+    changePhoto: '写真を変更', personalSpace: 'あなたの個人スペース', helloBefore: 'こんにちは、', helloAfter: '！', identityEyebrow: '基本情報', editBioTitle: 'ファン情報を編集', privacyNote: '個人情報はランダムコードで仮名化され、写真は形式を確認してから保存されます。', saveChanges: '変更を保存', profileSavedMsg: 'プロフィールを更新しました。', sinceEyebrow: '登録日', oshiStoredNote: '推しとその理由はアカウントに保存されます。', manageOshi: '推しを管理', logoutBtn: 'ログアウト',
+    requestEyebrow: 'アクセス申請', accessTitleHtml: '<span>WIKI48</span>の運営を手伝おう', accessSubtitle: 'やりたい寄稿内容を教えてください。申請はすべて管理者が手動で確認します。', fullNameLabel: '名前', contactEmailLabel: '連絡先メール', chooseRoom: 'ルームを選択', optID: 'インドネシア', optJP: '日本', optTH: 'タイ', optCN: '中国', optTW: '台湾', optMY: 'マレーシア', optOther: 'その他',
+    accessTypeLabel: '希望するアクセス種別', chooseAccess: 'アクセスを選択', optReader: '認証済み読者', optContributor: 'データ・記事の投稿者', optEditor: 'コミュニティ編集者', helpLabel: 'どんなことを手伝いたいですか？', reasonPh: '例：メンバーのプロフィールやJKT48の公式情報の更新...', experienceLabel: '経験または寄稿例', optionalLabel: '（任意）', experiencePh: '関連する経験のリンクや要約', consentText: 'コミュニティのルールに従い、出典を明記し、データをむやみに変更しないことに同意します。', submitRequest: '申請を送信', sensitiveNote: 'このフォームにパスワード、身分証番号、機微情報を送らないでください。',
+    privateWs: 'プライベートワークスペース', reviewTitleHtml: 'アクセス申請の<span>レビュー</span>', reviewDesc: 'Wikiアクセスを許可する前に、申請を手動で評価します。', filterStatusAria: '申請ステータスの絞り込み', optPending: '保留中', optApproved: '承認済み', optRejected: '却下済み', loadingRequests: '申請を読み込み中...',
+    adminLoginTitleHtml: 'WIKI48 <span>管理者</span>', adminOnlyNote: 'このエリアはWiki管理者専用です。', adminEmailLabel: '管理者メール', loginPanelBtn: 'パネルへログイン', backToWiki: '← WIKI48へ戻る',
+    noResultTitle: '該当なし', noMemberFilter: 'このフィルターに一致するメンバーはいません。', emptyOshiTitle: 'まだ推しがいません', pinnedCountTpl: '{n}件ピン留め', noStageSchedule: 'ステージ予定なし', groupsNoMatchTpl: '「{q}」に一致するグループはありません。', memberNotFoundTpl: 'id {id} のメンバーは見つかりません。', agendaLocalEmpty: 'ローカルの予定はまだありません。グループの公式スケジュールをご確認ください。', officialSource: '公式ソース', emptyOshiSubTpl: '好きなメンバーの🤍をタップすると、ここ（最大{n}人）に表示されます。', countFromTpl: '{b}人中{a}人のメンバー', countTpl: 'メンバー{n}人', dirScopedTpl: '{scope}のメンバー',
+  },
+  th: {
+    home: 'หน้าแรก', members: 'สมาชิก', groups: 'ข้อมูลกลุ่ม', gallery: 'แกลเลอรี', schedule: 'ตารางเวลา', community: 'ชุมชน', updates: 'อัปเดต Wiki', search: 'ค้นหา Wiki...', menu: 'เมนู', back: '← หน้าแรก', official: 'ทางการ',
+    liveStatusNav: 'สถานะไลฟ์', openMenuAria: 'เปิดเมนูนำทาง', closeMenuAria: 'ปิดเมนู', searchBtn: 'ค้นหา', profileNav: 'โปรไฟล์ของฉัน', notificationsAria: 'การแจ้งเตือน',
+    footerHub: 'Idol & Group Wiki Hub — สร้างเพื่อแฟนคลับ', footerSpark: 'สร้างด้วยความประดับประดาเพื่อแฟน 48 กรุ๊ป', backDirectory: '← สมาชิก',
+    heroEyebrow: 'จักรวาลสีสันของ 48 กรุ๊ป', heroTitleHtml: 'สำรวจโลก<em>อัศจรรย์</em><br />ของ 48 กรุ๊ป!', heroLede: 'สารานุกรมสุดน่ารักเกี่ยวกับสมาชิก กลุ่ม ไลฟ์ และทุกช่วงเวลาที่ควรจดจำ', ctaMembers: 'พบกับสมาชิก', ctaGroups: 'สำรวจกลุ่ม',
+    freshEyebrow: 'ใหม่จากวิกิ', featuredTitle: '★ บทความแนะนำ ★', viewAll: 'ดูทั้งหมด', shelfEyebrow: 'ชั้นส่วนตัวของคุณ', oshiTitle: 'ไอดอลที่ฉันชอบ', manage: 'จัดการ',
+    liveEyebrow: 'กำลังเกิดขึ้นตอนนี้', liveTitleHtml: 'ใครกำลัง<em>ไลฟ์?</em> <span>♥</span>', loveEyebrow: 'ส่งความรักเล็กๆ', birthdaysTitle: 'วันเกิด', seeAll: 'ดูทั้งหมด',
+    readingEyebrow: 'แฟนๆ กำลังอ่าน', trendingTitle: 'บทความมาแรง', trend1: 'คู่มือมารยาทโรงละครฉบับสมบูรณ์', trend2: '12 กลุ่มพี่น้อง ครอบครัวเดียวกัน', trend3: 'วิธีค้นหาไอดอลที่ถูกใจคนต่อไป',
+    syncingTracker: 'กำลังซิงค์ตัวติดตาม...', checkingStreams: 'กำลังตรวจสอบการถ่ายทอดสด...', birthdayEmpty: 'ข้อมูลวันเกิดกำลังจัดใหม่ให้สวยงาม',
+    directoryTitleHtml: 'สมาชิก<span class="gradient-text">ทั้งหมด</span>', membersSubtitle: 'โปรไฟล์ สถานะไลฟ์ เวที ตารางเวลา และ My Oshi ในที่เดียว', searchMembersPh: 'ค้นหาสมาชิกหรือกลุ่ม...', allMembers: 'สมาชิกทั้งหมด',
+    scopeLabel: 'หมวดและกลุ่ม', allCategories: 'ทุกหมวด', scopeHint: 'เลือกหนึ่งหมวด หรือไปที่รายชื่อของกลุ่มโดยตรง', filterGroupAria: 'กรองสถานะสมาชิก', filterAll: 'ทั้งหมด', filterLive: '🔴 กำลังไลฟ์', filterStage: '🎤 บนเวที',
+    groupsTitleHtml: 'ทุก<span class="gradient-text">กลุ่ม</span>', groupsSubtitle: 'กลุ่ม AKB48 ทั้ง 12 — แบ่งเป็นกลุ่มในญี่ปุ่นและต่างประเทศ เลือกกลุ่มเพื่อดูรายชื่อสมาชิก', searchGroupsPh: 'ค้นหาชื่อกลุ่มหรือสมาชิก…', groupDirectory: 'ไดเรกทอรีกลุ่ม',
+    newsTitleHtml: 'ข่าว<span class="gradient-text">ทางการ</span>', newsSubtitle: 'เข้าถึงหน้าข่าวทางการของทุกกลุ่มจากแหล่งต้นทาง',
+    scheduleTitleHtml: 'ไลฟ์และ<span class="gradient-text">ตารางเวลา</span>', scheduleSubtitle: 'ติดตามว่าใครกำลังไลฟ์ ใครอยู่บนเวที และตารางเวลาที่บันทึกไว้', loadingStatus: 'กำลังโหลดสถานะ...', refreshLabel: 'รีเฟรช', labelLive: 'กำลังไลฟ์', labelStage: 'บนเวที', agendaTitle: 'กำหนดการทางการ',
+    accountLink: 'โปรไฟล์ของฉัน ↗', meetEyebrow: 'พื้นที่พบปะแฟนๆ', communityTitleHtml: 'WIKI48 <span class="gradient-text">คอมมูนิตี้</span>', communitySubtitle: 'แชร์เพลงโปรด ค้นหาบทสนทนาใหม่ และฉลองช่วงเวลาเล็กๆ ของ 48 กรุ๊ปไปด้วยกัน',
+    qdayEyebrow: 'คำถามประจำวัน', hubTitle: 'แชทแยกตามประเทศ', hubDesc: 'เลือกห้องประเทศเพื่อให้บทสนทนาสบายและตามง่าย', roomLabel: 'ห้อง', loadingQuestions: 'กำลังโหลดคำถามวันนี้...',
+    ideaEyebrow: 'มีไอเดียหัวข้อสนทนา?', askTitle: 'ตั้งคำถามให้แฟนๆ', askDesc: 'แบ่งปันคำถามที่เจาะจงและเป็นมิตรสำหรับห้องประเทศที่คุณเลือก', countryLabel: 'ประเทศ', topicLabel: 'หัวข้อ', questionLabel: 'คำถาม', topicPh: 'เพลง สมาชิก โรงละคร...', questionPh: 'เขียนคำถามของคุณถึงแฟนๆ...', submitQuestion: 'ส่งคำถาม', voteNow: 'โหวตเลย', syncSummaryTpl: 'ไลฟ์ {a} · สเตจ {b}', stageDetailTbd: 'รายละเอียดจะตามมา', activeFilterLabel: 'ตัวกรองที่ใช้อยู่', clearFilterAriaTpl: 'ล้างตัวกรอง {q}', oshiPromptTpl: 'ทำไมจึงอยากเพิ่ม {name} เป็น My Oshi?', toastReasonMin: 'เขียนเหตุผลสั้นๆ อย่างน้อย 3 ตัวอักษร', toastOshiRemovedTpl: 'เอา {name} ออกจาก My Oshi แล้ว', toastOshiFullTpl: 'มี My Oshi ได้สูงสุด {n} คน เอาออกหนึ่งคนก่อนเพิ่ม {name}', toastOshiAddedTpl: 'เพิ่ม {name} ใน My Oshi แล้ว ({n})', toastStorageWarn: 'เบราว์เซอร์นี้บล็อกพื้นที่จัดเก็บ — ปักหมุดอยู่แค่ในแท็บนี้', toastStatusRefreshed: 'อัปเดตสถานะไลฟ์และสเตจแล้ว', toastStatusFresh: 'สถานะเป็นปัจจุบันแล้ว', stampCheckedTpl: 'ตรวจแล้ว {t}', stampAutoEveryTpl: 'อัตโนมัติทุก {n} วินาที', stampRealtime: 'เรียลไทม์', stampStaleSuffix: 'ข้อมูลล้าสมัย', stampUnreachable: 'เชื่อมต่อตัวติดตามไม่ได้', stampDataAt: 'ข้อมูล {t}', notFoundTitleHtml: 'ไม่พบ<span class="gradient-text">สมาชิก</span>', notFoundIdTpl: 'ไม่มีสมาชิกที่ id {id} รายชื่ออาจเปลี่ยนไปหรือลิงก์ผิด', notFoundNeedId: 'หน้านี้ต้องการพารามิเตอร์ <code>?id=</code> เช่น <code>member.html?id=jkt48-01</code>', noStageMarked: 'ยังไม่มีสมาชิกที่ขึ้นสเตจ', noLocalAgendaTitle: 'ยังไม่มีกระดานท้ອงถิ่น', noLocalAgendaSub: 'กระดานล่าสุดดึงจากเว็บทางการของแต่ละกลุ่มโดยตรง', liveUrlPending: 'ยังไม่ได้บันทึกลิงก์ไลฟ์', agendaCountTpl: 'มี {n} กิจกรรม', qEmptyRoom: 'ยังไม่มีคำถามสำหรับห้องนี้', qShared: 'แชร์คำถามของคุณไปที่ห้องนี้แล้ว', qLoginNeeded: 'ต้องเข้าสู่ระบบเพื่อโพสต์คำถาม', pollPickFirst: 'เลือกเพลงก่อนสิ ซุปตาร์', pollVotedTpl: 'บันทึกโหวตของคุณให้ {song} แล้ว', todayLabel: 'วันนี้', membersListedTpl: 'สมาชิกในรายชื่อ {n} คน', openNews: 'เปิดข่าว', levelReader: 'ผู้อ่าน', levelContributor: 'ผู้ร่วมเขียน', levelEditor: 'บรรณาธิการ', accessLabel: 'สิทธิ์เข้าถึง', submittedLabel: 'ส่งคำขอ', experiencePrefix: 'ประสบการณ์:', approveBtn: 'อนุมัติ', rejectBtn: 'ปฏิเสธ', noRequestsStatus: 'ไม่มีคำขอในสถานะนี้', sendingRequest: 'กำลังส่งคำขอ...', requestReceived: 'รับคำขอแล้ว จะตรวจโดยมนุษย์', photoRejected: 'รปไม่ผ่าน: ใช้ JPEG, PNG หรือ WebP ไม่เกิน 1.8 MB และไม่มีเนื้อหา 18+',
+    weekEyebrow: 'คำถามประจำสัปดาห์', pollQuestion: 'เพลง JKT48 ที่คุณเปิดบ่อยที่สุดคือเพลงใด?', pollNote: 'เลือกคำตอบเดียว ผลจะแสดงหลังจากคุณโหวต',
+    picksEyebrow: 'บทสนทนาแนะนำ', topicsTitle: 'หัวข้อที่กำลังฮิต', joinChat: 'เข้าร่วมสนทนา',
+    d1Meta: 'JKT48 · 24 ตอบกลับ', d1Title: 'อยากดูเซ็ตลิสต์โรงละครแบบสดๆ เล่มไหน?', d1Author: 'เริ่มโดย Rara · 2 ชั่วโมงที่แล้ว',
+    d2Meta: 'AKB48 · 18 ตอบกลับ', d2Title: 'แนะนำสมาชิกสำหรับผู้ฟังหน้าใหม่?', d2Author: 'เริ่มโดย Kiki · 5 ชั่วโมงที่แล้ว',
+    d3Meta: '48 Group · 11 ตอบกลับ', d3Title: 'แชร์ช่วงเวลาแฟนมีตติ้งที่ประทับใจที่สุด', d3Author: 'เริ่มโดย Nao · เมื่อวาน',
+    cornerEyebrow: 'จากมุมแฟนคลับ', fanartTitle: 'แฟนอาร์ตล่าสุด', openGallery: 'เปิดแกลเลอรี',
+    storyEyebrow: 'มีเรื่องเล่าไหม?', joinTitle: 'พื้นที่นี้เป็นของแฟนๆ ทุกคน', joinDesc: 'เข้าสู่ระบบเพื่อบันทึกโปรไฟล์และช่วยสร้างคอมมูนิตี้ WIKI48', requestAccess: 'ขอสิทธิ์เข้าใช้',
+    welcomeBack: 'ยินดีต้อนรับกลับมา', loginTitleHtml: 'เข้าสู่ระบบ <span>WIKI48</span>', loginSubtitle: 'บันทึกไอดอลที่ชอบและจัดพื้นที่ส่วนตัวของคุณในคอมมูนิตี้', emailLabel: 'อีเมล', passwordLabel: 'รหัสผ่าน', minCharsPh: 'อย่างน้อย 4 ตัวอักษร', loginSubmit: 'เข้าสู่ระบบ', haveAccount: 'ยังไม่มีบัญชี?', nameLabel: 'ชื่อที่แสดง', namePh: 'ชื่อของคุณ', registerSubmit: 'สร้างบัญชี', authNote: 'บัญชีถูกจัดเก็บอย่างปลอดภัยในฐานข้อมูลคอมมูนิตี้', accessLink: 'สมัครสิทธิ์ผู้สนับสนุนวิกิ ↗',
+    changePhoto: 'เปลี่ยนรูป', personalSpace: 'พื้นที่ส่วนตัวของคุณ', helloBefore: 'สวัสดี', helloAfter: '!', identityEyebrow: 'ข้อมูลตัวตน', editBioTitle: 'แก้ไขข้อมูลแฟน', privacyNote: 'ข้อมูลส่วนตัวถูกปกปิดด้วยรหัสสุ่มและรูปภาพจะตรวจรูปแบบก่อนบันทึก', saveChanges: 'บันทึกการเปลี่ยนแปลง', profileSavedMsg: 'อัปเดตโปรไฟล์แล้ว', sinceEyebrow: 'สมาชิกตั้งแต่', oshiStoredNote: 'My Oshi และเหตุผลของคุณถูกบันทึกในบัญชีของคุณ', manageOshi: 'จัดการ My Oshi', logoutBtn: 'ออกจากระบบ',
+    requestEyebrow: 'คำขอสิทธิ์เข้าถึง', accessTitleHtml: 'ช่วยดูแล <span>WIKI48</span>', accessSubtitle: 'บอกเราว่าคุณต้องการสนับสนุนอะไร ทุกคำขอจะได้รับการตรวจสอบด้วยตนเอง', fullNameLabel: 'ชื่อ', contactEmailLabel: 'อีเมลสำหรับติดต่อ', chooseRoom: 'เลือกห้อง', optID: 'อินโดนีเซีย', optJP: 'ญี่ปุ่น', optTH: 'ไทย', optCN: 'จีน', optTW: 'ไต้หวัน', optMY: 'มาเลเซีย', optOther: 'อื่นๆ',
+    accessTypeLabel: 'ระดับสิทธิ์ที่ขอ', chooseAccess: 'เลือกสิทธิ์', optReader: 'ผู้อ่านที่ยืนยันแล้ว', optContributor: 'ผู้สนับสนุนข้อมูล/บทความ', optEditor: 'บรรณาธิการคอมมูนิตี้', helpLabel: 'คุณต้องการช่วยอะไร?', reasonPh: 'ตัวอย่าง: อัปเดตโปรไฟล์สมาชิกและแหล่งข้อมูลทางการของ JKT48...', experienceLabel: 'ประสบการณ์หรือตัวอย่างผลงาน', optionalLabel: '(ไม่บังคับ)', experiencePh: 'ลิงก์หรือสรุปประสบการณ์ที่เกี่ยวข้อง', consentText: 'ฉันยอมรับกฎของคอมมูนิตี้ ระบุแหล่งที่มา และจะไม่แก้ไขข้อมูลอย่างไม่ระมัดระวัง', submitRequest: 'ส่งคำขอ', sensitiveNote: 'อย่าส่งรหัสผ่าน เลขประจำตัว หรือข้อมูลที่ละเอียดอ่อนผ่านแบบฟอร์มนี้',
+    privateWs: 'พื้นที่ทำงานส่วนตัว', reviewTitleHtml: 'ตรวจ<span>คำขอเข้าถึง</span>', reviewDesc: 'ประเมินคำขอด้วยตนเองก่อนให้สิทธิ์เข้าถึงวิกิ', filterStatusAria: 'กรองสถานะคำขอ', optPending: 'รอดำเนินการ', optApproved: 'อนุมัติแล้ว', optRejected: 'ปฏิเสธแล้ว', loadingRequests: 'กำลังโหลดคำขอ...',
+    adminLoginTitleHtml: 'WIKI48 <span>ผู้ดูแล</span>', adminOnlyNote: 'พื้นที่นี้สำหรับผู้ดูแลวิกิเท่านั้น', adminEmailLabel: 'อีเมลผู้ดูแล', loginPanelBtn: 'เข้าสู่แผงควบคุม', backToWiki: '← กลับไป WIKI48',
+    noResultTitle: 'ไม่พบผลลัพธ์', noMemberFilter: 'ไม่มีสมาชิกที่ตรงกับตัวกรองนี้', emptyOshiTitle: 'ยังไม่มีไอดอลที่ชอบ', pinnedCountTpl: 'ปักหมุด {n} คน', noStageSchedule: 'ยังไม่มีตารางเวที', groupsNoMatchTpl: 'ไม่มีกลุ่มที่ตรงกับ “{q}”', memberNotFoundTpl: 'ไม่พบสมาชิกที่มี id {id}', agendaLocalEmpty: 'ยังไม่มีกำหนดการในพื้นที่ ดูตารางทางการของกลุ่มสำหรับข้อมูลล่าสุด', officialSource: 'แหล่งทางการ', emptyOshiSubTpl: 'แตะ 🤍 ที่สมาชิกที่ชอบเพื่อดูด่วนที่นี่ (สูงสุด {n} คน)', countFromTpl: 'สมาชิก {a} จาก {b} คน', countTpl: '{n} คน', dirScopedTpl: 'สมาชิก{scope}',
+  },
+  'zh-CN': {
+    home: '首页', members: '成员目录', groups: '组合信息', gallery: '媒体画廊', schedule: '日程', community: '社区', updates: 'Wiki更新', search: '搜索 Wiki...', menu: '菜单', back: '← 首页', official: '官方',
+    liveStatusNav: '直播状态', openMenuAria: '打开导航菜单', closeMenuAria: '关闭菜单', searchBtn: '搜索', profileNav: '我的主页', notificationsAria: '通知',
+    footerHub: 'Idol & Group Wiki Hub — 为粉丝而建。', footerSpark: '为48系粉丝闪耀而成。', backDirectory: '← 成员目录',
+    heroEyebrow: '缤纷的48系宇宙', heroTitleHtml: '探索<em>奇妙</em>的<br />48系世界！', heroLede: '超可爱的百科全书：成员、组合、直播与所有值得纪念的瞬间。', ctaMembers: '认识成员们', ctaGroups: '探索组合',
+    freshEyebrow: 'Wiki最新内容', featuredTitle: '★ 精选文章 ★', viewAll: '查看全部', shelfEyebrow: '你的个人收藏架', oshiTitle: '我最喜欢的偶像', manage: '管理',
+    liveEyebrow: '正在发生', liveTitleHtml: '谁正在<em>直播？</em> <span>♥</span>', loveEyebrow: '送上一份爱意', birthdaysTitle: '生日', seeAll: '查看全部',
+    readingEyebrow: '粉丝都在读', trendingTitle: '热门文章', trend1: '剧场礼仪完全指南', trend2: '12个姐妹组合，一个大家庭', trend3: '如何找到你的下一个本命',
+    syncingTracker: '正在同步追踪器...', checkingStreams: '正在检查直播...', birthdayEmpty: '生日数据正在美化整理中。',
+    directoryTitleHtml: '成员<span class="gradient-text">目录</span>', membersSubtitle: '资料、直播状态、舞台、行程与My Oshi，一页尽览。', searchMembersPh: '搜索成员或组合...', allMembers: '全部成员',
+    scopeLabel: '分类与组合', allCategories: '全部分类', scopeHint: '选择一个分类，或直接跳转到某个组合的名单。', filterGroupAria: '筛选成员状态', filterAll: '全部', filterLive: '🔴 直播中', filterStage: '🎤 舞台上',
+    groupsTitleHtml: '所有<span class="gradient-text">组合</span>', groupsSubtitle: 'AKB48 Group的12个组合——分为日本国内和海外。选择一个组合即可查看成员名单。', searchGroupsPh: '搜索组合或成员名称…', groupDirectory: '组合目录',
+    newsTitleHtml: '官方<span class="gradient-text">新闻</span>', newsSubtitle: '从原始来源访问每个组合的官方新闻页。',
+    scheduleTitleHtml: '直播与<span class="gradient-text">日程</span>', scheduleSubtitle: '掌握正在直播、正在登台的成员以及已记录的日程。', loadingStatus: '正在加载状态...', refreshLabel: '刷新', labelLive: '直播中', labelStage: '舞台上', agendaTitle: '官方日程',
+    accountLink: '我的资料 ↗', meetEyebrow: '粉丝相聚之地', communityTitleHtml: 'WIKI48 <span class="gradient-text">社区</span>', communitySubtitle: '分享喜欢的歌、找到新的话题，和其他粉丝一起庆祝48系的小确幸。',
+    qdayEyebrow: '每日问题', hubTitle: '按国家聊天', hubDesc: '选择国家房间，让对话保持舒适易懂。', roomLabel: '房间', loadingQuestions: '正在加载今日问题...',
+    ideaEyebrow: '有聊天点子？', askTitle: '向粉丝们提问', askDesc: '为你选择的国家房间分享具体又友好的问题。', countryLabel: '国家', topicLabel: '主题', questionLabel: '问题', topicPh: '音乐、成员、剧场...', questionPh: '写下你对粉丝的问题...', submitQuestion: '发送问题', voteNow: '立即投票', syncSummaryTpl: '{a} 直播 · {b} 舞台', stageDetailTbd: '日程详情稍后公布', activeFilterLabel: '当前筛选', clearFilterAriaTpl: '清除筛选 {q}', oshiPromptTpl: '为什么想把 {name} 加入 My Oshi？', toastReasonMin: '请写简短理由，至少 3 个字符。', toastOshiRemovedTpl: '已将 {name} 从 My Oshi 移除。', toastOshiFullTpl: '最多 {n} 个 My Oshi。请先移除一个再添加 {name}。', toastOshiAddedTpl: '已将 {name} 添加到 My Oshi（{n}）。', toastStorageWarn: '此浏览器阻止本地存储—收藏仅在当前标签页有效。', toastStatusRefreshed: '直播与舞台状态已更新。', toastStatusFresh: '状态已是最新。', stampCheckedTpl: '检查于 {t}', stampAutoEveryTpl: '每 {n} 秒自动', stampRealtime: '实时', stampStaleSuffix: '数据已过期', stampUnreachable: '无法连接追踪器', stampDataAt: '最后数据 {t}', notFoundTitleHtml: '未找到<span class="gradient-text">成员</span>', notFoundIdTpl: '没有 id 为 {id} 的成员。名单可能已变动或链接有误。', notFoundNeedId: '此页面需要 <code>?id=</code> 参数，例如 <code>member.html?id=jkt48-01</code>。', noStageMarked: '还没有成员登台', noLocalAgendaTitle: '暂无本地活动', noLocalAgendaSub: '最新活动直接取自各团体官网。', liveUrlPending: '尚未录入直播链接', agendaCountTpl: '已收录 {n} 项活动', qEmptyRoom: '这个房间还没有问题。', qShared: '你的问题已分享到该房间。', qLoginNeeded: '发布问题需要登录。', pollPickFirst: '先选一首歌吧，超级明星。', pollVotedTpl: '你投给 {song} 的票已记录。', todayLabel: '今天', membersListedTpl: '已注册成员 {n} 人', openNews: '打开新闻', levelReader: '读者', levelContributor: '贡献者', levelEditor: '编辑者', accessLabel: '权限', submittedLabel: '提交时间', experiencePrefix: '经验：', approveBtn: '通过', rejectBtn: '拒绝', noRequestsStatus: '此状态下没有申请。', sendingRequest: '正在发送申请...', requestReceived: '申请已收到，将人工审核。', photoRejected: '照片被拒绝：请使用 JPEG、PNG 或 WebP，不超过 1.8 MB且无成人内容。',
+    weekEyebrow: '本周问题', pollQuestion: '你最常播放哪首JKT48的歌？', pollNote: '选择一个答案，投票后即可看到暂定结果。',
+    picksEyebrow: '精选聊天', topicsTitle: '当前热议话题', joinChat: '参与讨论',
+    d1Meta: 'JKT48 · 24条回复', d1Title: '你想现场看哪个剧场歌单？', d1Author: '由 Rara 发起 · 2小时前',
+    d2Meta: 'AKB48 · 18条回复', d2Title: '给新听众推荐哪些成员？', d2Author: '由 Kiki 发起 · 5小时前',
+    d3Meta: '48 Group · 11条回复', d3Title: '分享你最难忘的见面会时刻', d3Author: '由 Nao 发起 · 昨天',
+    cornerEyebrow: '来自粉丝角落', fanartTitle: '最新粉丝画作', openGallery: '打开画廊',
+    storyEyebrow: '有故事想分享？', joinTitle: '这里属于每一位粉丝。', joinDesc: '登录以保存资料，一起建设WIKI48社区。', requestAccess: '申请权限',
+    welcomeBack: '欢迎回来', loginTitleHtml: '登录 <span>WIKI48</span>', loginSubtitle: '收藏你的本命，打造社区中的个人空间。', emailLabel: '邮箱', passwordLabel: '密码', minCharsPh: '至少4个字符', loginSubmit: '登录', haveAccount: '还没有账号？', nameLabel: '显示名称', namePh: '你的名字', registerSubmit: '创建账号', authNote: '账号安全地存储在社区数据库中。', accessLink: '申请Wiki贡献者权限 ↗',
+    changePhoto: '更换照片', personalSpace: '你的个人空间', helloBefore: '你好，', helloAfter: '！', identityEyebrow: '身份信息', editBioTitle: '编辑粉丝资料', privacyNote: '个人数据以随机代码假名化，照片在保存前会检查格式。', saveChanges: '保存更改', profileSavedMsg: '资料已更新。', sinceEyebrow: '加入于', oshiStoredNote: '你的My Oshi和理由都保存在账号里。', manageOshi: '管理我的Oshi', logoutBtn: '退出账号',
+    requestEyebrow: '权限申请', accessTitleHtml: '协助维护 <span>WIKI48</span>', accessSubtitle: '告诉我们你想做什么贡献。每个申请都会由站长人工审核。', fullNameLabel: '姓名', contactEmailLabel: '联系邮箱', chooseRoom: '选择房间', optID: '印度尼西亚', optJP: '日本', optTH: '泰国', optCN: '中国', optTW: '台湾', optMY: '马来西亚', optOther: '其他',
+    accessTypeLabel: '申请的权限类型', chooseAccess: '选择权限', optReader: '已验证读者', optContributor: '数据/文章贡献者', optEditor: '社区编辑', helpLabel: '你想帮忙做什么？', reasonPh: '例如：更新成员资料和JKT48官方来源...', experienceLabel: '经验或贡献示例', optionalLabel: '（可选）', experiencePh: '相关经验的链接或简介', consentText: '我同意遵守社区规则、注明来源，并不随意更改数据。', submitRequest: '提交申请', sensitiveNote: '请勿在此表单发送密码、证件号码或敏感数据。',
+    privateWs: '私人工作区', reviewTitleHtml: '审核<span>权限申请</span>', reviewDesc: '在授予Wiki权限前人工评估申请。', filterStatusAria: '筛选申请状态', optPending: '待处理', optApproved: '已通过', optRejected: '已拒绝', loadingRequests: '正在加载申请...',
+    adminLoginTitleHtml: 'WIKI48 <span>管理员</span>', adminOnlyNote: '此区域仅限Wiki管理员使用。', adminEmailLabel: '管理员邮箱', loginPanelBtn: '进入面板', backToWiki: '← 返回WIKI48',
+    noResultTitle: '没有结果', noMemberFilter: '没有符合此筛选条件的成员。', emptyOshiTitle: '还没有本命', pinnedCountTpl: '已收藏 {n} 人', noStageSchedule: '暂无舞台安排', groupsNoMatchTpl: '没有匹配“{q}”的组合。', memberNotFoundTpl: '找不到 id 为 {id} 的成员。', agendaLocalEmpty: '暂无本地日程。请查看组合的官方日程获取最新信息。', officialSource: '官方来源', emptyOshiSubTpl: '点击喜爱成员的🤍，即可在此快速查看（最多 {n} 人）。', countFromTpl: '{b} 名成员中的 {a} 名', countTpl: '{n} 名成员', dirScopedTpl: '{scope}成员',
+  },
+  'zh-TW': {
+    home: '首頁', members: '成員目錄', groups: '團體資訊', gallery: '媒體圖庫', schedule: '行程', community: '社群', updates: 'Wiki更新', search: '搜尋 Wiki...', menu: '選單', back: '← 首頁', official: '官方',
+    liveStatusNav: '直播狀態', openMenuAria: '開啟導覽選單', closeMenuAria: '關閉選單', searchBtn: '搜尋', profileNav: '我的主頁', notificationsAria: '通知',
+    footerHub: 'Idol & Group Wiki Hub — 為粉絲而築。', footerSpark: '為48系粉絲閃耀而成。', backDirectory: '← 成員目錄',
+    heroEyebrow: '繽紛的48系宇宙', heroTitleHtml: '探索<em>奇妙</em>的<br />48系世界！', heroLede: '超可愛的百科全書：成員、團體、直播與所有值得紀念的瞬間。', ctaMembers: '認識成員們', ctaGroups: '探索團體',
+    freshEyebrow: 'Wiki最新內容', featuredTitle: '★ 精選文章 ★', viewAll: '查看全部', shelfEyebrow: '你的個人收藏架', oshiTitle: '我最喜歡的偶像', manage: '管理',
+    liveEyebrow: '正在發生', liveTitleHtml: '誰正在<em>直播？</em> <span>♥</span>', loveEyebrow: '送上愛意', birthdaysTitle: '生日', seeAll: '查看全部',
+    readingEyebrow: '粉絲都在讀', trendingTitle: '熱門文章', trend1: '劇場禮儀完全指南', trend2: '12個姐妹團體，一個大家庭', trend3: '如何找到你的下一個本命',
+    syncingTracker: '正在同步追蹤器...', checkingStreams: '正在檢查直播...', birthdayEmpty: '生日資料正在美化整理中。',
+    directoryTitleHtml: '成員<span class="gradient-text">目錄</span>', membersSubtitle: '資料、直播狀態、舞台、行程與My Oshi，一頁盡覽。', searchMembersPh: '搜尋成員或團體...', allMembers: '全部成員',
+    scopeLabel: '分類與團體', allCategories: '全部分類', scopeHint: '選擇一個分類，或直接跳轉到某個團體的名單。', filterGroupAria: '篩選成員狀態', filterAll: '全部', filterLive: '🔴 直播中', filterStage: '🎤 舞台上',
+    groupsTitleHtml: '所有<span class="gradient-text">團體</span>', groupsSubtitle: 'AKB48 Group的12個團體——分為日本國內與海外。選擇一個團體即可查看成員名單。', searchGroupsPh: '搜尋團體或成員名稱…', groupDirectory: '團體目錄',
+    newsTitleHtml: '官方<span class="gradient-text">新聞</span>', newsSubtitle: '從原始來源造訪每個團體的官方新聞頁。',
+    scheduleTitleHtml: '直播與<span class="gradient-text">行程</span>', scheduleSubtitle: '掌握正在直播、正在登台的成員以及已記錄的行程。', loadingStatus: '正在載入狀態...', refreshLabel: '重新整理', labelLive: '直播中', labelStage: '舞台上', agendaTitle: '官方行程',
+    accountLink: '我的資料 ↗', meetEyebrow: '粉絲相聚之地', communityTitleHtml: 'WIKI48 <span class="gradient-text">社群</span>', communitySubtitle: '分享喜歡的歌、找到新的話題，和其他粉絲一起慶祝48系的小確幸。',
+    qdayEyebrow: '每日問題', hubTitle: '依國家聊天', hubDesc: '選擇國家房間，讓對話保持舒適易讀。', roomLabel: '房間', loadingQuestions: '正在載入今日問題...',
+    ideaEyebrow: '有聊天點子？', askTitle: '向粉絲們提問', askDesc: '為你選擇的國家房間分享具體又友善的問題。', countryLabel: '國家', topicLabel: '主題', questionLabel: '問題', topicPh: '音樂、成員、劇場...', questionPh: '寫下你對粉絲的問題...', submitQuestion: '傳送問題', voteNow: '立即投票', syncSummaryTpl: '{a} 直播 · {b} 舞台', stageDetailTbd: '行程詳情稍後公佈', activeFilterLabel: '目前篩選', clearFilterAriaTpl: '清除篩選 {q}', oshiPromptTpl: '為什麼想把 {name} 加入 My Oshi？', toastReasonMin: '請寫簡短理由，至少 3 個字元。', toastOshiRemovedTpl: '已將 {name} 從 My Oshi 移除。', toastOshiFullTpl: '最多 {n} 個 My Oshi。請先移除一個再新增 {name}。', toastOshiAddedTpl: '已將 {name} 新增到 My Oshi（{n}）。', toastStorageWarn: '此瀏覽器封鎖本機儲存—收藏僅在目前分頁有效。', toastStatusRefreshed: '直播與舞台狀態已更新。', toastStatusFresh: '狀態已是最新。', stampCheckedTpl: '檢查於 {t}', stampAutoEveryTpl: '每 {n} 秒自動', stampRealtime: '即時', stampStaleSuffix: '資料已過期', stampUnreachable: '無法連線追蹤器', stampDataAt: '最後資料 {t}', notFoundTitleHtml: '找不到<span class="gradient-text">成員</span>', notFoundIdTpl: '沒有 id 為 {id} 的成員。名單可能已變動或連結有誤。', notFoundNeedId: '此頁面需要 <code>?id=</code> 參數，例如 <code>member.html?id=jkt48-01</code>。', noStageMarked: '還沒有成員上台', noLocalAgendaTitle: '暫無本地活動', noLocalAgendaSub: '最新活動直接取自各團體官網。', liveUrlPending: '尚未錄入直播連結', agendaCountTpl: '已收錄 {n} 項活動', qEmptyRoom: '這個房間還沒有問題。', qShared: '你的問題已分享到該房間。', qLoginNeeded: '發佈問題需要登入。', pollPickFirst: '先選一首歌吧，超級明星。', pollVotedTpl: '你投給 {song} 的票已記錄。', todayLabel: '今天', membersListedTpl: '已註冊成員 {n} 人', openNews: '開啟新聞', levelReader: '讀者', levelContributor: '貢獻者', levelEditor: '編輯者', accessLabel: '權限', submittedLabel: '提交時間', experiencePrefix: '經驗：', approveBtn: '通過', rejectBtn: '拒絕', noRequestsStatus: '此狀態下沒有申請。', sendingRequest: '正在傳送申請...', requestReceived: '申請已收到，將人工審核。', photoRejected: '照片被拒絕：請使用 JPEG、PNG 或 WebP，不超過 1.8 MB且無成人內容。',
+    weekEyebrow: '本週問題', pollQuestion: '你最常播放哪首JKT48的歌？', pollNote: '選擇一個答案，投票後即可看到暫定結果。',
+    picksEyebrow: '精選聊天', topicsTitle: '當前熱議話題', joinChat: '參與討論',
+    d1Meta: 'JKT48 · 24則回覆', d1Title: '你想現場看哪個劇場歌單？', d1Author: '由 Rara 發起 · 2小時前',
+    d2Meta: 'AKB48 · 18則回覆', d2Title: '給新聽眾推薦哪些成員？', d2Author: '由 Kiki 發起 · 5小時前',
+    d3Meta: '48 Group · 11則回覆', d3Title: '分享你最難忘的見面會時刻', d3Author: '由 Nao 發起 · 昨天',
+    cornerEyebrow: '來自粉絲角落', fanartTitle: '最新粉絲畫作', openGallery: '開啟畫廊',
+    storyEyebrow: '有故事想分享？', joinTitle: '這裡屬於每一位粉絲。', joinDesc: '登入以保存資料，一起建設WIKI48社群。', requestAccess: '申請權限',
+    welcomeBack: '歡迎回來', loginTitleHtml: '登入 <span>WIKI48</span>', loginSubtitle: '收藏你的本命，打造社群中的個人空間。', emailLabel: '電子郵件', passwordLabel: '密碼', minCharsPh: '至少4個字元', loginSubmit: '登入', haveAccount: '還沒有帳號？', nameLabel: '顯示名稱', namePh: '你的名字', registerSubmit: '建立帳號', authNote: '帳號安全地儲存在社群資料庫中。', accessLink: '申請Wiki貢獻者權限 ↗',
+    changePhoto: '更換照片', personalSpace: '你的個人空間', helloBefore: '你好，', helloAfter: '！', identityEyebrow: '身分資訊', editBioTitle: '編輯粉絲資料', privacyNote: '個人資料以隨機代碼假名化，照片在儲存前會檢查格式。', saveChanges: '儲存變更', profileSavedMsg: '資料已更新。', sinceEyebrow: '加入於', oshiStoredNote: '你的My Oshi和理由都保存在帳號裡。', manageOshi: '管理我的Oshi', logoutBtn: '登出帳號',
+    requestEyebrow: '權限申請', accessTitleHtml: '協助維護 <span>WIKI48</span>', accessSubtitle: '告訴我們你想做什麼貢獻。每個申請都會由站長人工審核。', fullNameLabel: '姓名', contactEmailLabel: '聯絡信箱', chooseRoom: '選擇房間', optID: '印尼', optJP: '日本', optTH: '泰國', optCN: '中國', optTW: '台灣', optMY: '馬來西亞', optOther: '其他',
+    accessTypeLabel: '申請的權限類型', chooseAccess: '選擇權限', optReader: '已驗證讀者', optContributor: '資料/文章貢獻者', optEditor: '社群編輯', helpLabel: '你想幫忙做什麼？', reasonPh: '例如：更新成員資料和JKT48官方來源...', experienceLabel: '經驗或貢獻示例', optionalLabel: '（選填）', experiencePh: '相關經驗的連結或簡介', consentText: '我同意遵守社群規則、註明來源，並不隨意變更資料。', submitRequest: '送出申請', sensitiveNote: '請勿在此表單傳送密碼、證件號碼或敏感資料。',
+    privateWs: '私人工作區', reviewTitleHtml: '審核<span>權限申請</span>', reviewDesc: '在授予Wiki權限前人工評估申請。', filterStatusAria: '篩選申請狀態', optPending: '待處理', optApproved: '已通過', optRejected: '已拒絕', loadingRequests: '正在載入申請...',
+    adminLoginTitleHtml: 'WIKI48 <span>管理員</span>', adminOnlyNote: '此區域僅限Wiki管理員使用。', adminEmailLabel: '管理員信箱', loginPanelBtn: '進入面板', backToWiki: '← 返回WIKI48',
+    noResultTitle: '沒有結果', noMemberFilter: '沒有符合此篩選條件的成員。', emptyOshiTitle: '還沒有本命', pinnedCountTpl: '已收藏 {n} 人', noStageSchedule: '暫無舞台安排', groupsNoMatchTpl: '沒有符合「{q}」的團體。', memberNotFoundTpl: '找不到 id 為 {id} 的成員。', agendaLocalEmpty: '暫無本地行程。請查看團體的官方行程取得最新資訊。', officialSource: '官方來源', emptyOshiSubTpl: '點擊喜愛成員的🤍，即可在此快速查看（最多 {n} 人）。', countFromTpl: '{b} 位成員中的 {a} 位', countTpl: '{n} 位成員', dirScopedTpl: '{scope}成員',
+  },
+  ms: {
+    home: 'Laman Utama', members: 'Direktori Ahli', groups: 'Info Kumpulan', gallery: 'Galeri Media', schedule: 'Jadual', community: 'Komuniti', updates: 'Kemas Kini Wiki', search: 'Cari Wiki...', menu: 'Menu', back: '← Laman Utama', official: 'Rasmi',
+    liveStatusNav: 'Status Live', openMenuAria: 'Buka menu navigasi', closeMenuAria: 'Tutup menu', searchBtn: 'Cari', profileNav: 'Profil saya', notificationsAria: 'Pemberitahuan',
+    footerHub: 'Idol & Group Wiki Hub — dibina untuk peminat.', footerSpark: 'dibuat dengan kilauan untuk peminat 48 Group.', backDirectory: '← Direktori Ahli',
+    heroEyebrow: 'Dunia berwarna 48 Group anda', heroTitleHtml: 'Terokai dunia <em>ajaib</em><br />48 Group!', heroLede: 'Ensiklopedia comel tentang ahli, kumpulan, strim langsung dan semua detik yang berharga.', ctaMembers: 'Kenali para ahli', ctaGroups: 'Terokai kumpulan',
+    freshEyebrow: 'Baharu dari wiki', featuredTitle: '★ Artikel Pilihan ★', viewAll: 'Lihat semua', shelfEyebrow: 'Rak peribadi anda', oshiTitle: 'Idol kegemaran saya', manage: 'Urus',
+    liveEyebrow: 'Sedang berlaku sekarang', liveTitleHtml: 'Siapa sedang <em>live?</em> <span>♥</span>', loveEyebrow: 'Kirim sedikit kasih', birthdaysTitle: 'Hari lahir', seeAll: 'Lihat semua',
+    readingEyebrow: 'Peminat sedang membaca', trendingTitle: 'Artikel trending', trend1: 'Panduan lengkap etika teater', trend2: '12 kumpulan saudara, satu keluarga besar', trend3: 'Cara mencari oshi seterusnya',
+    syncingTracker: 'Menyegerakkan penjejak...', checkingStreams: 'Menyemak siaran...', birthdayEmpty: 'Data hari lahir sedang diemas cantik.',
+    directoryTitleHtml: 'Ahli <span class="gradient-text">Direktori</span>', membersSubtitle: 'Profil, status live, pentas, jadual dan My Oshi dalam satu senarai.', searchMembersPh: 'Cari ahli atau kumpulan...', allMembers: 'Semua ahli',
+    scopeLabel: 'Kategori & kumpulan', allCategories: 'Semua kategori', scopeHint: 'Pilih satu kategori, atau terus ke senarai ahli sesebuah kumpulan.', filterGroupAria: 'Penapis status ahli', filterAll: 'Semua', filterLive: '🔴 Sedang Live', filterStage: '🎤 Di Pentas',
+    groupsTitleHtml: 'Semua <span class="gradient-text">Kumpulan</span>', groupsSubtitle: '12 kumpulan AKB48 Group — dipecah kepada domestik (Jepun) dan kaigai (luar negara). Pilih kumpulan untuk melihat senarai ahlinya.', searchGroupsPh: 'Cari nama kumpulan atau ahli…', groupDirectory: 'Direktori Kumpulan',
+    newsTitleHtml: 'Berita <span class="gradient-text">Rasmi</span>', newsSubtitle: 'Akses laman berita rasmi setiap kumpulan terus dari sumber asalnya.',
+    scheduleTitleHtml: 'Live &amp; <span class="gradient-text">Jadual</span>', scheduleSubtitle: 'Pantau ahli yang sedang live, di pentas, dan jadual yang telah direkodkan.', loadingStatus: 'Memuatkan status...', refreshLabel: 'Muat semula', labelLive: 'Sedang Live', labelStage: 'Di Pentas', agendaTitle: 'Agenda rasmi',
+    accountLink: 'Profil saya ↗', meetEyebrow: 'Ruangan pertemuan peminat', communityTitleHtml: 'WIKI48 <span class="gradient-text">Komuniti</span>', communitySubtitle: 'Kongsi lagu kegemaran, temui perbualan baharu dan raikan detik kecil 48 Group bersama peminat lain.',
+    qdayEyebrow: 'Soalan hari ini', hubTitle: 'Perbualan mengikut negara', hubDesc: 'Pilih ruang negara supaya perbualan selesa dan mudah diikuti.', roomLabel: 'Ruang', loadingQuestions: 'Memuatkan soalan hari ini...',
+    ideaEyebrow: 'Ada idea perbualan?', askTitle: 'Ajukan soalan kepada peminat', askDesc: 'Kongsi soalan yang spesifik dan mesra untuk ruang negara pilihan anda.', countryLabel: 'Negara', topicLabel: 'Topik', questionLabel: 'Soalan', topicPh: 'Muzik, ahli, teater...', questionPh: 'Tulis soalan anda untuk peminat...', submitQuestion: 'Hantar soalan', voteNow: 'Undi sekarang', syncSummaryTpl: '{a} live · {b} pentas', stageDetailTbd: 'Butiran jadual menyusul', activeFilterLabel: 'Penapis aktif', clearFilterAriaTpl: 'Kosongkan penapis {q}', oshiPromptTpl: 'Kenapa anda mahu tambah {name} sebagai My Oshi?', toastReasonMin: 'Tulis alasan ringkas, sekurang-kurangnya 3 aksara.', toastOshiRemovedTpl: '{name} dikeluarkan dari My Oshi.', toastOshiFullTpl: 'Maksimum {n} oshi. Buang satu dahulu sebelum tambah {name}.', toastOshiAddedTpl: '{name} ditambah ke My Oshi ({n}).', toastStorageWarn: 'Pelayar ini menyekat storan setempat — pin hanya kekal dalam tab ini.', toastStatusRefreshed: 'Status live & pentas dikemas kini.', toastStatusFresh: 'Status sudah terkini.', stampCheckedTpl: 'Disemak {t}', stampAutoEveryTpl: 'auto setiap {n} saat', stampRealtime: 'masa nyata', stampStaleSuffix: 'data sudah lapuk', stampUnreachable: 'Penjejak tidak dapat dihubungi', stampDataAt: 'data {t}', notFoundTitleHtml: 'Ahli <span class="gradient-text">tidak dijumpai</span>', notFoundIdTpl: 'Tiada ahli dengan id {id}. Senarai mungkin telah berubah atau pautan salah.', notFoundNeedId: 'Halaman ini memerlukan parameter <code>?id=</code>, contohnya <code>member.html?id=jkt48-01</code>.', noStageMarked: 'Belum ada ahli yang ditanda pentas.', noLocalAgendaTitle: 'Belum ada agenda setempat', noLocalAgendaSub: 'Agenda terkini dibaca terus dari laman rasmi setiap kumpulan.', liveUrlPending: 'URL live belum direkod', agendaCountTpl: '{n} agenda direkod', qEmptyRoom: 'Belum ada soalan untuk bilik ini.', qShared: 'Soalan anda dikongsi ke bilik negara ini.', qLoginNeeded: 'Log masuk diperlukan untuk menghantar soalan.', pollPickFirst: 'Pilih satu lagu dahulu, superstar.', pollVotedTpl: 'Undi anda untuk {song} telah direkod.', todayLabel: 'Hari ini', membersListedTpl: '{n} ahli berdaftar', openNews: 'Buka berita', levelReader: 'Pembaca', levelContributor: 'Penyumbang', levelEditor: 'Penyunting', accessLabel: 'Akses', submittedLabel: 'Dihantar', experiencePrefix: 'Pengalaman:', approveBtn: 'Luluskan', rejectBtn: 'Tolak', noRequestsStatus: 'Tiada permohonan dengan status ini.', sendingRequest: 'Menghantar permohonan...', requestReceived: 'Permohonan diterima. Ia akan disemak secara manual.', photoRejected: 'Foto ditolak: gunakan JPEG, PNG, atau WebP maksimum 1.8 MB dan tanpa kandungan 18+.',
+    weekEyebrow: 'Soalan minggu ini', pollQuestion: 'Lagu JKT48 manakah yang paling kerap anda mainkan?', pollNote: 'Pilih satu jawapan. Keputusan awal muncul selepas anda mengundi.',
+    picksEyebrow: 'Perbualan pilihan', topicsTitle: 'Topik hangat sekarang', joinChat: 'Sertai perbualan',
+    d1Meta: 'JKT48 · 24 balasan', d1Title: 'Setlist teater yang mana ingin anda tonton secara langsung?', d1Author: 'Dimulakan oleh Rara · 2 jam lalu',
+    d2Meta: 'AKB48 · 18 balasan', d2Title: 'Cadangan ahli untuk pendengar baharu?', d2Author: 'Dimulakan oleh Kiki · 5 jam lalu',
+    d3Meta: '48 Group · 11 balasan', d3Title: 'Kongsi detik fanmeeting paling berkesan anda', d3Author: 'Dimulakan oleh Nao · semalam',
+    cornerEyebrow: 'Dari sudut peminat', fanartTitle: 'Fan art terkini', openGallery: 'Buka galeri',
+    storyEyebrow: 'Ada cerita?', joinTitle: 'Ruang ini milik semua peminat.', joinDesc: 'Log masuk untuk menyimpan profil dan bersama membina komuniti WIKI48.', requestAccess: 'Mohon akses',
+    welcomeBack: 'Selamat kembali', loginTitleHtml: 'Masuk ke <span>WIKI48</span>', loginSubtitle: 'Simpan oshi dan atur ruang peribadi anda sebagai sebahagian daripada komuniti.', emailLabel: 'E-mel', passwordLabel: 'Kata laluan', minCharsPh: 'Sekurang-kurangnya 4 aksara', loginSubmit: 'Masuk', haveAccount: 'Belum ada akaun?', nameLabel: 'Nama paparan', namePh: 'Nama anda', registerSubmit: 'Buat akaun', authNote: 'Akaun disimpan dengan selamat dalam pangkalan data komuniti.', accessLink: 'Mohon akses penyumbang wiki ↗',
+    changePhoto: 'Tukar foto', personalSpace: 'Ruang peribadi anda', helloBefore: 'Hai,', helloAfter: '!', identityEyebrow: 'Identiti', editBioTitle: 'Edit biodata peminat', privacyNote: 'Data peribadi disamaran dengan kod rawak dan foto disemak formatnya sebelum disimpan.', saveChanges: 'Simpan perubahan', profileSavedMsg: 'Profil berjaya dikemas kini.', sinceEyebrow: 'Ahli sejak', oshiStoredNote: 'My Oshi dan alasan pilihan anda disimpan dalam akaun anda.', manageOshi: 'Urus My Oshi', logoutBtn: 'Log keluar',
+    requestEyebrow: 'Permohonan akses', accessTitleHtml: 'Bantu jaga <span>WIKI48</span>', accessSubtitle: 'Beritahu apa yang ingin anda sumbangkan. Setiap permohonan disemak secara manual oleh pemilik wiki.', fullNameLabel: 'Nama', contactEmailLabel: 'E-mel untuk dihubungi', chooseRoom: 'Pilih ruang', optID: 'Indonesia', optJP: 'Jepun', optTH: 'Thailand', optCN: 'China', optTW: 'Taiwan', optMY: 'Malaysia', optOther: 'Lain-lain',
+    accessTypeLabel: 'Jenis akses yang dimohon', chooseAccess: 'Pilih akses', optReader: 'Pembaca disahkan', optContributor: 'Penyumbang data/artikel', optEditor: 'Editor komuniti', helpLabel: 'Apakah yang ingin anda bantu?', reasonPh: 'Contoh: mengemas kini profil ahli dan sumber rasmi JKT48...', experienceLabel: 'Pengalaman atau contoh sumbangan', optionalLabel: '(pilihan)', experiencePh: 'Pautan atau ringkasan pengalaman berkaitan', consentText: 'Saya bersetuju mematuhi peraturan komuniti, menyatakan sumber dan tidak mengubah data sesuka hati.', submitRequest: 'Hantar permohonan', sensitiveNote: 'Jangan hantar kata laluan, nombor identiti atau data sensitif melalui borang ini.',
+    privateWs: 'Ruang kerja persendirian', reviewTitleHtml: 'Semak <span>permohonan akses</span>', reviewDesc: 'Nilai permohonan secara manual sebelum memberikan akses wiki.', filterStatusAria: 'Penapis status permohonan', optPending: 'Menunggu', optApproved: 'Diluluskan', optRejected: 'Ditolak', loadingRequests: 'Memuatkan permohonan...',
+    adminLoginTitleHtml: 'WIKI48 <span>Pentadbir</span>', adminOnlyNote: 'Area ini untuk pengurus wiki sahaja.', adminEmailLabel: 'E-mel pentadbir', loginPanelBtn: 'Masuk ke panel', backToWiki: '← Kembali ke WIKI48',
+    noResultTitle: 'Tiada hasil', noMemberFilter: 'Tiada ahli menepati penapis ini.', emptyOshiTitle: 'Belum ada oshi', pinnedCountTpl: '{n} dipin', noStageSchedule: 'Tiada pentas dijadualkan', groupsNoMatchTpl: 'Tiada kumpulan sepadan dengan “{q}”.', memberNotFoundTpl: 'Tiada ahli dengan id {id}.', agendaLocalEmpty: 'Tiada agenda tempatan lagi. Semak jadual rasmi kumpulan untuk maklumat terkini.', officialSource: 'Sumber rasmi', emptyOshiSubTpl: 'Tekan 🤍 pada ahli kegemaran anda untuk paparan pantas di sini (maksimum {n}).', countFromTpl: '{a} daripada {b} ahli', countTpl: '{n} ahli', dirScopedTpl: 'Ahli {scope}',
+  },
 };
 
 const UI_CARD_COPY = {
@@ -5354,6 +5775,16 @@ function uiCardText(key) {
     profile: { id: 'Lihat profil', en: 'View profile', ja: 'プロフィールを見る', th: 'ดูโปรไฟล์', 'zh-CN': '查看资料', 'zh-TW': '查看資料', ms: 'Lihat profil' },
     pin: { id: 'Pin', en: 'Pin', ja: 'ピン留め', th: 'ปักหมุด', 'zh-CN': '收藏', 'zh-TW': '收藏', ms: 'Pin' },
     unpin: { id: 'Lepas', en: 'Unpin', ja: 'ピンを外す', th: 'เลิกปักหมุด', 'zh-CN': '取消收藏', 'zh-TW': '取消收藏', ms: 'Nyahpin' },
+
+    /* Keadaan tracker. Enam kunci, bukan satu, karena "sedang sepi" dan
+       "kami tidak tahu" tidak boleh memakai kalimat yang sama —
+       pengunjung berhak tahu kapan situs ini sedang menebak. */
+    liveNone: { id: 'Belum ada yang live', en: 'Nobody is live right now', ja: '今は配信中のメンバーはいません', th: 'ยังไม่มีใครไลฟ์', 'zh-CN': '暂时没有人直播', 'zh-TW': '目前沒有人直播', ms: 'Belum ada yang live' },
+    liveNeverChecked: { id: 'Tracker belum pernah mengecek', en: 'Tracker has not checked yet', ja: 'トラッカーは未実行です', th: 'ตัวติดตามยังไม่ได้ตรวจสอบ', 'zh-CN': '追踪器尚未检查', 'zh-TW': '追蹤器尚未檢查', ms: 'Penjejak belum memeriksa' },
+    liveStale: { id: 'Status live kedaluwarsa', en: 'Live status is out of date', ja: '配信状況が古くなっています', th: 'สถานะไลฟ์ล้าสมัย', 'zh-CN': '直播状态已过期', 'zh-TW': '直播狀態已過期', ms: 'Status live sudah lapuk' },
+    liveStaleLast: { id: 'Data terakhir diketahui · kedaluwarsa', en: 'Last known list · out of date', ja: '最後に確認した情報 · 古い', th: 'ข้อมูลล่าสุด · ล้าสมัย', 'zh-CN': '最后已知 · 已过期', 'zh-TW': '最後已知 · 已過期', ms: 'Data terakhir diketahui · lapuk' },
+    liveOffline: { id: 'Tracker tidak terjangkau', en: 'Tracker unreachable', ja: 'トラッカーに接続できません', th: 'เชื่อมต่อตัวติดตามไม่ได้', 'zh-CN': '无法连接追踪器', 'zh-TW': '無法連線追蹤器', ms: 'Penjejak tidak dapat dihubungi' },
+    liveOfflineLast: { id: 'Data terakhir diketahui · tracker terputus', en: 'Last known list · tracker offline', ja: '最後に確認した情報 · 接続断', th: 'ข้อมูลล่าสุด · ตัวติดตามหลุด', 'zh-CN': '最后已知 · 追踪器离线', 'zh-TW': '最後已知 · 追蹤器離線', ms: 'Data terakhir diketahui · penjejak terputus' },
   };
   if (labels[key]) return labels[key][currentUiCode()];
   if (key === 'all') {
@@ -5362,6 +5793,8 @@ function uiCardText(key) {
   if (key === 'groups') {
     return { id: 'grup', en: 'groups', ja: 'グループ', th: 'กลุ่ม', 'zh-CN': '个组合', 'zh-TW': '個團體', ms: 'kumpulan' }[currentUiCode()];
   }
+  const ui = UI_COPY[currentUiCode()] || UI_COPY.en;
+  if (typeof ui[key] === 'string') return ui[key];
   return (UI_CARD_COPY[currentUiCode()] || UI_CARD_COPY.en)[key];
 }
 
@@ -5382,20 +5815,44 @@ function applyCardTranslations() {
   document.querySelectorAll('.group-site-text').forEach((item) => { item.textContent = copy.officialSite; });
 }
 
+function terapkanTeksI18n(copy) {
+  document.querySelectorAll('[data-i18n]').forEach((el) => {
+    const nilai = copy[el.dataset.i18n];
+    if (typeof nilai === 'string') el.textContent = nilai;
+  });
+  document.querySelectorAll('[data-i18n-html]').forEach((el) => {
+    const nilai = copy[el.dataset.i18nHtml];
+    if (typeof nilai === 'string') el.innerHTML = nilai;
+  });
+  document.querySelectorAll('[data-i18n-placeholder]').forEach((el) => {
+    const nilai = copy[el.dataset.i18nPlaceholder];
+    if (typeof nilai === 'string') el.setAttribute('placeholder', nilai);
+  });
+  document.querySelectorAll('[data-i18n-aria]').forEach((el) => {
+    const nilai = copy[el.dataset.i18nAria];
+    if (typeof nilai === 'string') el.setAttribute('aria-label', nilai);
+  });
+}
+
 function initI18n() {
+  if (initI18n.booted) return;
+  initI18n.booted = true;
   const header = $('.header-inner');
-  if (!header) return;
-  let select = $('.language-select');
-  if (!select) {
-    select = document.createElement('select');
-    select.className = 'language-select';
-    select.setAttribute('aria-label', 'Select language');
-    select.innerHTML = UI_LANGUAGES.map(([code, label]) => `<option value="${code}">${label}</option>`).join('');
-    const actions = $('.header-actions', header);
-    (actions || header).appendChild(select);
+  let select = null;
+  if (header) {
+    select = $('.language-select');
+    if (!select) {
+      select = document.createElement('select');
+      select.className = 'language-select';
+      select.setAttribute('aria-label', 'Select language');
+      select.innerHTML = UI_LANGUAGES.map(([code, label]) => `<option value="${code}">${label}</option>`).join('');
+      const actions = $('.header-actions', header);
+      (actions || header).appendChild(select);
+    }
   }
   const saved = localStorage.getItem('wiki48-language') || document.documentElement.lang || 'id';
-  select.value = UI_COPY[saved] ? saved : 'en';
+  const kode = UI_COPY[saved] ? saved : 'en';
+  if (select) select.value = kode;
   function apply(code) {
     const copy = UI_COPY[code] || UI_COPY.en;
     document.documentElement.lang = code;
@@ -5408,21 +5865,75 @@ function initI18n() {
     });
     document.querySelectorAll('.drawer-nav a').forEach((item) => {
       const href = item.getAttribute('href') || '';
-      const key = href.includes('members') ? 'members'
-        : href.includes('groups') ? 'groups'
-          : href.includes('schedule') ? 'schedule'
-            : href.includes('news') ? 'updates'
-              : href.includes('community') ? 'community' : 'home';
+      const hash = href.split('#')[1] || '';
+      const key = hash === 'status' ? 'liveStatusNav'
+        : hash === 'oshi' ? 'oshiTitle'
+          : hash === 'directory' ? 'members'
+            : href.includes('members') ? 'members'
+              : href.includes('groups') ? 'groups'
+                : href.includes('profile') ? 'profileNav'
+                  : href.includes('schedule') ? 'schedule'
+                  : href.includes('news') ? 'updates'
+                    : href.includes('community') ? 'community' : 'home';
       const icon = item.textContent.trim().split(' ')[0];
       item.textContent = `${icon} ${copy[key]}`;
     });
     document.querySelectorAll('.header-search input, #searchInput, #groupSearchInput').forEach((input) => { input.placeholder = copy.search; });
     const menu = $('.drawer-title'); if (menu) menu.textContent = copy.menu;
-    document.querySelectorAll('.back-link').forEach((link) => { if (/Beranda|Home|ホーム|หน้าแรก|首页|首頁|Laman Utama/.test(link.textContent)) link.textContent = copy.back; });
+    document.querySelectorAll('.back-link, .auth-home-link').forEach((link) => { if (/Beranda|Home|ホーム|หน้าแรก|首页|首頁|Laman Utama|Member Directory|メンバーディレクトリ|สมาชิก|成員目錄|成员目录|Direktori Ahli/.test(link.textContent)) link.textContent = copy.backDirectory && /member/i.test(link.textContent) ? copy.backDirectory : copy.back; });
+    document.querySelectorAll('#menuToggle').forEach((btn) => btn.setAttribute('aria-label', copy.openMenuAria));
+    document.querySelectorAll('#menuClose').forEach((btn) => btn.setAttribute('aria-label', copy.closeMenuAria));
+    terapkanTeksI18n(copy);
     applyCardTranslations();
     document.dispatchEvent(new CustomEvent('wiki48-language-change', { detail: { code } }));
     try { localStorage.setItem('wiki48-language', code); } catch (error) { /* storage is optional */ }
   }
-  select.addEventListener('change', () => apply(select.value));
-  apply(select.value);
+  if (select) select.addEventListener('change', () => apply(select.value));
+  apply(select ? select.value : kode);
 }
+
+/* -------------------------------------------------------------
+   9. PENANDA HALAMAN AKTIF — navbar & drawer mengikuti URL.
+   Hanya item pertama yang cocok ditandai, supaya tautan ganda
+   (mis. news.html dipakai dua label) tidak menyala bersamaan.
+   ------------------------------------------------------------- */
+function initActiveNav() {
+  const halaman = location.pathname.split('/').pop() || 'index.html';
+  const diBeranda = halaman === 'index.html';
+  const targetDari = (el) => ((el.getAttribute('href') || '').split('#')[0].split('/').pop() || 'index.html');
+  const cocok = (el) => {
+    const target = targetDari(el);
+    return diBeranda ? target === 'index.html' : target === halaman;
+  };
+  document.querySelectorAll('.desktop-nav').forEach((nav) => {
+    let sudah = false;
+    nav.querySelectorAll('.nav-item').forEach((item) => {
+      item.classList.remove('is-active');
+      item.removeAttribute('aria-current');
+      if (!sudah && cocok(item)) {
+        item.classList.add('is-active');
+        item.setAttribute('aria-current', 'page');
+        sudah = true;
+      }
+    });
+  });
+  document.querySelectorAll('.drawer-nav').forEach((nav) => {
+    let sudah = false;
+    nav.querySelectorAll('a').forEach((item) => {
+      item.removeAttribute('aria-current');
+      if (!sudah && cocok(item)) {
+        item.setAttribute('aria-current', 'page');
+        sudah = true;
+      }
+    });
+  });
+}
+
+function bootWiki48Chrome() {
+  initActiveNav();
+  initI18n();
+  initDrawer();
+}
+
+if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootWiki48Chrome);
+else bootWiki48Chrome();

@@ -11,7 +11,7 @@ function readStore(file = DEFAULT_FILE) {
   try {
     const parsed = JSON.parse(fs.readFileSync(file, 'utf8'));
     return {
-      members: Array.isArray(parsed.members) ? parsed.members : [],
+      members: Array.isArray(parsed.members) ? parsed.members.filter((member) => !String(member?.id || '').startsWith('showroom-')) : [],
       updated_at: parsed.updated_at || null,
     };
   } catch (error) {
@@ -31,7 +31,7 @@ function writeStore(store, file = DEFAULT_FILE) {
 function upsertMembers(discovered, file = DEFAULT_FILE) {
   const store = readStore(file);
   const byId = new Map(store.members.map((member) => [member.id, member]));
-  discovered.forEach((member) => {
+  discovered.filter((member) => !String(member?.id || '').startsWith('showroom-')).forEach((member) => {
     const previous = byId.get(member.id) || {};
     byId.set(member.id, { ...previous, ...member });
   });

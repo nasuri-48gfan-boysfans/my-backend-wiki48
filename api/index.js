@@ -1,16 +1,4 @@
-const { app, ensureSchema } = require('../server/community-server');
-
-let databaseReady;
-
-module.exports = async function vercelHandler(request, response) {
-  try {
-    databaseReady ||= ensureSchema();
-    await databaseReady;
-    return app(request, response);
-  } catch (error) {
-    databaseReady = undefined;
-    console.error('[API STARTUP]', error.message);
-    console.error(error.message);
-    return response.status(500).json({ error: 'Backend database belum siap.' });
-  }
-};
+/* Titik masuk fungsi Vercel untuk /api (lihat rewrite di vercel.json).
+   Logikanya ada di server/vercel-handler.js supaya berkas ini dan
+   api/[...path].js tidak bisa berbeda diam-diam. */
+module.exports = require('../server/vercel-handler').createVercelHandler({ label: 'API' });

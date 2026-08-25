@@ -1,2 +1,11 @@
 node_modules/
+
+# Rahasia. .env.local ikut di sini karena itu yang dipakai untuk kredensial
+# Upstash di mesin lokal — tanpa baris ini, token REST bisa ikut ter-commit.
 .env
+.env.local
+.env.*.local
+.env.production
+
+# Berkas sementara store mapping (store.js menulis members.json.tmp lalu rename)
+*.tmp

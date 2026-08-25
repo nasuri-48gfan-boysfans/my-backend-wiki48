@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-labelledby="mTitle mDesc">
+  <title id="mTitle">Wiki48 Mascot</title>
+  <desc id="mDesc">Gadis idol chibi ceria berkuncir dua dengan microphone dan lightstick, warna pink dan putih.</desc>
+
+  <defs>
+    <linearGradient id="gHairFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FCA9CB"/>
+      <stop offset="1" stop-color="#F27BA8"/>
+    </linearGradient>
+    <linearGradient id="gHairTail" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F78BB4"/>
+      <stop offset="1" stop-color="#EC6A9C"/>
+    </linearGradient>
+    <radialGradient id="gEye" cx=".5" cy=".38" r=".75">
+      <stop offset="0" stop-color="#FFCFE2"/>
+      <stop offset=".55" stop-color="#F06292"/>
+      <stop offset="1" stop-color="#C2447A"/>
+    </radialGradient>
+    <linearGradient id="gDress" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFFFFF"/>
+      <stop offset="1" stop-color="#FFF0F6"/>
+    </linearGradient>
+    <linearGradient id="gStick" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE1EF"/>
+      <stop offset="1" stop-color="#FF8FC8"/>
+    </linearGradient>
+    <radialGradient id="gGlow" cx=".5" cy=".5" r=".5">
+      <stop offset="0" stop-color="#FFB7DC" stop-opacity=".85"/>
+      <stop offset=".6" stop-color="#FFB7DC" stop-opacity=".35"/>
+      <stop offset="1" stop-color="#FFB7DC" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+
+  <!-- glow lightstick (di belakang semua) -->
+  <circle cx="366" cy="136" r="52" fill="url(#gGlow)">
+    <animate attributeName="r" values="46;56;46" dur="2s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values=".65;1;.65" dur="2s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- ===== KUNCIR DUA (belakang kepala) ===== -->
+  <g stroke="#C2557F" stroke-width="4" stroke-linejoin="round">
+    <path fill="url(#gHairTail)" d="M176,152 C118,140 94,198 108,254 C116,294 104,330 84,352 C122,362 158,338 166,298 C174,260 168,214 188,186 Z">
+      <animateTransform attributeName="transform" type="rotate" values="-2.4 176 152;2.4 176 152;-2.4 176 152" dur="3.4s" repeatCount="indefinite"/>
+    </path>
+    <path fill="url(#gHairTail)" d="M336,152 C394,140 418,198 404,254 C396,294 408,330 428,352 C390,362 354,338 346,298 C338,260 344,214 324,186 Z">
+      <animateTransform attributeName="transform" type="rotate" values="2.4 336 152;-2.4 336 152;2.4 336 152" dur="3.4s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- rambut belakang -->
+  <ellipse cx="256" cy="186" rx="102" ry="86" fill="#EE6C9C"/>
+
+  <!-- ===== KAKI & SEPATU ===== -->
+  <g>
+    <rect x="228" y="412" width="17" height="50" rx="8.5" fill="#FFE9DE"/>
+    <rect x="267" y="412" width="17" height="50" rx="8.5" fill="#FFE9DE"/>
+    <rect x="226" y="444" width="21" height="16" rx="8" fill="#FFFFFF"/>
+    <rect x="265" y="444" width="21" height="16" rx="8" fill="#FFFFFF"/>
+    <rect x="222" y="456" width="31" height="19" rx="9.5" fill="#F06292"/>
+    <rect x="259" y="456" width="31" height="19" rx="9.5" fill="#F06292"/>
+    <path d="M226,462 h23 M263,462 h23" stroke="#D14B7E" stroke-width="3" stroke-linecap="round"/>
+    <circle cx="232" cy="461" r="2.6" fill="#FFFFFF" opacity=".85"/>
+    <circle cx="269" cy="461" r="2.6" fill="#FFFFFF" opacity=".85"/>
+  </g>
+
+  <!-- ===== DRESS ===== -->
+  <path d="M196,408 Q256,430 316,408 L324,421 Q256,447 188,421 Z" fill="#FFC9DC" stroke="#E879A9" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M206,350 L306,350 L330,412 Q256,428 182,412 Z" fill="url(#gDress)" stroke="#E8A8C2" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M214,304 C214,292 298,292 298,304 L302,352 L210,352 Z" fill="url(#gDress)" stroke="#E8A8C2" stroke-width="2.5" stroke-linejoin="round"/>
+  <!-- pita dada -->
+  <path d="M256,322 l-15,-9 v18 Z M256,322 l15,-9 v18 Z" fill="#F55FA0" stroke="#E04A8C" stroke-width="2" stroke-linejoin="round"/>
+  <circle cx="256" cy="322" r="3.6" fill="#FFD3E6"/>
+
+  <!-- ===== TANGAN KIRI (pegang mic) ===== -->
+  <circle cx="210" cy="311" r="16" fill="#FFB6CF" stroke="#E879A9" stroke-width="3"/>
+  <path d="M210,315 C190,320 187,296 197,271" fill="none" stroke="#FFE9DE" stroke-width="13" stroke-linecap="round"/>
+  <circle cx="199" cy="267" r="9" fill="#FFE9DE"/>
+
+  <!-- ===== TANGAN KANAN (lightstick) ===== -->
+  <circle cx="302" cy="311" r="16" fill="#FFB6CF" stroke="#E879A9" stroke-width="3"/>
+  <path d="M303,313 C324,294 341,258 352,224" fill="none" stroke="#FFE9DE" stroke-width="13" stroke-linecap="round"/>
+  <line x1="349" y1="240" x2="362" y2="152" stroke="#E39FC0" stroke-width="15" stroke-linecap="round"/>
+  <line x1="349" y1="240" x2="362" y2="152" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+  <circle cx="355" cy="218" r="9.5" fill="#FFE9DE"/>
+
+  <!-- ===== KEPALA ===== -->
+  <ellipse cx="256" cy="208" rx="92" ry="88" fill="#FFE9DE"/>
+
+  <!-- poni -->
+  <path d="M168,192 C170,116 342,116 344,192
+           C338,178 322,187 306,176
+           C292,166 282,183 264,172
+           C248,162 236,181 220,172
+           C204,163 192,182 178,173
+           C172,169 169,180 168,192 Z"
+        fill="url(#gHairFront)" stroke="#C2557F" stroke-width="4" stroke-linejoin="round"/>
+  <!-- ahoge -->
+  <path d="M256,120 C250,96 270,82 281,95 C271,92 263,103 263,119 Z" fill="url(#gHairFront)" stroke="#C2557F" stroke-width="3" stroke-linejoin="round"/>
+  <!-- lock samping -->
+  <path d="M170,190 C157,240 161,288 176,310 C187,290 185,236 185,206 Z" fill="url(#gHairFront)" stroke="#C2557F" stroke-width="4" stroke-linejoin="round"/>
+  <path d="M342,190 C355,240 351,288 336,310 C325,290 327,236 327,206 Z" fill="url(#gHairFront)" stroke="#C2557F" stroke-width="4" stroke-linejoin="round"/>
+  <!-- shine rambut -->
+  <path d="M212,142 q30,-14 66,-4" fill="none" stroke="#FFD3E6" stroke-width="6" stroke-linecap="round" opacity=".9"/>
+
+  <!-- scrunchie kuncir -->
+  <g>
+    <circle cx="177" cy="150" r="17" fill="#FF87B3" stroke="#FFFFFF" stroke-width="4"/>
+    <path d="M177,159 c-6,-5 -12,-10 -8,-16 c3,-4 8,-2 8,2 c0,-4 5,-6 8,-2 c4,6 -2,11 -8,16 Z" fill="#FFFFFF" opacity=".95"/>
+    <circle cx="335" cy="150" r="17" fill="#FF87B3" stroke="#FFFFFF" stroke-width="4"/>
+    <path d="M335,159 c-6,-5 -12,-10 -8,-16 c3,-4 8,-2 8,2 c0,-4 5,-6 8,-2 c4,6 -2,11 -8,16 Z" fill="#FFFFFF" opacity=".95"/>
+  </g>
+
+  <!-- ===== WAJAH ===== -->
+  <path d="M196,205 q18,-13 37,-5" fill="none" stroke="#C2557F" stroke-width="4" stroke-linecap="round"/>
+  <path d="M279,200 q19,-8 37,5" fill="none" stroke="#C2557F" stroke-width="4" stroke-linecap="round"/>
+
+  <!-- mata kiri -->
+  <g>
+    <ellipse cx="216" cy="233" rx="15" ry="20" fill="#FFFFFF" stroke="#4A2436" stroke-width="3">
+      <animate attributeName="ry" values="20;20;2;20;20" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="216" cy="235" rx="11" ry="15" fill="url(#gEye)">
+      <animate attributeName="ry" values="15;15;1.5;15;15" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <circle cx="216" cy="235" rx="5" ry="7" fill="#4A2436">
+      <animate attributeName="ry" values="7;7;.8;7;7" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="211" cy="227" r="4.6" fill="#FFFFFF"/>
+    <circle cx="221" cy="242" r="2.4" fill="#FFFFFF" opacity=".9"/>
+    <path d="M199,221 q17,-14 34,-2" fill="none" stroke="#4A2436" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- mata kanan -->
+  <g>
+    <ellipse cx="296" cy="233" rx="15" ry="20" fill="#FFFFFF" stroke="#4A2436" stroke-width="3">
+      <animate attributeName="ry" values="20;20;2;20;20" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="296" cy="235" rx="11" ry="15" fill="url(#gEye)">
+      <animate attributeName="ry" values="15;15;1.5;15;15" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <circle cx="296" cy="235" rx="5" ry="7" fill="#4A2436">
+      <animate attributeName="ry" values="7;7;.8;7;7" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="291" cy="227" r="4.6" fill="#FFFFFF"/>
+    <circle cx="301" cy="242" r="2.4" fill="#FFFFFF" opacity=".9"/>
+    <path d="M279,219 q17,-12 34,2" fill="none" stroke="#4A2436" stroke-width="5" stroke-linecap="round"/>
+  </g>
+
+  <!-- blush & hidung -->
+  <ellipse cx="192" cy="262" rx="13" ry="7" fill="#FF9DBB" opacity=".6"/>
+  <ellipse cx="320" cy="262" rx="13" ry="7" fill="#FF9DBB" opacity=".6"/>
+  <circle cx="256" cy="254" r="2.6" fill="#F2BFA8"/>
+
+  <!-- mulut senyum lebar -->
+  <path d="M238,270 C242,291 272,291 276,270 C275,285 268,294 257,294 C246,294 239,285 238,270 Z" fill="#A63A5C"/>
+  <path d="M247,286 q10,6 20,0 q-4,7 -10,7 q-6,0 -10,-7 Z" fill="#FF97AF"/>
+
+  <!-- ===== MICROPHONE ===== -->
+  <line x1="203" y1="266" x2="230" y2="258" stroke="#A6A6AB" stroke-width="10" stroke-linecap="round"/>
+  <path d="M226,263 l9,-7" stroke="#F58AA8" stroke-width="6" stroke-linecap="round"/>
+  <circle cx="241" cy="253" r="13" fill="#C9C9CE" stroke="#9AA0A6" stroke-width="3"/>
+  <g fill="#9AA0A6">
+    <circle cx="237" cy="249" r="1.7"/><circle cx="243" cy="248" r="1.7"/>
+    <circle cx="248" cy="252" r="1.7"/><circle cx="236" cy="255" r="1.7"/>
+    <circle cx="242" cy="254" r="1.7"/><circle cx="247" cy="258" r="1.7"/>
+  </g>
+
+  <!-- orb lightstick -->
+  <circle cx="364" cy="138" r="17" fill="url(#gStick)" stroke="#F58AA8" stroke-width="3.5"/>
+  <path d="M364,121 l5,12 12,5 -12,5 -5,12 -5,-12 -12,-5 12,-5 Z" fill="#FFFFFF" opacity=".95">
+    <animate attributeName="opacity" values=".95;.5;.95" dur="1.6s" repeatCount="indefinite"/>
+  </path>
+
+  <!-- sparkles sekitar -->
+  <g stroke="none">
+    <path d="M108,108 l4,11 11,4 -11,4 -4,11 -4,-11 -11,-4 11,-4 Z" fill="#FFD76E">
+      <animate attributeName="opacity" values="1;.25;1" dur="1.8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M420,300 l3.4,9 9,3.4 -9,3.4 -3.4,9 -3.4,-9 -9,-3.4 9,-3.4 Z" fill="#FFB6CF">
+      <animate attributeName="opacity" values=".3;1;.3" dur="2.2s" repeatCount="indefinite"/>
+    </path>
+    <path d="M132,392 l2.8,7.5 7.5,2.8 -7.5,2.8 -2.8,7.5 -2.8,-7.5 -7.5,-2.8 7.5,-2.8 Z" fill="#C9A6F2">
+      <animate attributeName="opacity" values=".35;1;.35" dur="2.6s" repeatCount="indefinite"/>
+    </path>
+  </g>
+</svg>

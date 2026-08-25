@@ -1,0 +1,50 @@
+# Mapping live BNK48 — data/sumber/live/bnk48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js bnk48 --write
+
+Marine     | - | - | -   # Team BIII
+Fame       | - | - | -   # Team BIII
+Hoop       | - | - | -   # Team BIII
+Janry      | - | - | -   # Team BIII
+Luksorn    | - | - | -   # Team BIII
+Mail       | - | - | -   # Team BIII
+Micha      | - | - | -   # Team BIII
+Monet      | - | - | -   # Team BIII
+Patt       | - | - | -   # Team BIII
+Praew      | - | - | -   # Team BIII
+Wawa       | - | - | -   # Team BIII
+Emmy       | - | - | -   # Team NV
+Arlee      | - | - | -   # Team NV
+Berry      | - | - | -   # Team NV
+Jew        | - | - | -   # Team NV
+L          | - | - | -   # Team NV
+Palmmy     | - | - | -   # Team NV
+Pancake    | - | - | -   # Team NV
+Proud      | - | - | -   # Team NV
+Saonoi     | - | - | -   # Team NV
+Sindy      | - | - | -   # Team NV
+Yoghurt    | - | - | -   # Team NV
+Galeya     | - | - | -   # Trainee
+Khaimook   | - | - | -   # Trainee
+Mayji      | - | - | -   # Trainee
+Nall       | - | - | -   # Trainee
+Nammonn    | - | - | -   # Trainee
+Neen       | - | - | -   # Trainee
+Niya       | - | - | -   # Trainee
+Blythe     | - | - | -   # Trainee
+Cartoon    | - | - | -   # Trainee
+Grape      | - | - | -   # Trainee
+Inkcha     | - | - | -   # Trainee
+Khowjow    | - | - | -   # Trainee
+Mint       | - | - | -   # Trainee
+Mirin      | - | - | -   # Trainee
+Rose       | - | - | -   # Trainee

@@ -1,0 +1,55 @@
+# Mapping live AKB48 — data/sumber/live/akb48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js akb48 --write
+
+Chiba Erii        | - | - | -
+Oguri Yui         | - | - | -
+Kuranoo Narumi    | - | - | -
+Shitao Miu        | - | - | -
+Takahshi Ayane    | - | - | -
+Nagano Serika     | - | - | -
+Hashimoto Haruna  | - | - | -
+Tokunaga Remi     | - | - | -
+Sakagawa Hiyuka   | - | - | -
+Iwatate Saho      | - | - | -
+Fukuoka Seina     | - | - | -
+Nagatomo Ayami    | - | - | -
+Yamauchi Mizuki   | - | - | -
+Ota Yuki          | - | - | -
+Sato Airi         | - | - | -
+Hashimoto Eriko   | - | - | -
+Hatekayama Nozomi | - | - | -
+Hirata Yuki       | - | - | -
+Hotei Moka        | - | - | -
+Masai Mayuu       | - | - | -
+Mizushima Miyuu   | - | - | -
+Yamazaki Sora     | - | - | -
+Akiyama           | - | - | -
+Arai Sae          | - | - | -
+Kudo Kasumi       | - | - | -
+Kubo Hinano       | - | - | -
+Sako Yumemi       | - | - | -
+Narita Kohina     | - | - | -
+Yagi Azuki        | - | - | -
+Yamaguchi Yui     | - | - | -
+Ito Momoka        | - | - | -
+Okumoto Kairi     | - | - | -
+Kawamura Yui      | - | - | -
+Oga Saki          | - | - | -
+Kondo Saki        | - | - | -
+Maruyama Hinata   | - | - | -
+Takahashi Mao     | - | - | -
+Tanaka Sayuri     | - | - | -
+Makito Ema        | - | - | -
+Morikawa Yu       | - | - | -
+Watanabe Kiko     | - | - | -
+Yamane Suzuha     | - | - | -

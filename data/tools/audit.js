@@ -25,8 +25,8 @@ const path = require('path');
 const vm = require('vm');
 
 const ROOT = path.resolve(__dirname, '..', '..');
-const JS_FILES = ['common.js', 'script.js', 'groups.js', 'member.js', 'schedule.js', 'news.js'];
-const HTML_FILES = ['index.html', 'groups.html', 'member.html', 'members.html', 'schedule.html', 'news.html'];
+const JS_FILES = ['common.js', 'script.js', 'groups.js', 'member.js', 'news.js'];
+const HTML_FILES = ['index.html', 'groups.html', 'member.html', 'members.html', 'news.html'];
 const ACCENTS = ['pink', 'cyan', 'violet', 'amber'];
 
 const errors = [];
@@ -132,10 +132,21 @@ function muatCommon() {
       getElementById: () => null,
       createElement: () => stubEl,
       addEventListener: () => {},
+      dispatchEvent: () => {},
       documentElement: stubEl,
       body: stubEl,
     },
-    window: { addEventListener: () => {}, location: { search: '', hash: '' } },
+    /* Global yang dipakai common.js saat modul dimuat:
+       location → initActiveNav, CustomEvent → initI18n. */
+    location: { href: 'https://wiki48.test/index.html', pathname: '/index.html', search: '', hash: '', protocol: 'https:' },
+    CustomEvent: class CustomEvent { constructor(type, opsi = {}) { this.type = type; this.detail = opsi.detail; } },
+    window: {
+      addEventListener: () => {},
+      location: { search: '', hash: '' },
+      /* Loader stage di common.js memasang timer saat modul dimuat. */
+      setTimeout: () => 0,
+      clearTimeout: () => {},
+    },
     localStorage: { getItem: () => null, setItem: () => {}, removeItem: () => {} },
     console,
     encodeURIComponent,

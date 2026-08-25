@@ -1,0 +1,69 @@
+# Mapping live SKE48 — data/sumber/live/ske48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js ske48 --write
+
+Ida Reona          | - | - | -   # Team E
+Kamata Natsuki     | - | - | -   # Team KII
+Kumazaki Haruka    | - | - | -   # Team S
+Aikawa Honoka      | - | - | -   # Team S
+Asai Yuka          | - | - | -   # Gen 7
+Ota Ayaka          | - | - | -   # Team E
+Ishiguro Yuzuki    | - | - | -   # Team S
+Inoue Ruka         | - | - | -   # Team KII
+Kitagawa Yoshino   | - | - | -   # Gen 8
+Kurashima Ami      | - | - | -   # Gen 8
+Sakamoto Marin     | - | - | -   # Gen 8
+Sato Kaho          | - | - | -   # Gen 8
+Nomura Miyo        | - | - | -   # Gen 8
+Akahori Kimie      | - | - | -   # Team E
+Arano Himeka       | - | - | -   # Team KII
+Ikeda Kaede        | - | - | -   # Gen 9
+Iriuchijima Sayaka | - | - | -   # Team S
+Suzuki Ena         | - | - | -   # Gen 9
+Suzuki Kokona      | - | - | -   # Gen 9
+Nakasaka Miyu      | - | - | -   # Gen 9
+Aoki Rika          | - | - | -   # Team E
+Ito Miki           | - | - | -   # Team KII
+Nishii Mio         | - | - | -   # Gen 10
+Omura Anzu         | - | - | -   # Team E
+Shinohara Kyoka    | - | - | -   # Team KII
+Sugimoto Riina     | - | - | -   # Team S
+Hara Yune          | - | - | -   # Gen 11
+Morimoto Kurumi    | - | - | -   # Gen 11
+Yamamura Sakura    | - | - | -   # Gen 11
+Ito Kokomi         | - | - | -   # Team S
+Okuno Kokoha       | - | - | -   # Team KII
+Kawamura Yua       | - | - | -   # Team E
+Kuramoto Hana      | - | - | -   # Gen 12
+Takamura Saya      | - | - | -   # Gen 12
+Hasegawa Miyabi    | - | - | -   # Gen 12
+Matsukawa Miyu     | - | - | -   # Gen 12
+Minamisawa Coco    | - | - | -   # Gen 12
+Ota Manae          | - | - | -   # Team E
+Kawamura Shoko     | - | - | -   # Gen 13
+Kubota Rei         | - | - | -   # Gen 13
+Kumoi Sana         | - | - | -   # Team KII
+Kuwahara Tsubaki   | - | - | -   # Team S
+Kondo Mikoto       | - | - | -   # Gen 13
+Sakurai Arisa      | - | - | -   # Gen 13
+Sasaki Nozomi      | - | - | -   # Gen 13
+Tachibana Ayame    | - | - | -   # Gen 13
+Tamura Mayu        | - | - | -   # Gen 6
+Hijiri Haruka      | - | - | -   # Gen 13
+Miyamoto Rinka     | - | - | -   # Gen 13
+Yokoi Shiho        | - | - | -   # Gen 13
+Iida Yura          | - | - | -   # Gen 14
+Ikeda Arisa        | - | - | -   # Gen 14
+Takeshita Marika   | - | - | -   # Gen 14
+Nakao Fuka         | - | - | -   # Gen 14
+Yajima Nagi        | - | - | -   # Gen 14
+Matsumoto Chikako  | - | - | -   # Team KII

@@ -11,7 +11,7 @@ async function communityApi(url, options) {
 
 function questionCardHTML(question, country) {
   const source = question.source === 'bot' ? 'WIKI48 Bot' : question.author;
-  return `<article class="daily-question-card ${question.source === 'bot' ? 'is-bot' : 'is-fan'}"><div class="question-card-top"><span class="question-source">${question.source === 'bot' ? '✦ BOT' : '♡ FAN'}</span><span class="question-topic">${esc(question.topic)}</span></div><h3>${esc(question.prompt)}</h3><p class="question-card-meta">${esc(source)} · ${esc(country.name)} · ${question.day === new Date().toISOString().slice(0, 10) ? 'Hari ini' : esc(question.day)}</p></article>`;
+  return `<article class="daily-question-card ${question.source === 'bot' ? 'is-bot' : 'is-fan'}"><div class="question-card-top"><span class="question-source">${question.source === 'bot' ? '✦ BOT' : '♡ FAN'}</span><span class="question-topic">${esc(question.topic)}</span></div><h3>${esc(question.prompt)}</h3><p class="question-card-meta">${esc(source)} · ${esc(country.name)} · ${question.day === new Date().toISOString().slice(0, 10) ? esc(uiCardText('todayLabel')) : esc(question.day)}</p></article>`;
 }
 
 async function initDailyQuestions() {
@@ -30,10 +30,10 @@ async function initDailyQuestions() {
 
     async function loadQuestions() {
       const country = countries.find((item) => item.code === countrySelect.value) || countries[0];
-      list.innerHTML = '<p class="community-loading">Memuat pertanyaan...</p>';
+      list.innerHTML = `<p class="community-loading">${esc(uiCardText('loadingQuestions'))}</p>`;
       try {
         const data = await communityApi(`/api/community/questions?country=${encodeURIComponent(country.code)}`);
-        list.innerHTML = data.questions.length ? data.questions.map((question) => questionCardHTML(question, country)).join('') : '<p class="community-loading">Belum ada pertanyaan untuk ruang ini.</p>';
+        list.innerHTML = data.questions.length ? data.questions.map((question) => questionCardHTML(question, country)).join('') : `<p class="community-loading">${esc(uiCardText('qEmptyRoom'))}</p>`;
       } catch (error) {
         list.innerHTML = `<p class="community-loading is-error">${esc(error.message)}</p>`;
       }
@@ -52,10 +52,10 @@ async function initDailyQuestions() {
         form.reset();
         countrySelect.value = body.country;
         askCountry.value = body.country;
-        message.textContent = 'Pertanyaanmu sudah dibagikan ke ruang negara ini.';
+        message.textContent = uiCardText('qShared');
         await loadQuestions();
       } catch (error) {
-        message.textContent = `${error.message} Login diperlukan untuk membuat pertanyaan.`;
+        message.textContent = `${error.message} ${uiCardText('qLoginNeeded')}`;
       }
     });
   } catch (error) {
@@ -82,7 +82,7 @@ function initCommunityPage() {
     event.preventDefault();
     const choice = form.querySelector('input[name="song"]:checked');
     if (!choice) {
-      result.textContent = 'Pilih satu lagu dulu, superstar.';
+      result.textContent = uiCardText('pollPickFirst');
       return;
     }
     try { localStorage.setItem(COMMUNITY_POLL_KEY, choice.value); } catch (error) { /* storage optional */ }
@@ -95,7 +95,7 @@ function initCommunityPage() {
     form.querySelectorAll('input[name="song"]').forEach((input) => { input.checked = input.value === value; });
     results.innerHTML = Object.entries(percentages).map(([key, percentage]) => `<div class="poll-result-row"><span>${labels[key]}</span><span class="poll-bar"><i style="width: ${percentage}%"></i></span><strong>${percentage}%</strong></div>`).join('');
     results.hidden = false;
-    result.textContent = `Vote kamu untuk ${labels[value]} sudah tercatat.`;
+    result.textContent = uiCardText('pollVotedTpl').replace('{song}', labels[value]);
   }
 }
 

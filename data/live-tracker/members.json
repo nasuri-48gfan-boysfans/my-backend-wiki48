@@ -1753,7 +1753,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T11:00:56.000Z"
     },
     {
       "id": "ngt48-12",
@@ -1843,7 +1843,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T11:30:04.000Z"
     },
     {
       "id": "ngt48-23",
@@ -2014,7 +2014,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T09:23:07.000Z"
     },
     {
       "id": "stu48-06",
@@ -2059,7 +2059,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T09:00:22.000Z"
     },
     {
       "id": "stu48-11",
@@ -2077,7 +2077,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T09:00:13.000Z"
     },
     {
       "id": "stu48-13",
@@ -2140,7 +2140,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T11:27:33.000Z"
     },
     {
       "id": "stu48-20",
@@ -2157,8 +2157,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T05:01:45.000Z"
     },
     {
       "id": "stu48-22",
@@ -2194,7 +2194,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T09:00:05.000Z"
     },
     {
       "id": "stu48-26",
@@ -2248,7 +2248,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T10:00:03.000Z"
     },
     {
       "id": "stu48-32",
@@ -2257,7 +2257,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T09:00:29.000Z"
     },
     {
       "id": "stu48-33",
@@ -2266,7 +2266,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T10:00:32.000Z"
     },
     {
       "id": "stu48-34",
@@ -2329,7 +2329,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T09:59:16.000Z"
     },
     {
       "id": "stu48-41",
@@ -2347,7 +2347,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T10:46:58.000Z"
     },
     {
       "id": "stu48-43",
@@ -2428,7 +2428,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T11:34:14.852Z"
     },
     {
       "id": "jkt48-07",
@@ -2482,7 +2482,7 @@
       "showroom_room_url_key": null,
       "idn_username": null,
       "is_live": false,
-      "last_live_at": null
+      "last_live_at": "2026-08-24T10:53:38.551Z"
     },
     {
       "id": "jkt48-13",
@@ -2850,8 +2850,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T04:34:46.801Z"
     },
     {
       "id": "jkt48-54",
@@ -4049,7 +4049,25 @@
       "idn_username": null,
       "is_live": false,
       "last_live_at": null
+    },
+    {
+      "id": "idn-6430dab8-2dd4-47df-ae75-87d50d555e06",
+      "member_name": "Keyi | Karafuru Idol Group",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "idn.axog2y54yygrdg",
+      "last_live_at": "2026-08-24T10:43:11.826Z",
+      "is_live": false
+    },
+    {
+      "id": "idn-52d343df-2b43-4848-9b23-70a081659109",
+      "member_name": "Jazzy JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_jazzy",
+      "last_live_at": "2026-08-24T11:34:14.852Z",
+      "is_live": false
     }
   ],
-  "updated_at": "2026-08-23T06:10:55.711Z"
+  "updated_at": "2026-08-25T05:12:37.116Z"
 }

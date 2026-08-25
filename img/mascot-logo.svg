@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 210" role="img" aria-label="Maskot Wiki48">
+  <defs>
+    <linearGradient id="lgHairFront" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FCA9CB"/>
+      <stop offset="1" stop-color="#F27BA8"/>
+    </linearGradient>
+    <linearGradient id="lgHairTail" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#F78BB4"/>
+      <stop offset="1" stop-color="#EC6A9C"/>
+    </linearGradient>
+    <radialGradient id="lgEye" cx=".5" cy=".38" r=".75">
+      <stop offset="0" stop-color="#FFCFE2"/>
+      <stop offset=".55" stop-color="#F06292"/>
+      <stop offset="1" stop-color="#C2447A"/>
+    </radialGradient>
+  </defs>
+
+  <!-- kuncir dua -->
+  <g stroke="#C2557F" stroke-width="3.5" stroke-linejoin="round">
+    <path fill="url(#lgHairTail)" d="M56,64 C18,58 4,96 14,132 C20,158 12,182 0,196 C26,202 50,186 55,158 C60,132 57,100 68,84 Z">
+      <animateTransform attributeName="transform" type="rotate" values="-3 56 64;3 56 64;-3 56 64" dur="3.2s" repeatCount="indefinite"/>
+    </path>
+    <path fill="url(#lgHairTail)" d="M164,64 C202,58 216,96 206,132 C200,158 208,182 220,196 C194,202 170,186 165,158 C160,132 163,100 152,84 Z">
+      <animateTransform attributeName="transform" type="rotate" values="3 164 64;-3 164 64;3 164 64" dur="3.2s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- rambut belakang + wajah -->
+  <ellipse cx="110" cy="92" rx="86" ry="72" fill="#EE6C9C"/>
+  <ellipse cx="110" cy="112" rx="80" ry="76" fill="#FFE9DE"/>
+
+  <!-- poni + ahoge + lock samping -->
+  <path d="M40,104 C42,42 178,42 180,104
+           C174,92 160,99 146,90
+           C134,82 126,96 111,87
+           C97,78 87,93 73,86
+           C59,79 49,94 41,87
+           C38,85 40,96 40,104 Z"
+        fill="url(#lgHairFront)" stroke="#C2557F" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M110,46 C106,28 122,18 130,27 C122,25 116,33 116,45 Z" fill="url(#lgHairFront)" stroke="#C2557F" stroke-width="2.5" stroke-linejoin="round"/>
+  <path d="M42,102 C32,140 35,176 46,192 C54,176 53,136 53,114 Z" fill="url(#lgHairFront)" stroke="#C2557F" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M178,102 C188,140 185,176 174,192 C166,176 167,136 167,114 Z" fill="url(#lgHairFront)" stroke="#C2557F" stroke-width="3.5" stroke-linejoin="round"/>
+  <path d="M74,66 q24,-11 52,-3" fill="none" stroke="#FFD3E6" stroke-width="5" stroke-linecap="round" opacity=".9"/>
+
+  <!-- scrunchie -->
+  <circle cx="55" cy="66" r="13" fill="#FF87B3" stroke="#FFFFFF" stroke-width="3.5"/>
+  <path d="M55,73 c-4.5,-4 -9,-7.5 -6,-12 c2.3,-3 6,-1.5 6,1.5 c0,-3 3.7,-4.5 6,-1.5 c3,4.5 -1.5,8 -6,12 Z" fill="#FFFFFF" opacity=".95"/>
+  <circle cx="165" cy="66" r="13" fill="#FF87B3" stroke="#FFFFFF" stroke-width="3.5"/>
+  <path d="M165,73 c-4.5,-4 -9,-7.5 -6,-12 c2.3,-3 6,-1.5 6,1.5 c0,-3 3.7,-4.5 6,-1.5 c3,4.5 -1.5,8 -6,12 Z" fill="#FFFFFF" opacity=".95"/>
+
+  <!-- alis -->
+  <path d="M66,108 q14,-10 28,-4" fill="none" stroke="#C2557F" stroke-width="3.5" stroke-linecap="round"/>
+  <path d="M126,104 q14,-6 28,4" fill="none" stroke="#C2557F" stroke-width="3.5" stroke-linecap="round"/>
+
+  <!-- mata kiri -->
+  <g>
+    <ellipse cx="82" cy="130" rx="12" ry="16" fill="#FFFFFF" stroke="#4A2436" stroke-width="3">
+      <animate attributeName="ry" values="16;16;1.6;16;16" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="82" cy="131" rx="9" ry="12" fill="url(#lgEye)">
+      <animate attributeName="ry" values="12;12;1.2;12;12" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <circle cx="82" cy="132" rx="4" ry="5.5" fill="#4A2436">
+      <animate attributeName="ry" values="5.5;5.5;.6;5.5;5.5" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="78" cy="125" r="3.6" fill="#FFFFFF"/>
+    <circle cx="86" cy="137" r="1.9" fill="#FFFFFF" opacity=".9"/>
+    <path d="M68,120 q14,-11 28,-2" fill="none" stroke="#4A2436" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- mata kanan -->
+  <g>
+    <ellipse cx="138" cy="130" rx="12" ry="16" fill="#FFFFFF" stroke="#4A2436" stroke-width="3">
+      <animate attributeName="ry" values="16;16;1.6;16;16" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <ellipse cx="138" cy="131" rx="9" ry="12" fill="url(#lgEye)">
+      <animate attributeName="ry" values="12;12;1.2;12;12" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </ellipse>
+    <circle cx="138" cy="132" rx="4" ry="5.5" fill="#4A2436">
+      <animate attributeName="ry" values="5.5;5.5;.6;5.5;5.5" keyTimes="0;.9;.93;.96;1" dur="3.6s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="134" cy="125" r="3.6" fill="#FFFFFF"/>
+    <circle cx="142" cy="137" r="1.9" fill="#FFFFFF" opacity=".9"/>
+    <path d="M124,118 q14,-9 28,2" fill="none" stroke="#4A2436" stroke-width="4" stroke-linecap="round"/>
+  </g>
+
+  <!-- blush + mulut -->
+  <ellipse cx="62" cy="151" rx="10" ry="5.5" fill="#FF9DBB" opacity=".6"/>
+  <ellipse cx="158" cy="151" rx="10" ry="5.5" fill="#FF9DBB" opacity=".6"/>
+  <path d="M95,158 C98,175 122,175 125,158 C124,170 118,177 110,177 C102,177 96,170 95,158 Z" fill="#A63A5C"/>
+  <path d="M102,171 q8,5 16,0 q-3,6 -8,6 q-5,0 -8,-6 Z" fill="#FF97AF"/>
+
+  <!-- sparkle pipis -->
+  <path d="M196,36 l3,8.5 8.5,3 -8.5,3 -3,8.5 -3,-8.5 -8.5,-3 8.5,-3 Z" fill="#FFD76E">
+    <animate attributeName="opacity" values="1;.25;1" dur="2s" repeatCount="indefinite"/>
+  </path>
+  <path d="M22,30 l2.4,6.6 6.6,2.4 -6.6,2.4 -2.4,6.6 -2.4,-6.6 -6.6,-2.4 6.6,-2.4 Z" fill="#FFB6CF">
+    <animate attributeName="opacity" values=".3;1;.3" dur="2.4s" repeatCount="indefinite"/>
+  </path>
+</svg>

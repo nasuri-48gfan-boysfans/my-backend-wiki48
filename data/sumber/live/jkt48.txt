@@ -1,0 +1,72 @@
+# Mapping live JKT48 — data/sumber/live/jkt48.txt
+#
+# Kolom:  Nama Latin | Showroom | IDN | YouTube
+#   Showroom : room_url_key atau URL room (room_id numerik diisi otomatis
+#              oleh worker saat member pertama kali terlihat live)
+#   IDN      : username IDN atau URL profilnya
+#   YouTube  : channel id UC… atau video id (handle @nama TIDAK bisa)
+#
+#   "-" = biarkan apa adanya   "!" = hapus mapping platform itu
+#   Nama harus persis seperti di roster — itu yang dipakai mencocokkan id.
+#
+# Setelah diisi:  node data/tools/import-live-map.js jkt48 --write
+
+Fiony Alveria Tantri               | - | - | -   # Team Love
+Indah Cahya Nabila                 | - | - | -   # Team Love
+Aurellia                           | - | - | -   # Team Love
+Anindya Ramadhani Purnomo          | - | - | -   # Team Love
+Celline Thefannie                  | - | - | -   # Team Love
+Cynthia Yaputera                   | - | - | -   # Team Love
+Grace Octaviani Tunajaya           | - | - | -   # Team Love
+Michellle Alexandra Suandi         | - | - | -   # Team Love
+Aurhel Alana Tirta                 | - | - | -   # Team Love
+Fritzy Rosmerian                   | - | - | -   # Team Love
+Hilliary Abigail Mantiri           | - | - | -   # Team Love
+Jazzlyn Agatha Thrisha Indra Putri | - | - | -   # Team Love
+Araki Nayla Suji Aurelia           | - | - | -   # Team Love
+Feni Fitriyanti                    | - | - | -   # Team Passion
+Angelina Christy                   | - | - | -   # Team Passion
+Jessica Rich Chandra               | - | - | -   # Team Passion
+Muthe Azzahra Umandana             | - | - | -   # Team Passion
+Cornelia Shafa Vanisa              | - | - | -   # Team Passion
+Kathrina Irene Indarto Putri       | - | - | -   # Team Passion
+Raisha Syifa Wardhana              | - | - | -   # Team Passion
+Dena Natalia Ang                   | - | - | -   # Team Passion
+Desy Natalia Ang                   | - | - | -   # Team Passion
+Abigail Rachel Lie                 | - | - | -   # Team Passion
+Catherina Valencia Kurniawan       | - | - | -   # Team Passion
+Michelle Levia Afirin              | - | - | -   # Team Passion
+Ribka Budiman                      | - | - | -   # Team Passion
+Victoria Kimberly Lukitama         | - | - | -   # Team Passion
+Gita Sekar Andarini                | - | - | -   # Team Dream
+Febriola Sinambela                 | - | - | -   # Team Dream
+Freyanashifa Jayawardana           | - | - | -   # Team Dream
+Helisma Mauludzunia Putri Kurnia   | - | - | -   # Team Dream
+Lulu Azkiya Salsabila              | - | - | -   # Team Dream
+Marsha Lenathea Lapian             | - | - | -   # Team Dream
+Gabriella Abigail Mewengkang       | - | - | -   # Team Dream
+Jesslyn Septiani                   | - | - | -   # Team Dream
+Greesella Sophina Adhalia          | - | - | -   # Team Dream
+Adeline Wijaya                     | - | - | -   # Team Dream
+Nina Tutachia Browning Chapman     | - | - | -   # Team Dream
+Oline Manuel Chay                  | - | - | -   # Team Dream
+Shahbilqis Naila Bustomi           | - | - | -   # Team Dream
+Astrella Virgiananda Nugraha       | - | - | -   # Trainee
+Aulia Riza Firdausy Effendi        | - | - | -   # Trainee
+Bong Aprilli Paskah                | - | - | -   # Trainee
+Hagia Sopia                        | - | - | -   # Trainee
+Humaria Ramadhani Salfiandi        | - | - | -   # Trainee
+Jacqueline Immanuela Jonathan      | - | - | -   # Trainee
+Jemima Evodie Mayra Lijaya         | - | - | -   # Trainee
+Mikaela Kusjanto                   | - | - | -   # Trainee
+Nur Intan                          | - | - | -   # Trainee
+Afera Thalia Putri Eysteinn        | - | - | -   # Trainee
+Carissa Dini Asmaranti             | - | - | -   # Trainee
+Christabella Bonita Claura Chandra | - | - | -   # Trainee
+Fahira Putri Kirana                | - | - | -   # Trainee
+Fatimah Azzahra                    | - | - | -   # Trainee
+Heidi Suyangga                     | - | - | -   # Trainee
+Maxine Faye Lee                    | - | - | -   # Trainee
+Putry Jazyta                       | - | - | -   # Trainee
+Ralyne Van Irwan                   | - | - | -   # Trainee
+Sona Kalyana Purboprasetyani       | - | - | -   # Trainee

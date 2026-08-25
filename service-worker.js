@@ -1,10 +1,10 @@
-const CACHE_NAME = 'wiki48-shell-v7';
+  const CACHE_NAME = 'wiki48-shell-v12';
 const APP_SHELL = [
   '/index.html',
   '/members.html',
   '/member.html',
   '/groups.html',
-  '/schedule.html',
+  '/stage-schedule.html',
   '/news.html',
   '/community.html',
   '/login.html',
@@ -18,7 +18,7 @@ const APP_SHELL = [
   '/script.js',
   '/groups.js',
   '/member.js',
-  '/schedule.js',
+  '/stage-schedule.js',
   '/news.js',
   '/community.js',
   '/auth.js',
