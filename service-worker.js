@@ -1,4 +1,4 @@
-  const CACHE_NAME = 'wiki48-shell-v12';
+  const CACHE_NAME = 'wiki48-shell-v13';
 const APP_SHELL = [
   '/index.html',
   '/members.html',
@@ -47,22 +47,18 @@ self.addEventListener('fetch', (event) => {
   const url = new URL(request.url);
   if (request.method !== 'GET' || url.pathname.startsWith('/api/')) return;
 
-  if (request.mode === 'navigate') {
-    event.respondWith(fetch(request).then((response) => {
-      if (response.ok) {
-        const copy = response.clone();
-        caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
-      }
-      return response;
-    }).catch(() => caches.match(request).then((cached) => cached || caches.match('/index.html'))));
-    return;
-  }
-
-  event.respondWith(caches.match(request).then((cached) => cached || fetch(request).then((response) => {
+  /* Navigasi & aset same-origin: NETWORK-FIRST.
+     Dulu aset non-navigasi (style.css, common.js, script.js) memakai
+     cache-first, akibatnya setelah deploy browser masih menyajikan
+     CSS/JS lama dari cache sampai SW baru aktif — navbar "tidak mau"
+     berubah padahal kode sudah ter-deploy. Sekarang jaringan didahulukan;
+     cache hanya fallback saat offline. */
+  event.respondWith(fetch(request).then((response) => {
     if (response.ok && url.origin === self.location.origin) {
       const copy = response.clone();
       caches.open(CACHE_NAME).then((cache) => cache.put(request, copy));
     }
     return response;
-  })));
+  }).catch(() => caches.match(request).then((cached) => cached
+    || caches.match('/index.html'))));
 });

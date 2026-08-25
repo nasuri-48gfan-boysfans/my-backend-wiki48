@@ -156,6 +156,40 @@ app.get('/health', (request, response) => {
   response.status(200).json({ status: 'ok', message: 'Server is healthy' });
 });
 
+/* =============================================================
+    GET /api/diag — diagnosa deployment TANPA kredensial.
+    Dipakai untuk menjawab "kenapa live tracker mati / navbar
+    kok belum berubah" langsung dari server produksi:
+    buka https://<domain>/api/diag dan cocokkan hasilnya.
+    Semua nilai aman untuk publik: tidak ada token/URL kredensial.
+    ============================================================= */
+app.get('/api/diag', (request, response) => {
+  response.setHeader('cache-control', 'no-store');
+  response.status(200).json({
+    ok: true,
+    time: new Date().toISOString(),
+    server: {
+      node: process.version,
+      uptime_s: Math.round(process.uptime()),
+      env: process.env.NODE_ENV || 'development',
+      port: PORT,
+    },
+    tracker: {
+      worker: liveWorkerInProcess ? 'in-process' : 'external',
+      sse: liveSseEnabled,
+      redis: liveCache ? liveCache.status() : null,
+      cron_secret_set: Boolean(process.env.CRON_SECRET),
+      stale_ms_batas: LIVE_STALE_MS || null,
+    },
+    integrasi: {
+      database_url_set: Boolean(process.env.DATABASE_URL),
+      frontend_url_set: Boolean(process.env.FRONTEND_URL),
+      cors_fallback_terbuka: envOrigins.length === 0 && !process.env.FRONTEND_ORIGIN,
+      supabase: (() => { try { return require('./supabase').statusSupabase(); } catch { return null; } })(),
+    },
+  });
+});
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
