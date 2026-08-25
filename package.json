@@ -3,9 +3,12 @@
   "version": "1.0.0",
   "private": true,
   "description": "WIKI48 community backend",
-  "main": "server/community-server.js",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
   "scripts": {
-    "start": "node server/community-server.js",
+    "start": "node index.js",
     "dev": "node --watch server/community-server.js",
     "live": "node server/live-runner.js",
     "live:once": "node server/live-runner.js --once",
@@ -19,6 +22,7 @@
     "audit": "node data/tools/audit.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.58.0",
     "@upstash/redis": "^1.34.3",
     "bcryptjs": "^3.0.2",
     "cookie-session": "^2.1.1",

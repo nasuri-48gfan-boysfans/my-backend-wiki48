@@ -100,14 +100,16 @@ app.disable('x-powered-by');
 app.set('trust proxy', isProduction ? 1 : 0);
 
 /* =============================================================
-   CORS — WAJIB paling atas, sebelum route & middleware lain.
-   Whitelist: localhost (dev) + domain Vercel + FRONTEND_URL
-   (boleh banyak, pisahkan dengan koma di .env / dashboard Render).
-   ============================================================= */
+    CORS — WAJIB paling atas, sebelum route & middleware lain.
+    Whitelist: localhost (dev) + FRONTEND_URL produksi (URL
+    Vercel; boleh banyak, pisahkan dengan koma di .env atau
+    dashboard Railway/Render). FRONTEND_ORIGIN masih dibaca
+    sebagai nama variabel lama agar deploy yang sudah jalan
+    tidak tiba-tiba kehilangan akses.
+    ============================================================= */
 const DEFAULT_ALLOWED_ORIGINS = [
   'http://localhost:3000',              // frontend dev
   'http://localhost:5000',
-  'https://namaproject.vercel.app',     // TODO: ganti dengan domain Vercel-mu
 ];
 const envOrigins = String(process.env.FRONTEND_URL || '')
   .split(',')
@@ -135,13 +137,14 @@ app.use(cors({
 }));
 
 /* =============================================================
-   HEALTH CHECK — super ringan untuk UptimeRobot keep-alive.
-   Ditembak tiap 5 menit supaya instance gratis Render tidak spin-down.
-   Sengaja dipasang SEBELUM guard database/rate limiter supaya selalu
-   200 walau DATABASE_URL belum diatur.
-   ============================================================= */
+    HEALTH CHECK — super ringan untuk UptimeRobot/Railway.
+    Ditembak tiap 5 menit supaya instance tidak spin-down, dan
+    jadi penanda utama Railway bahwa aplikasi hidup (anti-502).
+    Sengaja dipasang SEBELUM guard database/rate limiter supaya
+    selalu 200 walau DATABASE_URL belum diatur.
+    ============================================================= */
 app.get('/health', (request, response) => {
-  response.status(200).json({ status: 'ok', message: 'Server is alive' });
+  response.status(200).json({ status: 'ok', message: 'Server is healthy' });
 });
 
 app.use(helmet({
@@ -800,16 +803,75 @@ app.patch('/api/me', requireAuth, async (request, response) => {
   }
 });
 
+const serverInstance = {
+  app,
+  /* Disimpan supaya matikanTeratur() bisa menutupnya. */
+  listener: null,
+};
+
 async function start() {
-  if (!process.env.DATABASE_URL) throw new Error('DATABASE_URL belum diatur. Salin .env.example menjadi .env.');
-  await ensureSchema();
-  app.listen(port, () => console.log(`WIKI48 community server: http://localhost:${port}`));
+  /* DATABASE_URL kosong TIDAK boleh mematikan proses: di Railway
+     variabel bisa terlambat disetel, dan semua jalur yang benar-benar
+     butuh database sudah dijaga masalahKonfigurasi(). Health check
+     tetap harus hidup agar deploy tidak ditandai gagal (502). */
+  if (!process.env.DATABASE_URL) {
+    console.warn('[START] DATABASE_URL belum diatur — jalur database akan menolak dengan pesan jelas, sisanya tetap melayani.');
+  } else {
+    try {
+      await ensureSchema();
+    } catch (error) {
+      console.error(`[START] ensureSchema gagal: ${error.message} — server tetap dinyalakan.`);
+    }
+  }
+
+  /* KRUSIAL UNTUK RAILWAY/DOCKER: bind ke '0.0.0.0' (semua antarmuka).
+     Tanpa host eksplisit, Node hanya mendengarkan IPv6 localhost pada
+     beberapa versi, proxy internal Railway tidak bisa meneruskan trafik,
+     dan hasilnya 502 Bad Gateway padahal proses "jalan". */
+  const HOST = '0.0.0.0';
+  await new Promise((resolve, reject) => {
+    serverInstance.listener = app.listen(port, HOST, () => {
+      console.log(`WIKI48 community server listening on http://${HOST}:${port}`);
+      resolve();
+    });
+    serverInstance.listener.on('error', reject);
+  });
+
   /* Cache selalu disiapkan (API perlu membaca snapshot); worker hanya ikut
      start bila memang in-process. Kegagalan Redis tidak boleh menggagalkan
      server: situs tetap harus bisa dibuka. */
   siapkanLive();
-  console.log(`[LIVE] worker: ${liveWorkerInProcess ? 'in-process' : 'eksternal (jalankan npm run live)'} · SSE: ${liveSseEnabled ? 'on' : 'off'} · redis: ${liveCache.status().host || '(memori)'}`);
+  const { statusSupabase } = require('./supabase');
+  console.log(`[START] port=${port} · env=${process.env.NODE_ENV || 'development'} · supabase=${statusSupabase().configured ? 'aktif' : 'tidak dikonfigurasi'} · worker: ${liveWorkerInProcess ? 'in-process' : 'eksternal (jalankan npm run live)'} · SSE: ${liveSseEnabled ? 'on' : 'off'} · redis: ${liveCache.status().host || '(memori)'}`);
+  return serverInstance.listener;
 }
+
+/* Matikan rapi saat platform mengirim sinyal (Railway kirim SIGTERM
+   saat redeploy): berhenti menerima koneksi baru, tutup pool DB.
+   Timeout pengaman 8 detik — jangan biarkan koneksi SSE menggantung
+   proses selamanya. */
+let sedangMatikan = false;
+async function matikanTeratur(sinyal) {
+  if (sedangMatikan) return;
+  sedangMatikan = true;
+  console.log(`[SHUTDOWN] ${sinyal} diterima, menutup server…`);
+  const paksa = setTimeout(() => process.exit(0), 8000);
+  if (typeof paksa.unref === 'function') paksa.unref();
+  try {
+    await new Promise((resolve) => {
+      if (!serverInstance.listener) return resolve();
+      serverInstance.listener.close(resolve);
+    });
+    await Promise.resolve(pool.end()).catch(() => {});
+    await liveCache.close().catch(() => {});
+  } catch (error) {
+    console.warn(`[SHUTDOWN] ${error.message}`);
+  }
+  clearTimeout(paksa);
+  process.exit(0);
+}
+process.on('SIGTERM', () => { matikanTeratur('SIGTERM'); });
+process.on('SIGINT', () => { matikanTeratur('SIGINT'); });
 
 if (require.main === module) {
   start().catch((error) => {
@@ -818,4 +880,4 @@ if (require.main === module) {
   });
 }
 
-module.exports = { app, ensureSchema, liveCache, livePayload, liveWorker };
+module.exports = { app, start, ensureSchema, liveCache, livePayload, liveWorker };

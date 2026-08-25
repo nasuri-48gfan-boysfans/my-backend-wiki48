@@ -2157,7 +2157,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T05:01:45.000Z"
     },
     {
@@ -2508,8 +2508,8 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": false,
-      "last_live_at": null
+      "is_live": true,
+      "last_live_at": "2026-08-25T06:35:44.868Z"
     },
     {
       "id": "jkt48-16",
@@ -2850,7 +2850,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T04:34:46.801Z"
     },
     {
@@ -4067,7 +4067,16 @@
       "idn_username": "jkt48_jazzy",
       "last_live_at": "2026-08-24T11:34:14.852Z",
       "is_live": false
+    },
+    {
+      "id": "idn-0078fe3c-8f4d-495b-bb7c-bdb2b98d0598",
+      "member_name": "Oniel JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_oniel",
+      "last_live_at": "2026-08-25T05:38:17.047Z",
+      "is_live": true
     }
   ],
-  "updated_at": "2026-08-25T05:12:37.116Z"
+  "updated_at": "2026-08-25T06:41:54.480Z"
 }
