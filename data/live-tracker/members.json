@@ -1788,7 +1788,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T10:33:28.000Z"
     },
     {
@@ -2103,7 +2103,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:00:04.000Z"
     },
     {
@@ -2121,7 +2121,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:00:20.000Z"
     },
     {
@@ -2130,7 +2130,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T10:32:40.000Z"
     },
     {
@@ -2211,7 +2211,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T10:11:54.000Z"
     },
     {
@@ -2328,7 +2328,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T10:14:43.000Z"
     },
     {
@@ -2355,7 +2355,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:55:50.000Z"
     },
     {
@@ -2742,7 +2742,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:43:21.928Z"
     },
     {
@@ -2796,7 +2796,7 @@
       "showroom_room_id": null,
       "showroom_room_url_key": null,
       "idn_username": null,
-      "is_live": true,
+      "is_live": false,
       "last_live_at": "2026-08-25T09:47:47.207Z"
     },
     {
@@ -4114,5 +4114,5 @@
       "is_live": false
     }
   ],
-  "updated_at": "2026-08-25T10:37:17.824Z"
+  "updated_at": "2026-08-25T10:49:47.599Z"
 }

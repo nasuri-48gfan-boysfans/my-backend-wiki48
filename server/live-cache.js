@@ -239,6 +239,20 @@ function createLiveCache({
     if (driver) await Promise.resolve(driver.close?.()).catch(() => {});
   }
 
+  /* adaData() — apakah RAW value di LIVE_KEY ADA (tidak NULL/kosong)?
+     Tanpa parse, tanpa validasi: murni untuk diagnosa konektivitas
+     /api/diag antara platform tulis (Railway) dan baca (Vercel). */
+  async function adaData() {
+    if (!connected || !driver) return false;
+    try {
+      const value = await driver.get(LIVE_KEY);
+      return Boolean(value && String(value).length);
+    } catch (error) {
+      catatError(new Error(`gagal cek ${LIVE_KEY}: ${error.message}`));
+      return false;
+    }
+  }
+
   function status() {
     return {
       mode: mode(),
@@ -254,7 +268,7 @@ function createLiveCache({
     };
   }
 
-  return { connect, getSnapshot, publish, subscribe, claimOnce, close, status };
+  return { connect, getSnapshot, publish, subscribe, claimOnce, adaData, close, status };
 }
 
 module.exports = { LIVE_KEY, LIVE_CHANNEL, CLAIM_PREFIX, EMPTY_SNAPSHOT, createLiveCache, backoffMs, hostLabel };

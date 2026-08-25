@@ -157,35 +157,53 @@ app.get('/health', (request, response) => {
 });
 
 /* =============================================================
-    GET /api/diag — diagnosa deployment TANPA kredensial.
-    Dipakai untuk menjawab "kenapa live tracker mati / navbar
-    kok belum berubah" langsung dari server produksi:
-    buka https://<domain>/api/diag dan cocokkan hasilnya.
-    Semua nilai aman untuk publik: tidak ada token/URL kredensial.
+    GET /api/diag — diagnosa sinkronisasi Redis antar platform.
+    Satu endpoint yang sama dilayani di FRONTEND Vercel (lewat
+    serverless api/index.js) dan BACKEND Railway (index.js), karena
+    keduanya menjalankan Express app yang sama.
+
+    Kontrak respons (wajib):
+      redis_url_host  : host dari UPSTASH_REDIS_REST_URL env
+      redis_key_used  : key Redis yang dipakai READ/WRITE
+      data_exists     : true bila GET ke key itu mengembalikan isi
+      timestamp       : waktu endpoint dipanggil
+
+    Bandingkan hasil dari domain Vercel vs Railway: host & key harus
+    IDENTIK, dan data_exists harus true — kalau tidak, di situlah
+    masalahnya. Tidak ada kredensial yang ikut tercetak.
     ============================================================= */
-app.get('/api/diag', (request, response) => {
-  response.setHeader('cache-control', 'no-store');
-  response.status(200).json({
-    ok: true,
-    time: new Date().toISOString(),
-    server: {
+app.get('/api/diag', async (request, response) => {
+  response.setHeader('cache-control', 'no-store, max-age=0');
+  const redisStatus = liveCache.status();
+  let dataExists = false;
+  try {
+    await liveCache.connect();
+    dataExists = await liveCache.adaData();
+  } catch { /* tetap jawab dengan false */ }
+  return response.status(200).json({
+    redis_url_host: redisStatus.host,
+    redis_key_used: redisStatus.key,
+    data_exists: dataExists,
+    timestamp: new Date().toISOString(),
+    detail: {
+      ok: true,
       node: process.version,
       uptime_s: Math.round(process.uptime()),
       env: process.env.NODE_ENV || 'development',
       port: PORT,
-    },
-    tracker: {
-      worker: liveWorkerInProcess ? 'in-process' : 'external',
-      sse: liveSseEnabled,
-      redis: liveCache ? liveCache.status() : null,
-      cron_secret_set: Boolean(process.env.CRON_SECRET),
-      stale_ms_batas: LIVE_STALE_MS || null,
-    },
-    integrasi: {
-      database_url_set: Boolean(process.env.DATABASE_URL),
-      frontend_url_set: Boolean(process.env.FRONTEND_URL),
-      cors_fallback_terbuka: envOrigins.length === 0 && !process.env.FRONTEND_ORIGIN,
-      supabase: (() => { try { return require('./supabase').statusSupabase(); } catch { return null; } })(),
+      tracker: {
+        worker: liveWorkerInProcess ? 'in-process' : 'external',
+        sse: liveSseEnabled,
+        redis_mode: redisStatus.mode,
+        redis_transport: redisStatus.transport,
+        redis_connected: redisStatus.connected,
+        cron_secret_set: Boolean(process.env.CRON_SECRET),
+      },
+      integrasi: {
+        database_url_set: Boolean(process.env.DATABASE_URL),
+        frontend_url_set: Boolean(process.env.FRONTEND_URL),
+        supabase: (() => { try { return require('./supabase').statusSupabase(); } catch { return null; } })(),
+      },
     },
   });
 });
@@ -286,31 +304,13 @@ function sendLiveEvent(response, snapshot) {
   response.write(`event: live:update\ndata: ${JSON.stringify(livePayload(snapshot))}\n\n`);
 }
 
-/* CACHE CDN — DEFAULT KINI no-store.
-   Dulu default-nya s-maxage=20/swr=60 untuk menjaga kuota Upstash,
-   tetapi itu membuat CDN Vercel boleh menyajikan respons sampai 60
-   detik lama — terasa seperti "data tidak mau berubah" padahal Redis
-   sudah diperbarui platform lain. Sesuai kebutuhan sekarang (data
-   harus selalu termutakhir), default dibalik:
-
-     LIVE_CDN_S_MAXAGE tidak diset / 0 → 'no-store' (selalu segar)
-     LIVE_CDN_S_MAXAGE > 0            → edge cache menyala kembali;
-                                        sadari kuota Upstash naik
-                                        (±10.000 perintah/hari gratis). */
-const LIVE_CDN_S_MAXAGE = Number(process.env.LIVE_CDN_S_MAXAGE || 0);
-const LIVE_CDN_SWR = Number(process.env.LIVE_CDN_SWR || 60);
-
+/* CACHE — DINONAKTIFKAN SEPENUHNYA.
+   Dulu ada edge cache CDN (s-maxage/stale-while-revalidate) untuk
+   menjaga kuota Upstash, tetapi itu membuat respons live bisa basi
+   sampai 60 detik dan membingungkan diagnosa antar platform.
+   Sekarang SELURUH respons dinamis wajib no-store. */
 function setCacheLive(response) {
-  if (LIVE_CDN_S_MAXAGE <= 0) {
-    /* Persis kontrak yang diminta: CDN dan browser tidak boleh
-       menyimpan respons live sama sekali. */
-    response.setHeader('cache-control', 'no-store, max-age=0');
-    return;
-  }
-  /* max-age=0 supaya browser tetap bertanya (statusnya harus terasa
-     baru bagi pemakai), sementara CDN yang menyerap bebannya. */
-  response.setHeader('cache-control',
-    `public, max-age=0, s-maxage=${LIVE_CDN_S_MAXAGE}, stale-while-revalidate=${LIVE_CDN_SWR}`);
+  response.setHeader('cache-control', 'no-store, max-age=0');
 }
 
 let siaranTerakhir = null;
