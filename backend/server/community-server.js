@@ -207,6 +207,91 @@ app.get('/api/diag', async (request, response) => {
   });
 });
 
+/* -------------------------------------------------------------
+   YOUTUBE WEBHOOK (WebSub/PubSubHubbub) — upload video baru
+   -------------------------------------------------------------
+   Route /webhook/youtube menerima GET (challenge verifikasi hub)
+   dan POST (notifikasi Atom). Didaftarkan di sini, sebelum
+   express.json, karena body XML dibaca mentah oleh route-level
+   parser sendiri (express.text). Detail lengkap ada di modulnya.
+   Timer perpanjangan langganan ikut dinyalakan — semuanya berjalan
+   di proses Railway, tidak ada ketergantungan komputer lokal.
+   ------------------------------------------------------------- */
+const youtubeWebhook = require('./youtube-webhook').buatModul({ app, pool, logger: console });
+youtubeWebhook.jadwalkanPembaruan();
+
+/* GET /api/youtube/videos — daftar video terbaru hasil webhook
+   untuk kartu frontend. Publik + limiter ringan. */
+app.get('/api/youtube/videos', scheduleLimiter, async (request, response) => {
+  const limit = Math.min(Math.max(Number(request.query.limit) || 24, 1), 50);
+  const channelId = String(request.query.channel_id || '').trim();
+  const params = [];
+  let where = '';
+  if (/^UC[\w-]{22}$/.test(channelId)) {
+    params.push(channelId);
+    where = `WHERE channel_id = $${params.length}`;
+  }
+  params.push(limit);
+  try {
+    const { rows } = await pool.query(
+      `SELECT video_id, channel_id, title, video_url, published_at, updated_at
+         FROM youtube_videos ${where}
+        ORDER BY COALESCE(published_at, fetched_at) DESC
+        LIMIT $${params.length}`,
+      params,
+    );
+    rows.forEach((r) => {
+      r.video_url = r.video_url || `https://www.youtube.com/watch?v=${r.video_id}`;
+    });
+    response.setHeader('cache-control', 'public, max-age=0, s-maxage=120');
+    return response.json({ items: rows });
+  } catch (error) {
+    console.error(`[YT-VIDEOS] ${error.message}`);
+    return response.status(500).json({ error: 'Gagal membaca video YouTube.' });
+  }
+});
+
+/* GET /api/youtube/resolve-channels?key=…&handles=@JKT48,@KLP48
+   Alat bantu sekali pakai: menerjemahkan handle/username menjadi
+   Channel ID memakai YouTube Data API (butuh YOUTUBE_API_KEY).
+   ID yang sudah berawalan UC dilewati apa adanya. */
+app.get('/api/youtube/resolve-channels', async (request, response) => {
+  if (!cronSah(request)) return response.status(401).json({ error: 'CRON_SECRET tidak cocok.' });
+  const key = process.env.YOUTUBE_API_KEY;
+  if (!key) return response.status(503).json({ error: 'YOUTUBE_API_KEY belum diatur.' });
+  const handles = String(request.query.handles || '')
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean)
+    .slice(0, 20);
+  if (!handles.length) return response.status(400).json({ error: 'Param handles kosong. Contoh: ?key=…&handles=@JKT48,user/SKE48' });
+
+  const hasil = [];
+  for (const h of handles) {
+    const bersih = h.replace(/^https?:\/\/(www\.)?youtube\.com\//i, '').replace(/^@/, '').replace(/^user\//i, '');
+    if (/^UC[\w-]{22}$/.test(bersih)) { hasil.push({ input: h, channel_id: bersih }); continue; }
+    try {
+      const url = `https://www.googleapis.com/youtube/v3/channels?part=id&forHandle=${encodeURIComponent(bersih)}&key=${key}`;
+      const r = await fetch(url, { signal: AbortSignal.timeout(10000) });
+      const j = await r.json().catch(() => null);
+      const id = j && j.items && j.items[0] && j.items[0].id;
+      /* forHandle kadang gagal utk username legacy → coba forUsername. */
+      if (!id) {
+        const u = `https://www.googleapis.com/youtube/v3/channels?part=id&forUsername=${encodeURIComponent(bersih)}&key=${key}`;
+        const r2 = await fetch(u, { signal: AbortSignal.timeout(10000) });
+        const j2 = await r2.json().catch(() => null);
+        hasil.push({ input: h, channel_id: (j2 && j2.items && j2.items[0] && j2.items[0].id) || null });
+      } else {
+        hasil.push({ input: h, channel_id: id });
+      }
+    } catch (error) {
+      hasil.push({ input: h, channel_id: null, error: error.message });
+    }
+  }
+  response.setHeader('cache-control', 'no-store');
+  return response.json({ items: hasil });
+});
+
 app.use(helmet({
   contentSecurityPolicy: {
     directives: {
@@ -409,6 +494,29 @@ async function ensureSchema() {
   if (process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD_HASH) {
     await pool.query('INSERT INTO wiki_admins (email, password_hash) VALUES ($1, $2) ON CONFLICT (email) DO UPDATE SET password_hash = EXCLUDED.password_hash', [cleanEmail(process.env.ADMIN_EMAIL), process.env.ADMIN_PASSWORD_HASH]);
   }
+
+  /* ---------- YouTube WebSub (upload video baru per channel) ----------
+     Migrasi aman: CREATE TABLE IF NOT EXISTS — tabel existing lain
+     tidak disentuh sama sekali. */
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS youtube_videos (
+      video_id TEXT PRIMARY KEY,
+      channel_id TEXT NOT NULL,
+      title TEXT,
+      video_url TEXT,
+      published_at TIMESTAMPTZ,
+      updated_at TIMESTAMPTZ,
+      fetched_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
+  await pool.query('CREATE INDEX IF NOT EXISTS youtube_videos_channel_published_idx ON youtube_videos (channel_id, published_at DESC)');
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS youtube_subscriptions (
+      channel_id TEXT PRIMARY KEY,
+      leased_until TIMESTAMPTZ NOT NULL,
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+    )
+  `);
 }
 
 function cleanEmail(value) {

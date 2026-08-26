@@ -13,12 +13,13 @@
     "live": "node server/live-runner.js",
     "live:once": "node server/live-runner.js --once",
     "cek:live": "node data/tools/cek-live.js",
-    "uji": "npm run uji:live && npm run uji:discord && npm run uji:cron && npm run uji:endpoint && npm run uji:kartu && npm run audit",
+    "uji": "npm run uji:live && npm run uji:discord && npm run uji:cron && npm run uji:endpoint && npm run uji:kartu && npm run uji:yt && npm run audit",
     "uji:live": "node data/live-tracker/mock-test.js",
     "uji:discord": "node data/live-tracker/uji-discord.js",
     "uji:cron": "node data/live-tracker/uji-cron.js",
     "uji:endpoint": "node data/live-tracker/uji-endpoint.js",
     "uji:kartu": "node data/live-tracker/uji-kartu-live.js",
+    "uji:yt": "node test/youtube-webhook.test.js",
     "audit": "node data/tools/audit.js"
   },
   "dependencies": {

@@ -8,7 +8,43 @@
       "idn_username": "jkt48_virgi",
       "last_live_at": "2026-08-25T11:08:06.117Z",
       "is_live": false
+    },
+    {
+      "id": "idn-79560bc6-813e-44d7-95b1-c9cf8e29f620",
+      "member_name": "Bella JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_bella",
+      "last_live_at": "2026-08-25T12:02:06.592Z",
+      "is_live": true
+    },
+    {
+      "id": "idn-fb24385e-4954-4ae9-b24e-de041cfca0c4",
+      "member_name": "Maxine JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_maxine",
+      "last_live_at": "2026-08-25T12:02:06.592Z",
+      "is_live": false
+    },
+    {
+      "id": "idn-61d965a9-58cc-4d79-8104-0a326b91f731",
+      "member_name": "Sona JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_sona",
+      "last_live_at": "2026-08-25T12:04:09.911Z",
+      "is_live": true
+    },
+    {
+      "id": "idn-22ea8526-30a9-4f95-a750-b84673647054",
+      "member_name": "Rara JKT48",
+      "group": "JKT48",
+      "category": "Kaigai",
+      "idn_username": "jkt48_rara",
+      "last_live_at": "2026-08-25T12:04:09.911Z",
+      "is_live": true
     }
   ],
-  "updated_at": "2026-08-25T11:16:15.044Z"
+  "updated_at": "2026-08-25T12:57:09.400Z"
 }

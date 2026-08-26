@@ -32,9 +32,10 @@
 const TANPA_DATABASE = [
   '/api/live',            // + /api/live/events lewat batas segmen
   '/api/live-status',
-  '/api/cron',            // + /api/cron/update-live
+  '/api/cron',            // + /api/cron/update-live & /api/cron/update-members
   '/api/health',
   '/api/schedule',        // jadwal resmi grup — sumbernya HTTP keluar, bukan Postgres
+  '/webhook',             // YouTube WebSub — menangani error DB-nya sendiri
 ];
 
 function butuhDatabase(url) {
