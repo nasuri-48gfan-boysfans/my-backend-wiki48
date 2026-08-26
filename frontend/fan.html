@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Profil fans WIKI48 — kenalan dan jadi teman." />
+  <title>Profil Fans - WIKI48</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="style.css" />
+  <link rel="manifest" href="manifest.json" />
+  <meta name="theme-color" content="#ff806b" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <link rel="apple-touch-icon" href="img/icon-192.svg" />
+  <meta name="wiki48-api-base" content="" />
+</head>
+<body class="profile-page">
+  <header class="site-header"><div class="container header-inner">
+    <a href="index.html#hero" class="logo" aria-label="WIKI48 home"><span class="logo-badge" aria-hidden="true"><span class="logo-badge-heart">♥</span><span class="logo-word">WIKI</span><strong>48</strong><i>✦</i><img class="logo-mascot" src="img/mascot-logo.svg" alt="" aria-hidden="true" /></span><span class="logo-text">WIKI<span class="logo-accent">48</span></span></a>
+    <nav class="profile-nav" aria-label="Navigasi profil"><a href="profile.html">Profil saya</a><a href="index.html#hero">Beranda</a></nav>
+  </div></header>
+  <main id="fanPage" class="profile-main">
+    <section class="profile-hero" aria-labelledby="fanTitle">
+      <div class="profile-avatar-wrap"><div class="profile-avatar" id="fanAvatar" aria-hidden="true">🐰</div></div>
+      <div><p class="eyebrow pink-eyebrow">Profil fans</p><h1 id="fanTitle">Memuat…</h1><p class="profile-email" id="fanMeta"></p>
+        <div class="fan-actions" id="friendActionWrap"></div>
+      </div>
+    </section>
+    <div class="profile-content">
+      <section class="profile-card" style="grid-column: 1 / -1;" aria-labelledby="fanOshiTitle">
+        <p class="eyebrow pink-eyebrow">My Oshi</p>
+        <h2 id="fanOshiTitle">Oshi yang dia sayangin ♥</h2>
+        <div id="fanOshi" class="profile-oshi-list fan-oshi-grid"><p class="profile-oshi-empty">Memuat…</p></div>
+      </section>
+    </div>
+    <p id="fanError" class="auth-error" hidden></p>
+  </main>
+  <footer class="site-footer"><div class="container"><p>© <span id="year">2026</span> WIKI48</p></div></footer>
+  <script src="api-config.js?v=6" defer></script><script src="common.js?v=6" defer></script><script src="auth.js?v=6" defer></script><script src="fan.js?v=1" defer></script><script src="pwa.js?v=6" defer></script>
+</body>
+</html>

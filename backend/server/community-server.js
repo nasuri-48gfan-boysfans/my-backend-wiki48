@@ -514,6 +514,27 @@ async function ensureSchema() {
   await pool.query("UPDATE fans SET public_code = encode(gen_random_bytes(12), 'hex') WHERE public_code IS NULL");
   await pool.query("ALTER TABLE fans ALTER COLUMN public_code SET NOT NULL");
   await pool.query("CREATE UNIQUE INDEX IF NOT EXISTS fans_public_code_idx ON fans (public_code)");
+  /* ---------- BIODATA & SOSIAL ----------
+     birth_date   : tanggal lahir fans (opsional, tampil di profil publik)
+     oshi_members : daftar id member oshi (maks 3, divalidasi di route) —
+                    disimpan di server supaya profil publik bisa menampilkan
+                    oshi pemiliknya, bukan hanya di browser sendiri.
+     friendships  : pertemanan antar fans (permintaan → terima → teman). */
+  await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS birth_date DATE');
+  await pool.query("ALTER TABLE fans ADD COLUMN IF NOT EXISTS oshi_members JSONB NOT NULL DEFAULT '[]'::jsonb");
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS friendships (
+      id BIGSERIAL PRIMARY KEY,
+      requester_id BIGINT NOT NULL REFERENCES fans(id) ON DELETE CASCADE,
+      addressee_id BIGINT NOT NULL REFERENCES fans(id) ON DELETE CASCADE,
+      status VARCHAR(12) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'accepted')),
+      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+      UNIQUE (requester_id, addressee_id)
+    )
+  `);
+  await pool.query('CREATE INDEX IF NOT EXISTS friendships_requester_status_idx ON friendships (requester_id, status)');
+  await pool.query('CREATE INDEX IF NOT EXISTS friendships_addressee_status_idx ON friendships (addressee_id, status)');
   await pool.query(`
     CREATE TABLE IF NOT EXISTS community_questions (
       id BIGSERIAL PRIMARY KEY,
@@ -587,7 +608,40 @@ function cleanEmail(value) {
 }
 
 function publicFan(fan) {
-  return { id: fan.public_code, name: fan.name, email: fan.email, profilePicture: fan.profile_picture || '', oshiReasons: fan.oshi_reasons || {}, joinedAt: fan.created_at };
+  return {
+    id: fan.public_code,
+    name: fan.name,
+    email: fan.email,
+    profilePicture: fan.profile_picture || '',
+    oshiReasons: fan.oshi_reasons || {},
+    oshiMembers: Array.isArray(fan.oshi_members) ? fan.oshi_members : [],
+    birthDate: fan.birth_date ? String(fan.birth_date).slice(0, 10) : '',
+    joinedAt: fan.created_at,
+  };
+}
+
+/* Bentuk publik untuk direktori/profil fans — TANPA email (privasi). */
+function fanPublik(fan) {
+  return {
+    code: fan.public_code,
+    name: fan.name,
+    photo: fan.profile_picture || '',
+    birthDate: fan.birth_date ? String(fan.birth_date).slice(0, 10) : '',
+    oshiMembers: Array.isArray(fan.oshi_members) ? fan.oshi_members : [],
+    joinedAt: fan.created_at,
+  };
+}
+
+/* Tanggal lahir opsional: terima 'YYYY-MM-DD' valid, tolak sisanya. */
+function parseTanggalLahir(nilai) {
+  const s = String(nilai || '').slice(0, 10);
+  if (!/^\d{4}-\d{2}-\d{2}$/.test(s)) return null;
+  const t = new Date(`${s}T00:00:00Z`);
+  if (Number.isNaN(t.getTime())) return null;
+  const tahun = Number(s.slice(0, 4));
+  const sekarang = new Date();
+  if (tahun < 1900 || t > sekarang) return null;
+  return s;
 }
 
 function requireAuth(request, response, next) {
@@ -646,6 +700,7 @@ app.post('/api/auth/register', authLimiter, async (request, response) => {
   const name = String(request.body.name || '').trim();
   const email = cleanEmail(request.body.email);
   const password = String(request.body.password || '');
+  const birthDate = parseTanggalLahir(request.body.birthDate);
   if (name.length < 2 || name.length > 80 || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) || email.length > 254 || password.length < 4 || password.length > 72) {
     return response.status(400).json({ error: 'Nama, email, dan password minimal 4 karakter wajib diisi.' });
   }
@@ -653,8 +708,8 @@ app.post('/api/auth/register', authLimiter, async (request, response) => {
   try {
     const passwordHash = await bcrypt.hash(password, 12);
     const result = await pool.query(
-      'INSERT INTO fans (name, email, password_hash) VALUES ($1, $2, $3) RETURNING public_code, name, email, profile_picture, oshi_reasons, created_at',
-      [name, email, passwordHash],
+      'INSERT INTO fans (name, email, password_hash, birth_date) VALUES ($1, $2, $3, $4) RETURNING public_code, name, email, profile_picture, oshi_reasons, oshi_members, birth_date, created_at',
+      [name, email, passwordHash, birthDate],
     );
     const fan = result.rows[0];
     request.session.fanId = fan.id;
@@ -812,7 +867,7 @@ app.post('/api/community/questions', communityLimiter, requireAuth, async (reque
 
 app.get('/api/me', requireAuth, async (request, response) => {
   try {
-    const result = await pool.query('SELECT public_code, name, email, profile_picture, oshi_reasons, created_at FROM fans WHERE id = $1', [request.session.fanId]);
+    const result = await pool.query('SELECT public_code, name, email, profile_picture, oshi_reasons, oshi_members, birth_date, created_at FROM fans WHERE id = $1', [request.session.fanId]);
     if (!result.rows[0]) return response.status(401).json({ error: 'Sesi tidak valid.' });
     return response.json({ user: publicFan(result.rows[0]) });
   } catch (error) {
@@ -1099,13 +1154,197 @@ app.patch('/api/me', requireAuth, async (request, response) => {
   const safeReasons = Object.fromEntries(Object.entries(oshiReasons).filter(([id, reason]) => /^[a-z0-9-]{3,40}$/.test(id) && typeof reason === 'string' && reason.trim().length >= 3).map(([id, reason]) => [id, reason.trim().slice(0, 240)]));
   try {
     const result = await pool.query(
-      'UPDATE fans SET name = $1, profile_picture = NULLIF($2, \'\'), oshi_reasons = $3::jsonb, updated_at = NOW() WHERE id = $4 RETURNING public_code, name, email, profile_picture, oshi_reasons, created_at',
-      [name, profilePicture, JSON.stringify(safeReasons), request.session.fanId],
+      'UPDATE fans SET name = $1, profile_picture = NULLIF($2, \'\'), oshi_reasons = $3::jsonb, birth_date = $4::date, oshi_members = $5::jsonb, updated_at = NOW() WHERE id = $6 RETURNING public_code, name, email, profile_picture, oshi_reasons, oshi_members, birth_date, created_at',
+      [name, profilePicture, JSON.stringify(safeReasons), parseTanggalLahir(request.body.birthDate), JSON.stringify(validasiOshiMembers(request.body.oshiMembers)), request.session.fanId],
     );
     return response.json({ user: publicFan(result.rows[0]) });
   } catch (error) {
     console.error(error);
     return response.status(500).json({ error: 'Gagal menyimpan profil.' });
+  }
+});
+
+/* Daftar id member oshi: maksimal 3, hanya karakter id yang wajar.
+   Catatan: PATCH /api/me selalu MENIMPA daftar — frontend mengirim
+   gabungan oshiList dari perangkat ini. */
+function validasiOshiMembers(nilai) {
+  if (!Array.isArray(nilai)) return [];
+  const bersih = nilai
+    .map((id) => String(id || '').trim())
+    .filter((id) => /^[a-z0-9-]{2,64}$/.test(id));
+  return [...new Set(bersih)].slice(0, 3);
+}
+
+/* =============================================================
+    SOSIAL — direktori fans, profil publik, pertemanan
+   =============================================================
+   Tujuannya komunitas yang hidup: fans saling kenal lewat profil
+   publik (biodata + oshi), lalu berteman. Email TIDAK pernah ikut
+   respons publik. Semua identitas memakai public_code acak. */
+
+async function ambilFanByKode(code) {
+  const result = await pool.query(
+    'SELECT id, public_code, name, profile_picture, birth_date, oshi_members, created_at FROM fans WHERE public_code = $1',
+    [String(code || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 32)],
+  );
+  return result.rows[0] || null;
+}
+
+/* Status pertemanan viewer terhadap satu fans (null bila belum login). */
+async function statusPertemanan(viewerId, targetId) {
+  if (!viewerId || viewerId === targetId) return null;
+  const result = await pool.query(
+    `SELECT requester_id, status FROM friendships
+      WHERE (requester_id = $1 AND addressee_id = $2) OR (requester_id = $2 AND addressee_id = $1)
+      LIMIT 1`,
+    [viewerId, targetId],
+  );
+  const row = result.rows[0];
+  if (!row) return 'none';
+  if (row.status === 'accepted') return 'friends';
+  return Number(row.requester_id) === Number(viewerId) ? 'pending_out' : 'pending_in';
+}
+
+/* GET /api/fans — direktori fans terbaru (discovery). */
+app.get('/api/fans', communityLimiter, async (request, response) => {
+  const limit = Math.min(Math.max(Number(request.query.limit) || 24, 1), 50);
+  try {
+    const result = await pool.query(
+      `SELECT public_code, name, profile_picture, birth_date, oshi_members, created_at
+         FROM fans ORDER BY created_at DESC LIMIT $1`,
+      [limit],
+    );
+    response.setHeader('cache-control', 'no-store');
+    return response.json({ fans: result.rows.map(fanPublik) });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ error: 'Gagal mengambil daftar fans.' });
+  }
+});
+
+/* GET /api/fans/:code — profil publik seorang fans. */
+app.get('/api/fans/:code', communityLimiter, async (request, response) => {
+  try {
+    const result = await pool.query(
+      'SELECT id, public_code, name, profile_picture, birth_date, oshi_members, oshi_reasons, created_at FROM fans WHERE public_code = $1',
+      [String(request.params.code || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 32)],
+    );
+    const fan = result.rows[0];
+    if (!fan) return response.status(404).json({ error: 'Fans tidak ditemukan.' });
+    /* Alasan oshi ikut dipublikasikan HANYA untuk member yang memang
+       ada di daftar oshinya — biar kartu oshinya bercerita. */
+    const oshiMembers = Array.isArray(fan.oshi_members) ? fan.oshi_members : [];
+    const alasan = fan.oshi_reasons && typeof fan.oshi_reasons === 'object'
+      ? Object.fromEntries(oshiMembers.filter((id) => fan.oshi_reasons[id]).map((id) => [id, String(fan.oshi_reasons[id]).slice(0, 240)]))
+      : {};
+    const isSelf = request.session.fanId === Number(fan.id);
+    return response.json({
+      fan: { ...fanPublik(fan), oshiReasons: alasan },
+      isSelf,
+      friendship: await statusPertemanan(request.session.fanId, Number(fan.id)),
+    });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ error: 'Gagal mengambil profil fans.' });
+  }
+});
+
+/* POST /api/fans/:code/friend — kirim permintaan teman.
+   Sopan santunnya: kalau LAWAKAN sudah mengirimi kita permintaan,
+   langsung dianggap saling add → jadi teman tanpa langkah kedua. */
+app.post('/api/fans/:code/friend', requireAuth, async (request, response) => {
+  try {
+    const fan = await ambilFanByKode(request.params.code);
+    if (!fan) return response.status(404).json({ error: 'Fans tidak ditemukan.' });
+    const targetId = Number(fan.id);
+    const viewerId = Number(request.session.fanId);
+    if (targetId === viewerId) return response.status(400).json({ error: 'Tidak bisa menambahkan diri sendiri.' });
+
+    const balik = await pool.query(
+      `UPDATE friendships SET status = 'accepted', updated_at = NOW()
+        WHERE requester_id = $1 AND addressee_id = $2 AND status = 'pending'
+        RETURNING id`,
+      [targetId, viewerId],
+    );
+    if (balik.rows.length) return response.json({ status: 'friends' });
+
+    const hasil = await pool.query(
+      `INSERT INTO friendships (requester_id, addressee_id, status)
+       VALUES ($1, $2, 'pending')
+       ON CONFLICT (requester_id, addressee_id) DO UPDATE SET updated_at = NOW()
+       RETURNING status`,
+      [viewerId, targetId],
+    );
+    return response.json({ status: hasil.rows[0].status === 'accepted' ? 'friends' : 'pending_out' });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ error: 'Gagal mengirim permintaan teman.' });
+  }
+});
+
+/* POST /api/fans/:code/friend/accept — terima permintaan masuk. */
+app.post('/api/fans/:code/friend/accept', requireAuth, async (request, response) => {
+  try {
+    const fan = await ambilFanByKode(request.params.code);
+    if (!fan) return response.status(404).json({ error: 'Fans tidak ditemukan.' });
+    const hasil = await pool.query(
+      `UPDATE friendships SET status = 'accepted', updated_at = NOW()
+        WHERE requester_id = $1 AND addressee_id = $2 AND status = 'pending'
+        RETURNING id`,
+      [Number(fan.id), Number(request.session.fanId)],
+    );
+    if (!hasil.rows.length) return response.status(404).json({ error: 'Tidak ada permintaan untuk diterima.' });
+    return response.json({ status: 'friends' });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ error: 'Gagal menerima permintaan teman.' });
+  }
+});
+
+/* DELETE /api/fans/:code/friend — batalkan permintaan / hapus teman. */
+app.delete('/api/fans/:code/friend', requireAuth, async (request, response) => {
+  try {
+    const fan = await ambilFanByKode(request.params.code);
+    if (!fan) return response.status(404).json({ error: 'Fans tidak ditemukan.' });
+    await pool.query(
+      `DELETE FROM friendships
+        WHERE (requester_id = $1 AND addressee_id = $2) OR (requester_id = $2 AND addressee_id = $1)`,
+      [Number(request.session.fanId), Number(fan.id)],
+    );
+    return response.json({ status: 'none' });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ error: 'Gagal menghapus teman.' });
+  }
+});
+
+/* GET /api/friends — teman + permintaan masuk/keluar milik sesi ini. */
+app.get('/api/friends', requireAuth, async (request, response) => {
+  const viewerId = Number(request.session.fanId);
+  try {
+    const dasar = `
+      SELECT f.public_code, f.name, f.profile_picture, f.created_at, fr.requester_id, fr.status
+        FROM friendships fr JOIN fans f ON f.id = fr.requester_id
+       WHERE fr.addressee_id = $1
+       UNION ALL
+      SELECT f.public_code, f.name, f.profile_picture, f.created_at, fr.requester_id, fr.status
+        FROM friendships fr JOIN fans f ON f.id = fr.addressee_id
+       WHERE fr.requester_id = $1`;
+    const result = await pool.query(dasar, [viewerId]);
+    const teman = [];
+    const masuk = [];
+    const keluar = [];
+    for (const row of result.rows) {
+      const item = { code: row.public_code, name: row.name, photo: row.profile_picture || '', joinedAt: row.created_at };
+      if (row.status === 'accepted') teman.push(item);
+      else if (Number(row.requester_id) === viewerId) keluar.push(item);
+      else masuk.push(item);
+    }
+    response.setHeader('cache-control', 'no-store');
+    return response.json({ friends: teman, incoming: masuk, outgoing: keluar });
+  } catch (error) {
+    console.error(error);
+    return response.status(500).json({ error: 'Gagal mengambil daftar teman.' });
   }
 });
 

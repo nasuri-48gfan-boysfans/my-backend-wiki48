@@ -25,8 +25,18 @@
     <div class="profile-avatar-wrap"><div class="profile-avatar" id="profileAvatar" aria-hidden="true">🐰</div><label class="profile-picture-button" for="profilePicture" data-i18n="changePhoto">Ganti foto</label><input id="profilePicture" type="file" accept="image/jpeg,image/png,image/webp" hidden /></div>
     <div><p class="eyebrow pink-eyebrow" data-i18n="personalSpace">Ruang personalmu</p><h1 id="profileTitle"><span data-i18n="helloBefore">Halo,</span> <span data-profile-name>Wiki Fan</span><span data-i18n="helloAfter">!</span></h1><p class="profile-email" data-profile-email></p></div>
   </section>
-  <div class="profile-content"><section class="profile-card profile-edit-card" aria-labelledby="editTitle"><p class="eyebrow coral-eyebrow" data-i18n="identityEyebrow">Identitas</p><h2 id="editTitle" data-i18n="editBioTitle">Edit biodata fans</h2><form id="profileForm" class="profile-form"><label for="profileName" data-i18n="nameLabel">Nama tampilan</label><input id="profileName" type="text" maxlength="40" required /><p class="profile-privacy" data-i18n="privacyNote">Data pribadi dipseudonimkan dengan kode acak dan foto diperiksa formatnya sebelum disimpan.</p><button class="auth-submit" type="submit"><span data-i18n="saveChanges">Simpan perubahan</span> <span aria-hidden="true">→</span></button><p id="profileSaved" class="profile-saved" hidden data-i18n="profileSavedMsg">Profil berhasil diperbarui.</p></form></section>
+  <div class="profile-content"><section class="profile-card profile-edit-card" aria-labelledby="editTitle"><p class="eyebrow coral-eyebrow" data-i18n="identityEyebrow">Identitas</p><h2 id="editTitle" data-i18n="editBioTitle">Edit biodata fans</h2><form id="profileForm" class="profile-form"><label for="profileName" data-i18n="nameLabel">Nama tampilan</label><input id="profileName" type="text" maxlength="40" required /><label for="profileBirth" data-i18n="birthLabel">Tanggal lahir <small>(tampil di profil publikmu)</small></label><input id="profileBirth" type="date" min="1900-01-01" max="2026-12-31" /><p class="profile-privacy" data-i18n="privacyNote">Data pribadi dipseudonimkan dengan kode acak dan foto diperiksa formatnya sebelum disimpan.</p><button class="auth-submit" type="submit"><span data-i18n="saveChanges">Simpan perubahan</span> <span aria-hidden="true">→</span></button><p id="profileSaved" class="profile-saved" hidden data-i18n="profileSavedMsg">Profil berhasil diperbarui.</p></form></section>
     <aside class="profile-card profile-summary"><p class="eyebrow lilac-eyebrow" data-i18n="sinceEyebrow">Member sejak</p><strong data-profile-joined></strong><p data-i18n="oshiStoredNote">My Oshi dan alasan pilihanmu tersimpan di akunmu.</p><div id="profileOshi" class="profile-oshi-list"></div><a class="profile-link" href="members.html"><span data-i18n="manageOshi">Kelola My Oshi</span> <span aria-hidden="true">→</span></a><button id="logoutButton" class="logout-button" type="button" data-i18n="logoutBtn">Keluar dari akun</button></aside>
+    <section class="profile-card friends-card" aria-labelledby="temanTitle">
+      <p class="eyebrow mint-eyebrow">Komunitas</p>
+      <h2 id="temanTitle">Teman & Fans Lain</h2>
+      <h3 class="friends-subtitle">Permintaan pertemanan</h3>
+      <div id="friendRequests" class="friend-list"><p class="friends-empty">Memuat…</p></div>
+      <h3 class="friends-subtitle">Teman kamu</h3>
+      <div id="friendList" class="friend-list"><p class="friends-empty">Memuat…</p></div>
+      <h3 class="friends-subtitle">Temukan fans baru ✦</h3>
+      <div id="fanDiscover" class="fan-discover"><p class="friends-empty">Memuat…</p></div>
+    </section>
   </div></main>
   <footer class="site-footer"><div class="container"><p>© <span id="year">2026</span> WIKI48</p></div></footer>
   <script src="api-config.js?v=6" defer></script><script src="common.js?v=6" defer></script><script src="auth.js?v=6" defer></script><script src="pwa.js?v=6" defer></script>

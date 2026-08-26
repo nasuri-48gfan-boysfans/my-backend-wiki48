@@ -49,8 +49,11 @@ async function muatJadwal() {
   let payload = null;
   try { payload = await response.json(); } catch (error) { /* ditangani lewat cek di bawah */ }
   if (!response.ok || !payload || !Array.isArray(payload.items)) {
-    const pesan = payload && payload.error ? payload.error : `HTTP ${response.status}`;
-    throw new Error(pesan);
+    /* Sertakan detail dari backend (mis. "HTTP 403", timeout) supaya
+       penyebabnya kelihatan tanpa harus membuka log server. */
+    const dasar = payload && payload.error ? payload.error : `HTTP ${response.status}`;
+    const detail = payload && payload.detail ? ` — ${payload.detail}` : '';
+    throw new Error(`${dasar}${detail}`);
   }
   return payload;
 }
@@ -148,9 +151,10 @@ async function renderStageSchedule() {
       try { return d.toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }); }
       catch (error) { return null; }
     })();
-    stageState.sumberTeks = jamAmbil
+    stageState.sumberTeks = (jamAmbil
       ? `dibaca ${jamAmbil} · ${(payload.officialUrl || '').replace(/^https?:\/\//, '')}`
-      : (payload.officialUrl || '').replace(/^https?:\/\//, '');
+      : (payload.officialUrl || '').replace(/^https?:\/\//, ''))
+      + (payload.stale ? ' · data salinan terakhir' : '');
     renderKartu();
   } catch (error) {
     if (window.console && console.warn) console.warn(`[jadwal-stage] ${error.message}`);

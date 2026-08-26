@@ -31,7 +31,7 @@
    pada bulan yang sama.
    ============================================================= */
 
-const DEFAULT_TIMEOUT_MS = Number(process.env.SCHEDULE_FETCH_TIMEOUT_MS || 12000);
+const DEFAULT_TIMEOUT_MS = Number(process.env.SCHEDULE_FETCH_TIMEOUT_MS || 20000);
 const CACHE_TTL_MS = Number(process.env.SCHEDULE_CACHE_TTL_MS || 300000);
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36';
 
@@ -628,9 +628,15 @@ const SOURCES = {
 };
 
 /* --- Cache memori ---------------------------------------------
-   Key: grup|tahun|bulan|bahasa. TTL direset saat gagal menyegarkan
-   supaya request berikutnya mencoba lagi, bukan menyajikan kosong. */
+    Dua lapis:
+      cache     : TTL 5 menit — jawaban segar untuk pengunjung ramai.
+      lastGood  : TANPA kedaluwarsa — salinan sukses terakhir per
+                  grup+bulan. Saat situs resmi memblokir IP datacenter
+                  (Cloudflare menantang Railway) kita tetap bisa
+                  menyajikan data terakhir yang berhasil, ditandai
+                  stale:true supaya frontend jujur menyebutnya. */
 const cache = new Map();
+const lastGood = new Map();
 
 function bacaCache(key) {
   const entri = cache.get(key);
@@ -647,6 +653,10 @@ function simpanCache(key, payload) {
      pengunjung menjelajah mundur berbulan-bulan. */
   if (cache.size > 200) cache.clear();
   cache.set(key, { expiresAt: Date.now() + CACHE_TTL_MS, payload });
+}
+
+function kunciLastGood(groupId, year, month) {
+  return `${groupId}|${year}|${month}`;
 }
 
 /* Titik masuk utama. Melempar Error bila sumber resmi gagal —
@@ -681,16 +691,32 @@ async function getOfficialSchedule(groupId, { month, year, lang = 'id' } = {}) {
         lang,
         fetched_at: new Date().toISOString(),
         cached: false,
+        stale: false,
         items,
       };
       simpanCache(key, payload);
+      lastGood.set(kunciLastGood(groupId, year, month), payload);
       return payload;
     } catch (error) {
       terakhir = error;
       if (attempt === 0) await new Promise((resolve) => setTimeout(resolve, 700));
     }
   }
+
+  /* Upstream membangkang (blokir IP datacenter, maintenance, dsb.).
+     Sajikan salinan sukses terakhir bila ada — jauh lebih berguna
+     daripada halaman gagal total. Ditandai stale supaya frontend
+     bisa memberi tahu bahwa datanya mungkin sedikit tua. */
+  const baik = lastGood.get(kunciLastGood(groupId, year, month));
+  if (baik) {
+    loggerPeringatan(groupId, `upstream gagal (${terakhir.message}) — menyajikan salinan terakhir.`);
+    return { ...baik, cached: true, stale: true };
+  }
   throw terakhir;
+}
+
+function loggerPeringatan(groupId, pesan) {
+  console.warn(`[SCHEDULE] ${groupId}: ${pesan}`);
 }
 
 function grupDidukung() {
