@@ -511,6 +511,10 @@ async function ensureSchema() {
   await pool.query("ALTER TABLE fans ADD COLUMN IF NOT EXISTS public_code VARCHAR(32)");
   await pool.query("ALTER TABLE fans ADD COLUMN IF NOT EXISTS profile_picture TEXT");
   await pool.query("ALTER TABLE fans ADD COLUMN IF NOT EXISTS oshi_reasons JSONB NOT NULL DEFAULT '{}'::jsonb");
+  /* Kolom yang ditambahkan lewat ALTER tidak mewarisi DEFAULT dari
+     bentuk CREATE TABLE — pastikan default-nya terpasang eksplisit,
+     kalau tidak INSERT baru menghasilkan NULL dan registrasi 500. */
+  await pool.query("ALTER TABLE fans ALTER COLUMN public_code SET DEFAULT encode(gen_random_bytes(12), 'hex')");
   await pool.query("UPDATE fans SET public_code = encode(gen_random_bytes(12), 'hex') WHERE public_code IS NULL");
   await pool.query("ALTER TABLE fans ALTER COLUMN public_code SET NOT NULL");
   await pool.query("CREATE UNIQUE INDEX IF NOT EXISTS fans_public_code_idx ON fans (public_code)");
@@ -707,12 +711,15 @@ app.post('/api/auth/register', authLimiter, async (request, response) => {
 
   try {
     const passwordHash = await bcrypt.hash(password, 12);
+    /* public_code dibuat di sini secara eksplisit: jangan bergantung pada
+       DEFAULT kolom — tabel lama hasil migrasi tidak selalu memilikinya. */
+    const kodePublik = crypto.randomBytes(12).toString('hex');
     const result = await pool.query(
-      'INSERT INTO fans (name, email, password_hash, birth_date) VALUES ($1, $2, $3, $4) RETURNING public_code, name, email, profile_picture, oshi_reasons, oshi_members, birth_date, created_at',
-      [name, email, passwordHash, birthDate],
+      'INSERT INTO fans (public_code, name, email, password_hash, birth_date) VALUES ($1, $2, $3, $4, $5) RETURNING id, public_code, name, email, profile_picture, oshi_reasons, oshi_members, birth_date, created_at',
+      [kodePublik, name, email, passwordHash, birthDate],
     );
     const fan = result.rows[0];
-    request.session.fanId = fan.id;
+    request.session.fanId = Number(fan.id);
     return response.status(201).json({ user: publicFan(fan) });
   } catch (error) {
     if (error.code === '23505') return response.status(409).json({ error: 'Email sudah terdaftar.' });
@@ -731,7 +738,7 @@ app.post('/api/auth/login', authLimiter, async (request, response) => {
     if (!fan || !(await bcrypt.compare(password, fan.password_hash))) {
       return response.status(401).json({ error: 'Email atau password salah.' });
     }
-    request.session.fanId = fan.id;
+    request.session.fanId = Number(fan.id);
     return response.json({ user: publicFan(fan) });
   } catch (error) {
     console.error(error);
