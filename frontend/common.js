@@ -5261,7 +5261,21 @@ async function fetchLiveTrackerSnapshot() {
   }
   catatKesehatanLive(data);
   applyLiveSnapshot(data.live);
+  /* LIVE TAMU — entri snapshot yang TIDAK terikat data member (id
+     "showroom-<nomor>" / "idn-<username>" hasil pencocokan dinamis,
+     mis. room berjudul kanji yang tak cocok dengan roster Latin).
+     Tanpa ini, siaran tersebut sukses terbaca backend tapi tak pernah
+     tampil di web — persis keluhan "backend terbaca, web kosong". */
+  const polaTamu = /^(showroom-|idn-)/;
+  window.WIKI48_LIVE_TAMU = Array.isArray(data.live)
+    ? data.live.filter((e) => polaTamu.test(String(e.id || '')))
+    : [];
   return data.live;
+}
+
+/* Aksesori aman: daftar live tamu terakhir ([] bila belum ada data). */
+function liveTamu() {
+  return Array.isArray(window.WIKI48_LIVE_TAMU) ? window.WIKI48_LIVE_TAMU : [];
 }
 
 function prioritizePinnedLive(list) {
@@ -5937,3 +5951,150 @@ function bootWiki48Chrome() {
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootWiki48Chrome);
 else bootWiki48Chrome();
+
+/* -------------------------------------------------------------
+   10. SCROLL REVEAL — fade in + slide up saat halaman discroll
+
+   Prinsip kerjanya:
+   - Teks section & kartu dicari lewat REVEAL_SELECTOR lalu diberi
+     kelas .wiki48-reveal (keadaan tersembunyi didefinisikan CSS).
+   - Satu IntersectionObserver mengawasi semuanya; begitu elemen
+     masuk viewport, kelas .is-visible ditambahkan dan CSS mengubah
+     opacity + transform SAJA — dua properti yang dianimasikan di
+     compositor/GPU sehingga gerakan tetap mulus walau kartunya banyak.
+   - Kartu-kartu dalam satu induk yang terlihat bersamaan diberi
+     jeda bertingkat (stagger) supaya muncul seperti gelombang.
+     Jeda dihitung saat reveal, bukan saat dipindai, jadi kartu
+     yang dimunculkan satu-satu tidak ikut menunggu.
+   - Begitu transisinya selesai kedua kelas dibuang lagi supaya
+     transisi hover bawaan kartu (translateY(-4px), dsb.) normal kembali.
+   - Elemen yang sudah berada di atas viewport saat halaman dibuka
+     (reload di tengah halaman, lompatan anchor) langsung dimunculkan
+     tanpa animasi — kalau tidak, dia menggantung tak terlihat selamanya.
+   - Render ulang hasil pencarian/filter tertangkap MutationObserver,
+     tapi kartu baru hasil filter sengaja TIDAK dianimasikan ulang:
+     mengetik satu huruf seharusnya tidak memicu gelombang animasi.
+   ------------------------------------------------------------- */
+(function initScrollReveal() {
+  if (typeof window.IntersectionObserver !== 'function') return;
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+  /* Durasi HARUS sama dengan --reveal di style.css blok SCROLL REVEAL. */
+  var REVEAL_DURATION_MS = 800;
+  var STAGGER_STEP_MS = 90;   // jeda antar kartu dalam satu gelombang
+  var STAGGER_MAX_MS = 420;   // batas jeda supaya ekor gelombang tidak lambat
+
+  var REVEAL_SELECTOR = [
+    '[data-reveal]',
+    '.section-head',            // judul + eyebrow tiap section (blok teks)
+    '.hero-copy',               // teks hero
+    '.page-head .container',    // judul besar halaman sekunder
+    '.article-card',
+    '.rail-card',
+    '.oshi-strip',
+    '.member-card',
+    '.group-card',
+    '.news-card',
+    '.status-card',
+    '.agenda-item',
+    '.official-schedule-card',
+    '.community-card',
+    '.fanart-card',
+    '.community-poll-card',
+    '.community-join-card',
+    '.community-question-hub',
+    '.community-ask-card',
+    '.discussion-card',
+    '.daily-question-card'
+  ].join(',');
+
+  var scanned = typeof WeakSet === 'function' ? new WeakSet() : null;
+  if (!scanned) return;
+
+  var observer = null;
+
+  /* Buang semua jejak reveal — dipakai baik setelah animasi selesai
+     maupun untuk elemen yang harus tampil instan. */
+  function lepaskanReveal(el) {
+    el.classList.remove('wiki48-reveal', 'is-visible');
+    el.style.removeProperty('--reveal-delay');
+  }
+
+  function tampilkan(el, jeda) {
+    el.style.setProperty('--reveal-delay', jeda + 'ms');
+    el.classList.add('is-visible');
+    window.setTimeout(function () { lepaskanReveal(el); }, jeda + REVEAL_DURATION_MS + 140);
+  }
+
+  function saatIntersection(entries) {
+    var gelombang = [];
+    for (var i = 0; i < entries.length; i += 1) {
+      var entry = entries[i];
+      var el = entry.target;
+      observer.unobserve(el);
+
+      if (entry.isIntersecting) {
+        gelombang.push(el);
+      } else if (entry.boundingClientRect.top < 0) {
+        lepaskanReveal(el); // sudah dilewati scroll — tampilkan apa adanya
+      }
+      /* Selain itu: masih di bawah viewport, biarkan terus diawasi. */
+    }
+    if (!gelombang.length) return;
+
+    /* Urutkan sesuai posisi DOM supaya stagger-nya dari kiri ke kanan. */
+    gelombang.sort(function (a, b) {
+      return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+    });
+    for (var j = 0; j < gelombang.length; j += 1) {
+      tampilkan(gelombang[j], Math.min(j * STAGGER_STEP_MS, STAGGER_MAX_MS));
+    }
+  }
+
+  function tandai(el) {
+    /* Elemen di dalam kartu lain yang ikut dianimasikan tidak perlu
+       dua kali animasi — cukup leluhur terdekatnya yang bergerak. */
+    if (scanned.has(el) || el.closest('.wiki48-reveal')) return;
+    scanned.add(el);
+    el.classList.add('wiki48-reveal');
+    observer.observe(el);
+  }
+
+  function pindai(root) {
+    var ditemukan = root.querySelectorAll(REVEAL_SELECTOR);
+    for (var i = 0; i < ditemukan.length; i += 1) tandai(ditemukan[i]);
+  }
+
+  function jalankan() {
+    observer = new IntersectionObserver(saatIntersection, {
+      /* Muncul sedikit lebih awal sebelum elemen menyentuh dasar layar. */
+      rootMargin: '0px 0px -64px 0px'
+    });
+
+    pindai(document.body);
+
+    /* Konten dinamis (grid member, agenda, pertanyaan harian, dll.)
+       yang dirender setelah halaman siap ikut dipindai. */
+    if (typeof MutationObserver === 'function') {
+      var tertunda = false;
+      var mo = new MutationObserver(function () {
+        if (tertunda) return;
+        tertunda = true;
+        window.requestAnimationFrame(function () {
+          tertunda = false;
+          pindai(document.body);
+        });
+      });
+      mo.observe(document.body, { childList: true, subtree: true });
+    }
+  }
+
+  /* Timeout 0 memberi script halaman (script.js, groups.js, dst.)
+     kesempatan menyelesaikan render sinkronnya lebih dulu, supaya
+     kartu hasil render ikut terpindai pada putaran pertama. */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', function () { window.setTimeout(jalankan, 0); });
+  } else {
+    window.setTimeout(jalankan, 0);
+  }
+})();

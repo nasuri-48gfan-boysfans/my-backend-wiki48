@@ -578,17 +578,38 @@ function badgeHTML(text, kind) {
 
 /* Tombol streaming — hanya untuk member live yang liveUrl-nya terisi,
    jadi tidak pernah ada link mati di banner. */
-function liveLinksHTML(list) {
+function liveLinksHTML(list, tamuList = []) {
   const withUrl = list.filter((m) => typeof m.liveUrl === 'string' && m.liveUrl.trim() !== '');
-  if (withUrl.length === 0) return '';
-
-  return withUrl.map((m) => `
+  const barisMember = withUrl.map((m) => `
     <a class="live-link" href="${esc(m.liveUrl)}" target="_blank" rel="noopener noreferrer"
        aria-label="Tonton live ${esc(m.name)} di ${esc(m.livePlatform || 'platform streaming')}">
       <span class="live-link-icon" aria-hidden="true">▶</span>
       <span class="live-link-name">${esc(m.name)}</span>
       <span class="live-link-platform">${esc(m.livePlatform || 'Live')}</span>
-    </a>`).join('');
+    </a>`);
+
+  /* Live tamu: siaran dinamis tanpa padanan roster (judul kanji dsb.).
+     streamUrl/live_url dipakai apa adanya; tanpa URL → tidak dirender
+     supaya tidak ada link mati. */
+  const barisTamu = tamuList
+    .filter((t) => typeof (t.streamUrl || t.live_url) === 'string' && String(t.streamUrl || t.live_url).trim() !== '')
+    .map((t) => {
+      const url = t.streamUrl || t.live_url;
+      const nama = t.memberName || t.member_name || 'Sedang live';
+      const platform = String(t.platform || '').toLowerCase() === 'idn' ? 'IDN Live'
+        : String(t.platform || '').toLowerCase() === 'showroom' ? 'SHOWROOM' : 'Live';
+      return `
+    <a class="live-link" href="${esc(url)}" target="_blank" rel="noopener noreferrer"
+       aria-label="Tonton live ${esc(nama)} di ${esc(platform)}">
+      <span class="live-link-icon" aria-hidden="true">▶</span>
+      <span class="live-link-name">${esc(nama)}</span>
+      <span class="live-link-platform">${esc(platform)}</span>
+    </a>`;
+    });
+
+  const semua = [...barisMember, ...barisTamu];
+  if (semua.length === 0) return '';
+  return semua.join('');
 }
 
 /* Rincian jadwal panggung/theater hari ini. */
@@ -629,10 +650,16 @@ function syncMemberCardStates() {
 function updateStatusBanners() {
   const live = prioritizePinnedLive(liveMembers());
   const stage = stageMembers();
+  /* LIVE TAMU — siaran dari snapshot yang tak terikat data member
+     (room dinamis Showroom/IDN). Tetap WAJIB tampil: kalau dibuang,
+     pengunjung melihat "tidak ada yang live" padahal backend membaca
+     siaran tersebut. */
+  const tamu = typeof liveTamu === 'function' ? liveTamu() : [];
+  const totalHidup = live.length + tamu.length;
   /* Keputusan "apa yang layak dikatakan" diambil di common.js
      (liveTrackerCardState) supaya bisa diuji tanpa browser. Di sini
      tinggal menempelkannya ke DOM. */
-  const keadaanLive = liveTrackerCardState(liveTrackerHealth, live.length);
+  const keadaanLive = liveTrackerCardState(liveTrackerHealth, totalHidup);
 
   /* --- Kartu LIVE --- */
   const liveCard = $('#liveStatusCard');
@@ -643,16 +670,20 @@ function updateStatusBanners() {
   /* Saat tracker tidak bisa dipercaya, angkanya diganti "?" — menulis "0"
      di situ sama dengan menyatakan tidak ada yang live, padahal yang
      terjadi adalah kita tidak tahu. */
-  if (livePill) livePill.textContent = keadaanLive.nada === 'peringatan' && live.length === 0 ? '?' : live.length;
+  if (livePill) livePill.textContent = keadaanLive.nada === 'peringatan' && totalHidup === 0 ? '?' : totalHidup;
   if (liveBadge) {
-    liveBadge.innerHTML = live.length ? badgeHTML(uiCardText('labelLive'), 'live') : '';
-    liveBadge.hidden = live.length === 0;
+    liveBadge.innerHTML = totalHidup ? badgeHTML(uiCardText('labelLive'), 'live') : '';
+    liveBadge.hidden = totalHidup === 0;
   }
   if (liveCard) {
     const value = liveCard.querySelector('.status-value');
     if (value) {
-      value.textContent = keadaanLive.tampilkanNama && live.length
-        ? (keadaanLive.kode === 'live' ? joinNames(live) : `${joinNames(live)} — ${uiCardText(keadaanLive.kunci)}`)
+      const namaTampil = [
+        ...live.map((m) => ({ name: m.name })),
+        ...tamu.map((t) => ({ name: t.memberName || t.member_name || 'Sedang live' })),
+      ];
+      value.textContent = keadaanLive.tampilkanNama && totalHidup
+        ? (keadaanLive.kode === 'live' ? joinNames(namaTampil) : `${joinNames(namaTampil)} — ${uiCardText(keadaanLive.kunci)}`)
         : uiCardText(keadaanLive.kunci);
     }
     liveCard.classList.toggle('is-placeholder', keadaanLive.kode === 'kosong');
@@ -660,7 +691,7 @@ function updateStatusBanners() {
     liveCard.classList.toggle('is-unknown', keadaanLive.nada === 'peringatan');
     liveCard.dataset.liveState = keadaanLive.kode;
   }
-  if (liveLinks) liveLinks.innerHTML = liveLinksHTML(live);
+  if (liveLinks) liveLinks.innerHTML = liveLinksHTML(live, tamu);
 
   /* --- Kartu STAGE --- */
   const stageCard = $('#stageStatusCard');
@@ -722,6 +753,39 @@ let liveEventSource = null;
 let liveSseRetry = 0;
 let liveSseTimer = 0;
 
+/* =============================================================
+   NOTIFIKASI "MULAI LIVE" DI WEB
+   Diff kumpulan id live antar siklus polling/SSE: id baru yang
+   muncul = ada yang baru mulai siaran → toast. Set pertama TIDAK
+   memicu notifikasi (halaman baru dibuka, bukan kejadian baru).
+   ============================================================= */
+let liveIdSebelumnya = null;
+
+function kumpulkanLiveSekarang() {
+  const peta = new Map();
+  liveMembers().forEach((m) => { if (m.id) peta.set(m.id, m.name); });
+  liveTamu().forEach((t) => {
+    const id = t.id || `${t.platform}:${t.streamUrl || t.live_url}`;
+    if (id) peta.set(String(id), t.memberName || t.member_name || 'Sedang live');
+  });
+  return peta;
+}
+
+function deteksiMulaiLive({ diam = false } = {}) {
+  const sekarang = kumpulkanLiveSekarang();
+  let namaBaru = [];
+  if (liveIdSebelumnya !== null && !diam) {
+    sekarang.forEach((nama, id) => {
+      if (!liveIdSebelumnya.has(id)) namaBaru.push(nama);
+    });
+  }
+  liveIdSebelumnya = sekarang;
+  if (namaBaru.length === 0) return;
+  const tampil = namaBaru.slice(0, 3).join(', ')
+    + (namaBaru.length > 3 ? ` & ${namaBaru.length - 3} lainnya` : '');
+  showToast(`🔴 ${tampil} mulai live!`, 'ok');
+}
+
 /* SSE hanya berguna kalau server memang mendukungnya. Di Vercel
    /api/live/events menjawab 501 (Upstash REST tidak punya pub/sub, jadi
    tidak ada yang bisa didorong), dan payload /api/live mengabarkan itu
@@ -739,9 +803,13 @@ function startLiveEvents() {
       liveSseRetry = 0;                 // sambungan sehat → hitungan mundur direset
       catatKesehatanLive(snapshot);
       applyLiveSnapshot(snapshot.live);
+      window.WIKI48_LIVE_TAMU = Array.isArray(snapshot.live)
+        ? snapshot.live.filter((e) => /^(showroom-|idn-)/.test(String(e.id || '')))
+        : [];
       const changed = statusSignature() !== lastStatusSignature;
       lastStatusSignature = statusSignature();
       updateStatusBanners();
+      deteksiMulaiLive();
       if (changed) { renderDirectory(); renderOshi(); }
       state.lastSync = new Date(snapshot.checked_at || Date.now());
       const stamp = $('#statusUpdated');
@@ -787,6 +855,7 @@ async function refreshStatus(options) {
   lastStatusSignature = signature;
 
   updateStatusBanners();
+  deteksiMulaiLive({ diam: Boolean(opts.firstRun) });
 
   /* Roster live/stage berubah → tulis ulang grid supaya tombol
      "Tonton Live" dan flag card ikut menyesuaikan. Kalau tidak berubah,
