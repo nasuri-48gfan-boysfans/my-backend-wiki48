@@ -202,6 +202,45 @@ app.get('/api/diag', async (request, response) => {
         database_url_set: Boolean(process.env.DATABASE_URL),
         frontend_url_set: Boolean(process.env.FRONTEND_URL),
         supabase: (() => { try { return require('./supabase').statusSupabase(); } catch { return null; } })(),
+        /* Uji DATABASE_URL sungguhan: host + hasil SELECT 1 + kode error.
+           Password TIDAK pernah disertakan. Ini penyelamat saat lupa kenapa
+           login/jadwal/youtube mati serentak — selama ini hanya tebak-tebakan
+           dari luar (500 "Database tidak dapat diakses" tidak menjelaskan
+           apakah password salah, host salah, atau SSL ditolak). */
+        database: await (async () => {
+          const url = process.env.DATABASE_URL || '';
+          let host = null, port = null, sslMode = null;
+          try {
+            const u = new URL(url);
+            host = u.hostname;
+            port = u.port || (u.protocol === 'postgresql:' ? '5432' : null);
+            sslMode = u.searchParams.get('sslmode');
+          } catch { host = 'DATABASE_URL tidak bisa diurai'; }
+          const mulai = Date.now();
+          try {
+            const client = new pool.Client({
+              connectionString: url,
+              ssl: process.env.DATABASE_SSL === 'true'
+                ? { rejectUnauthorized: process.env.DATABASE_SSL_REJECT_UNAUTHORIZED !== 'false' }
+                : undefined,
+              connectionTimeoutMillis: 8000,
+            });
+            await client.connect();
+            const r = await client.query('SELECT count(*)::int AS fans FROM fans');
+            await client.end();
+            return { ok: true, host, port, sslMode, durasi_ms: Date.now() - mulai, fans: r.rows[0].fans };
+          } catch (error) {
+            return {
+              ok: false,
+              host,
+              port,
+              sslMode,
+              durasi_ms: Date.now() - mulai,
+              kode: error.code || null,
+              pesan: String(error.message || '').slice(0, 160),
+            };
+          }
+        })(),
       },
     },
   });
