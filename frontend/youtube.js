@@ -78,11 +78,42 @@ async function muatVideoYouTube() {
   }
 
   function renderVideo() {
-    const daftar = ytState.channel === 'ALL' ? ytState.items : ytState.items.filter((v) => v.channel_id === ytState.channel);
-    if (sync) sync.textContent = `${daftar.length} video`;
-    grid.innerHTML = daftar.length
-      ? daftar.map(kartuVideo).join('')
-      : '<div class="empty-state"><p class="empty-title">Belum ada video</p><p class="empty-sub">Webhook belum menerima upload baru untuk filter ini.</p></div>';
+    const sumber = ytState.channel === 'ALL'
+      ? ytState.items
+      : ytState.items.filter((v) => v.channel_id === ytState.channel);
+
+    if (sync) sync.textContent = `${sumber.length} video`;
+
+    /* Kelompokkan per channel — tiap channel dapat KARTU sendiri
+       berisi video terbarunya, diurutkan dari yang terbaru upload. */
+    const perChannel = new Map();
+    for (const v of sumber) {
+      if (!perChannel.has(v.channel_id)) perChannel.set(v.channel_id, []);
+      perChannel.get(v.channel_id).push(v);
+    }
+    const urutan = [...perChannel.entries()].sort((a, b) => {
+      const ta = Math.max(...a[1].map((v) => new Date(v.published_at || v.updated_at || 0).getTime()));
+      const tb = Math.max(...b[1].map((v) => new Date(v.published_at || v.updated_at || 0).getTime()));
+      return tb - ta;
+    });
+
+    if (urutan.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><p class="empty-title">Belum ada video</p><p class="empty-sub">Webhook belum menerima upload baru untuk filter ini.</p></div>';
+      return;
+    }
+
+    grid.innerHTML = urutan.map(([channelId, daftar]) => {
+      const nama = NAMA_CHANNEL[channelId] || channelId;
+      return `<section class="yt-channel-card">
+        <header class="yt-channel-head">
+          <h2 class="yt-channel-name">${esc(nama)}</h2>
+          <span class="yt-channel-count">${daftar.length} video terbaru</span>
+        </header>
+        <div class="yt-grid yt-grid-inner">
+          ${daftar.map(kartuVideo).join('')}
+        </div>
+      </section>`;
+    }).join('');
   }
 }
 
