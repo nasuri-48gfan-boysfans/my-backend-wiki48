@@ -30,24 +30,64 @@ window.WIKI48_API_BASE = '';
 
 (function tentukanBaseApi() {
   const KUNCI_SIMPAN = 'WIKI48_API_BASE';
-  const bersihkan = (nilai) => String(nilai || '').trim().replace(/\/+$/, '');
+
+  /* Normalisasi base API. Dulu pernah ada kasus nilai tersimpan TANPA
+     protokol (mis. "xxx.up.railway.app") sehingga fetch() melempar
+     "Failed to parse URL" dan fitur live/schedule mati total. Kini:
+     - spasi & garis miring di ujung dibuang,
+     - tanpa skema → diberi https:// (http:// khusus localhost),
+     - nilai yang tetap tidak valid dibuang (return '') supaya urutan
+       prioritas lanjut ke sumber berikutnya. */
+  function normalkanBase(nilai) {
+    let v = String(nilai || '').trim().replace(/\/+$/, '');
+    if (!v) return '';
+    if (!/^[a-zA-Z][a-zA-Z0-9+.-]*:\/\//.test(v)) {
+      const lokal = /^(localhost|127\.0\.0\.1|\[::1\])(:\d+)?$/i.test(v);
+      v = (lokal ? 'http://' : 'https://') + v;
+    }
+    try {
+      const u = new URL(v);
+      if (u.origin === 'null' || !u.hostname) return '';
+      return u.origin + (u.pathname === '/' ? '' : u.pathname.replace(/\/+$/, ''));
+    } catch (error) {
+      return '';
+    }
+  }
+
+  /* Terima nilai baru hanya kalau hasil normalisasinya valid. */
+  function pakaiBase(nilai) {
+    const base = normalkanBase(nilai);
+    if (!base) return false;
+    window.WIKI48_API_BASE = base;
+    return true;
+  }
 
   /* 1. Query param ?api=… — juga disimpan supaya navigasi berikutnya
-        dalam browser yang sama tidak perlu param lagi. */
+        dalam browser yang sama tidak perlu param lagi. Yang disimpan
+        adalah versi yang sudah dinormalkan. */
   let dariQuery = '';
   try {
-    dariQuery = bersihkan(new URLSearchParams(window.location.search).get('api'));
-    if (dariQuery) {
-      window.WIKI48_API_BASE = dariQuery;
-      try { localStorage.setItem(KUNCI_SIMPAN, dariQuery); } catch (e) { /* private mode */ }
+    dariQuery = new URLSearchParams(window.location.search).get('api') || '';
+  } catch (error) { /* URLSearchParams tidak tersedia — lanjut */ }
+  if (dariQuery && pakaiBase(dariQuery)) {
+    try { localStorage.setItem(KUNCI_SIMPAN, window.WIKI48_API_BASE); } catch (e) { /* private mode */ }
+    return;
+  }
+
+  /* 2. Override tersimpan (dipakai admin/dev saat mengalihkan traffic).
+        Nilailama tanpa protokol ikut disembuhkan di sini dan ditulis
+        balik, jadi pengunjung tidak perlu menghapus localStorage manual. */
+  try {
+    const tersimpan = localStorage.getItem(KUNCI_SIMPAN);
+    if (tersimpan && pakaiBase(tersimpan)) {
+      if (normalkanBase(tersimpan) !== tersimpan.trim()) {
+        try { localStorage.setItem(KUNCI_SIMPAN, window.WIKI48_API_BASE); } catch (e) { /* private mode */ }
+      }
       return;
     }
-  } catch (error) { /* URLSearchParams tidak tersedia — lanjut */ }
-
-  /* 2. Override tersimpan (dipakai admin/dev saat mengalihkan traffic). */
-  try {
-    const tersimpan = bersihkan(localStorage.getItem(KUNCI_SIMPAN));
-    if (tersimpan) { window.WIKI48_API_BASE = tersimpan; return; }
+    /* Nilai tersimpan sama sekali tidak bisa dipakai → buang agar
+       tidak dievaluasi ulang di setiap kunjungan. */
+    if (tersimpan) localStorage.removeItem(KUNCI_SIMPAN);
   } catch (error) { /* localStorage diblokir — lanjut */ }
 
   /* 3–4. Biarkan nilai default (isi manual atau same-origin). */

@@ -6024,7 +6024,7 @@ else bootWiki48Chrome();
     '.community-ask-card',
     '.discussion-card',
     '.daily-question-card',
-    '.yt-card'
+    '.yt-row'
   ].join(',');
 
   var scanned = typeof WeakSet === 'function' ? new WeakSet() : null;

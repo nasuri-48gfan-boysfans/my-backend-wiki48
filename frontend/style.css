@@ -2768,47 +2768,6 @@ html[lang] .article-card p, html[lang] .rail-card p, html[lang] .community-card 
 
 
 /* =============================================================
-   VIDEO YOUTUBE — kartu upload resmi (hasil webhook WebSub)
-   ============================================================= */
-.yt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 14px; }
-.yt-card { display: flex; flex-direction: column; overflow: hidden; border: 1px solid var(--line, #eadfe5); border-radius: 14px; background: rgba(255,255,255,.9); box-shadow: 0 8px 18px rgba(99,61,94,.06); text-decoration: none; transition: transform .2s ease, box-shadow .2s ease; }
-.yt-card:hover { transform: translateY(-3px); box-shadow: 0 14px 26px rgba(99,61,94,.13); }
-.yt-thumb-wrap { display: block; aspect-ratio: 16 / 9; overflow: hidden; background: #f7d5df; }
-.yt-thumb { width: 100%; height: 100%; object-fit: cover; display: block; }
-.yt-card-body { display: flex; flex-direction: column; gap: 4px; padding: 10px 12px 12px; }
-.yt-channel { color: var(--coral, #ff806b); font-size: .62rem; font-weight: 800; letter-spacing: .08em; text-transform: uppercase; }
-.yt-title { color: var(--ink, #33253d); font-weight: 600; font-size: .85rem; line-height: 1.35; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
-.yt-meta { color: #aa9da8; font-size: .68rem; }
-
-
-
-/* =============================================================
-   KARTU PER CHANNEL � tiap channel punya kartunya sendiri
-   berisi video terbarunya (urut upload terbaru di atas).
-   ============================================================= */
-.yt-channel-card {
-  border: 1px solid var(--line, #eadfe5);
-  border-radius: 18px;
-  background: rgba(255,255,255,.85);
-  box-shadow: 0 10px 24px rgba(99,61,94,.07);
-  overflow: hidden;
-  margin-bottom: 22px;
-}
-.yt-channel-head {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-  padding: 14px 18px;
-  background: linear-gradient(120deg, #ffdbe6, #f5edff);
-  border-bottom: 1px solid var(--line, #eadfe5);
-}
-.yt-channel-name { margin: 0; color: var(--ink, #33253d); font: 700 1.1rem 'Fredoka', sans-serif; }
-.yt-channel-count { color: #9b8497; font: 700 .7rem 'DM Sans', sans-serif; }
-.yt-grid-inner { padding: 14px; }
-.yt-grid-inner .yt-card:hover { transform: translateY(-4px); box-shadow: 0 14px 26px rgba(99,61,94,.13); }
-
-/* =============================================================
    TOMBOL REFRESH MASKOT — logo hati+48 dengan animasi lucu
    (idle: goyang manis · hover: lebih lincah · busy: berputar)
    ============================================================= */

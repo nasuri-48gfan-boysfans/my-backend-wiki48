@@ -220,8 +220,14 @@ app.get('/api/diag', async (request, response) => {
 const youtubeWebhook = require('./youtube-webhook').buatModul({ app, pool, logger: console });
 youtubeWebhook.jadwalkanPembaruan();
 
+/* Fallback RSS — menjamin kartu YouTube tetap terisi walau webhook
+   belum mengirim apa pun. Detail ada di youtube-rss.js. */
+const youtubeRss = require('./youtube-rss').buatModulYoutubeRss({ pool, logger: console });
+
 /* GET /api/youtube/videos — daftar video terbaru hasil webhook
-   untuk kartu frontend. Publik + limiter ringan. */
+   untuk kartu frontend. Publik + limiter ringan.
+   Bila DB kosong/basi untuk suatu channel, data dilengkapi langsung
+   dari feed RSS resmi channel tersebut (ter-cache di memori). */
 app.get('/api/youtube/videos', scheduleLimiter, async (request, response) => {
   const limit = Math.min(Math.max(Number(request.query.limit) || 24, 1), 50);
   const channelId = String(request.query.channel_id || '').trim();
@@ -243,8 +249,19 @@ app.get('/api/youtube/videos', scheduleLimiter, async (request, response) => {
     rows.forEach((r) => {
       r.video_url = r.video_url || `https://www.youtube.com/watch?v=${r.video_id}`;
     });
+    let items = rows;
+    try {
+      items = await youtubeRss.lengkapiDenganRss(rows);
+      items.forEach((r) => {
+        r.video_url = r.video_url || `https://www.youtube.com/watch?v=${r.video_id}`;
+      });
+      /* Hormati limit setelah penggabungan supaya payload terkendali. */
+      items = items.slice(0, Math.max(limit, 26));
+    } catch (error) {
+      console.warn(`[YT-RSS] fallback dilewati: ${error.message}`);
+    }
     response.setHeader('cache-control', 'public, max-age=0, s-maxage=120');
-    return response.json({ items: rows });
+    return response.json({ items });
   } catch (error) {
     console.error(`[YT-VIDEOS] ${error.message}`);
     return response.status(500).json({ error: 'Gagal membaca video YouTube.' });
@@ -336,7 +353,14 @@ app.use(session({
   name: 'wiki48_session',
   keys: [process.env.SESSION_SECRET || 'development-only-session-secret'],
   httpOnly: true,
-  sameSite: 'strict',
+  /* sameSite 'none' di produksi: frontend boleh memanggil API lintas
+     domain (Vercel → Railway). Dengan 'strict', browser modern MENOLAK
+     cookie dari respons lintas situs — akibatnya login tampak sukses
+     tapi sesi tidak pernah tersimpan, pengguna dilempar balik ke
+     halaman login terus-menerus. 'none' wajib berpasangan dengan
+     secure:true (https) — keduanya aktif bersama di produksi.
+     Di dev (http lokal) dipakai 'lax' agar cookie tetap bekerja. */
+  sameSite: isProduction ? 'none' : 'lax',
   secure: isProduction,
   maxAge: 1000 * 60 * 60 * 24 * 30,
 }));
