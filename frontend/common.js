@@ -6005,7 +6005,8 @@ else bootWiki48Chrome();
     '.community-question-hub',
     '.community-ask-card',
     '.discussion-card',
-    '.daily-question-card'
+    '.daily-question-card',
+    '.yt-card'
   ].join(',');
 
   var scanned = typeof WeakSet === 'function' ? new WeakSet() : null;
@@ -6065,6 +6066,31 @@ else bootWiki48Chrome();
     for (var i = 0; i < ditemukan.length; i += 1) tandai(ditemukan[i]);
   }
 
+  /* JARING PENGAMAN — kasus nyata: kartu terlanjur diberi kelas
+     .wiki48-reveal (opacity 0) tetapi callback IntersectionObserver
+     tidak pernah menyentuhnya lagi (tab dibekukan browser, race dengan
+     render ulang, dsb.), akibatnya kartu "tidak mau muncul". Sapuan ini
+     memaksa menampilkan elemen yang TERTAHAN namun saat itu sudah berada
+     di dalam viewport. Yang masih di bawah layar tetap menunggu scroll
+     supaya animasinya tidak hilang. */
+  function sapuTersembunyi() {
+    var tertahan = document.querySelectorAll('.wiki48-reveal:not(.is-visible)');
+    var gelombang = [];
+    for (var i = 0; i < tertahan.length; i += 1) {
+      var el = tertahan[i];
+      var r = el.getBoundingClientRect();
+      if (r.width && r.height && r.top < window.innerHeight - 64 && r.bottom > 0) {
+        observer.unobserve(el);
+        gelombang.push(el);
+      }
+    }
+    if (!gelombang.length) return;
+    gelombang.sort(function (a, b) {
+      return a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1;
+    });
+    for (var j = 0; j < gelombang.length; j += 1) tampilkan(gelombang[j], Math.min(j * STAGGER_STEP_MS, STAGGER_MAX_MS));
+  }
+
   function jalankan() {
     observer = new IntersectionObserver(saatIntersection, {
       /* Muncul sedikit lebih awal sebelum elemen menyentuh dasar layar. */
@@ -6087,6 +6113,12 @@ else bootWiki48Chrome();
       });
       mo.observe(document.body, { childList: true, subtree: true });
     }
+
+    /* Sapuan jaring pengaman tiap 2 detik + saat tab kembali terlihat. */
+    window.setInterval(sapuTersembunyi, 2000);
+    document.addEventListener('visibilitychange', function () {
+      if (!document.hidden) sapuTersembunyi();
+    });
   }
 
   /* Timeout 0 memberi script halaman (script.js, groups.js, dst.)
