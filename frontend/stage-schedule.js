@@ -134,6 +134,8 @@ let sedangMemuat = false;
 async function renderStageSchedule() {
   if (sedangMemuat) return;
   sedangMemuat = true;
+  const tombolRefresh = $('#stageRefresh');
+  if (tombolRefresh) tombolRefresh.classList.add('is-busy');
   $('#monthLabel').textContent = `${BULAN_ID[stageState.month - 1]} ${stageState.year}`;
   $('#stageCardGrid').innerHTML = '<div class="stage-loading"><span class="live-dot"></span>Mengambil jadwal dari situs resmi…</div>';
 
@@ -163,6 +165,7 @@ async function renderStageSchedule() {
     }
   } finally {
     sedangMemuat = false;
+    if (tombolRefresh) tombolRefresh.classList.remove('is-busy');
   }
 }
 

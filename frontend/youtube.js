@@ -7,21 +7,10 @@
 
 const ytState = { items: [], channel: 'ALL' };
 
-const NAMA_CHANNEL = {
-  'UCaIbbu5Xg3DpHsn_3Zw2m9w': 'JKT48',
-  'UCadv-UfEyjjwOPcZHc2QvIQ': 'JKT48 TV',
-  'UCG-5D9k_fL4FnMeNuraeAtA': 'SKE48',
-  'UCnhrIe3jZNmqDEL_zSBXADQ': 'NMB48',
-  'UCPQ0GEWwLaam1lTX9P-CgGA': 'HKT48',
-  'UCIfuY0NRq1szr_6tzFy23NQ': 'NGT48',
-  'UCa8GISK9_hsZ8aEJEL1u1Sg': 'STU48',
-  'UClIsaGq7vBEW00ASqwQyzPw': 'BNK48',
-  'UC0ca9IoigIsaRJL5nF3p3pw': 'TSH48',
-  'UCajEDiZYhD_9NbFA3nqFYjw': 'TPE48',
-  'UCxk6_F4aXUG6EkVvjFj0Ryg': 'CGM48',
-  'UCVOBJSAK2wqQD9Lm1rE-TdQ': 'KLP48',
-  'UCfmrcEdes7yDtEISGPM1T-A': 'AKB48',
-};
+/* Nama channel memakai peta global dari common.js (YOUTUBE_CHANNEL_NAMA). */
+function namaChannel(channelId) {
+  return (typeof YOUTUBE_CHANNEL_NAMA === 'object' && YOUTUBE_CHANNEL_NAMA[channelId]) || channelId;
+}
 
 function tanggalVideo(iso) {
   const d = new Date(iso || '');
@@ -30,7 +19,7 @@ function tanggalVideo(iso) {
 }
 
 function kartuVideo(v) {
-  const namaChannel = NAMA_CHANNEL[v.channel_id] || v.channel_id;
+  const namaChannel = namaChannel(v.channel_id) || v.channel_id;
   const thumb = `https://i.ytimg.com/vi/${encodeURIComponent(v.video_id)}/mqdefault.jpg`;
   const tgl = tanggalVideo(v.published_at || v.updated_at);
   return `<a class="yt-card" href="${esc(v.video_url)}" target="_blank" rel="noopener noreferrer">
@@ -48,6 +37,8 @@ async function muatVideoYouTube() {
   const grid = $('#ytGrid');
   const sync = $('#ytSync');
   if (!grid) return;
+  const tombolRefresh = $('#ytRefresh');
+  if (tombolRefresh) tombolRefresh.classList.add('is-busy');
   grid.innerHTML = '<div class="stage-loading"><span class="live-dot"></span>Mengambil video…</div>';
   try {
     const response = await window.wiki48Fetch('/api/youtube/videos?limit=48');
@@ -60,7 +51,7 @@ async function muatVideoYouTube() {
     if (baris) {
       const ids = [...new Set(ytState.items.map((v) => v.channel_id))];
       if (!baris.dataset.dibangun) {
-        baris.innerHTML = ['ALL', ...ids].map((id) => `<button class="filter-chip${id === ytState.channel ? ' is-active' : ''}" type="button" data-channel="${esc(id)}">${id === 'ALL' ? 'Semua' : esc(NAMA_CHANNEL[id] || id)}</button>`).join('');
+        baris.innerHTML = ['ALL', ...ids].map((id) => `<button class="filter-chip${id === ytState.channel ? ' is-active' : ''}" type="button" data-channel="${esc(id)}">${id === 'ALL' ? 'Semua' : esc(namaChannel(id) || id)}</button>`).join('');
         baris.dataset.dibangun = '1';
         baris.addEventListener('click', (event) => {
           const chip = event.target.closest('[data-channel]');
@@ -75,6 +66,8 @@ async function muatVideoYouTube() {
   } catch (error) {
     grid.innerHTML = `<div class="empty-state"><p class="empty-title">Video tidak bisa dimuat</p><p class="empty-sub">${esc(error.message)}</p></div>`;
     if (sync) sync.textContent = 'Gagal memuat';
+  } finally {
+    if (tombolRefresh) tombolRefresh.classList.remove('is-busy');
   }
 
   function renderVideo() {

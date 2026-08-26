@@ -1219,7 +1219,55 @@ function init() {
     renderOshi();
   });
 
+  /* Kartu YouTube beranda — channel + video terbarunya (hasil webhook). */
+  renderYtRail();
+
   startLiveTracker();    // polling status tiap 30 detik
+}
+
+/* =============================================================
+   KARTU YOUTUBE DI BERANDA
+   Menampilkan tiap channel resmi beserta video terbarunya.
+   Hanya jalan bila #ytHomeList ada (halaman depan).
+   ============================================================= */
+async function renderYtRail() {
+  const box = $('#ytHomeList');
+  if (!box) return;
+  try {
+    const response = await window.wiki48Fetch('/api/youtube/videos?limit=24');
+    const data = await response.json();
+    if (!response.ok) throw new Error(data.error || `HTTP ${response.status}`);
+    const items = Array.isArray(data.items) ? data.items : [];
+    if (!items.length) {
+      box.innerHTML = '<p class="rail-empty">Belum ada upload baru dari channel resmi.</p>';
+      return;
+    }
+    /* Kelompokkan per channel, ambil video TERBARU tiap channel,
+       lalu urutkan channel dari upload terkini. */
+    const terbaruPerChannel = new Map();
+    items.forEach((v) => {
+      const waktu = new Date(v.published_at || v.updated_at || 0).getTime();
+      const sekarang = terbaruPerChannel.get(v.channel_id);
+      if (!sekarang || waktu > sekarang.waktu) terbaruPerChannel.set(v.channel_id, { ...v, waktu });
+    });
+    const baris = [...terbaruPerChannel.values()]
+      .sort((a, b) => b.waktu - a.waktu)
+      .map((v) => {
+        const namaChannel = (typeof YOUTUBE_CHANNEL_NAMA === 'object' && YOUTUBE_CHANNEL_NAMA[v.channel_id]) || v.channel_id;
+        return `<a class="yt-row" href="${esc(v.video_url)}" target="_blank" rel="noopener noreferrer">
+          <img class="yt-row-thumb" src="https://i.ytimg.com/vi/${encodeURIComponent(v.video_id)}/default.jpg" alt="" loading="lazy" />
+          <span class="yt-row-main">
+            <span class="yt-row-channel">${esc(namaChannel)}</span>
+            <span class="yt-row-title">${esc(v.title)}</span>
+          </span>
+          <span class="yt-row-arrow" aria-hidden="true">▶</span>
+        </a>`;
+      })
+      .join('');
+    box.innerHTML = baris;
+  } catch (error) {
+    box.innerHTML = `<p class="rail-empty">${esc(error.message)}</p>`;
+  }
 }
 
 // Jalankan setelah DOM siap.

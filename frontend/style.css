@@ -2699,7 +2699,9 @@ html[lang] .article-card p, html[lang] .rail-card p, html[lang] .community-card 
   background: linear-gradient(145deg, #c4f2e5, #96d9d0);
   box-shadow: 0 3px 0 #75bdb7, 0 6px 12px rgba(81, 150, 144, .22);
   transform: rotate(-6deg);
-  transition: transform .55s cubic-bezier(.34, 1.56, .64, 1), box-shadow .25s ease;
+  /* Cepat & mulus: ease-out quint tanpa overshoot — putaran mendarat
+     halus, tidak "memantul" di ujung. */
+  transition: transform .38s cubic-bezier(.22, 1, .36, 1), box-shadow .2s ease;
 }
 #refreshStatus::after {
   content: '';
@@ -2733,6 +2735,13 @@ html[lang] .article-card p, html[lang] .rail-card p, html[lang] .community-card 
   pointer-events: none;
 }
 #refreshStatus:hover:not(:disabled),
+#refreshStatus:focus-visible,
+#refreshStatus.is-busy {
+  /* Promosikan ke layer GPU hanya saat beranimasi — mulus tanpa
+     membebani memori saat diam. */
+  will-change: transform;
+}
+#refreshStatus:hover:not(:disabled),
 #refreshStatus:focus-visible {
   transform: rotate(354deg) scale(1.07);
   box-shadow: 0 4px 0 #75bdb7, 0 9px 16px rgba(81, 150, 144, .28);
@@ -2742,10 +2751,10 @@ html[lang] .article-card p, html[lang] .rail-card p, html[lang] .community-card 
   outline-offset: 3px;
 }
 #refreshStatus.is-busy {
-  animation: refreshLogoSpin .8s linear infinite;
+  animation: refreshLogoSpin .5s linear infinite;
 }
 #refreshStatus.is-busy .refresh-logo-heart {
-  animation: refreshLogoHeartBeat .8s ease-in-out infinite;
+  animation: refreshLogoHeartBeat .5s ease-in-out infinite;
 }
 @keyframes refreshLogoSpin {
   from { transform: rotate(-6deg); }
@@ -2774,7 +2783,7 @@ html[lang] .article-card p, html[lang] .rail-card p, html[lang] .community-card 
 
 
 /* =============================================================
-   KARTU PER CHANNEL � tiap channel punya kartunya sendiri
+   KARTU PER CHANNEL � tiap channel punya kartunya sendiri
    berisi video terbarunya (urut upload terbaru di atas).
    ============================================================= */
 .yt-channel-card {
@@ -2798,4 +2807,90 @@ html[lang] .article-card p, html[lang] .rail-card p, html[lang] .community-card 
 .yt-channel-count { color: #9b8497; font: 700 .7rem 'DM Sans', sans-serif; }
 .yt-grid-inner { padding: 14px; }
 .yt-grid-inner .yt-card:hover { transform: translateY(-4px); box-shadow: 0 14px 26px rgba(99,61,94,.13); }
+
+/* =============================================================
+   TOMBOL REFRESH MASKOT — logo hati+48 dengan animasi lucu
+   (idle: goyang manis · hover: lebih lincah · busy: berputar)
+   ============================================================= */
+.refresh-btn { gap: 2px; }
+.refresh-logo-heart {
+  font-style: normal;
+  color: var(--coral, #ff806b);
+  font-size: 1rem;
+  line-height: 1;
+  animation: mascotBob 2.8s ease-in-out infinite;
+}
+.refresh-logo {
+  display: inline-block;
+  font: 800 .58rem 'Fredoka', sans-serif;
+  color: #fff;
+  background: linear-gradient(135deg, var(--pink, #f58aa8), var(--coral, #ff806b));
+  border-radius: 7px;
+  padding: 2px 4px;
+  line-height: 1.1;
+  animation: mascotBob 2.8s ease-in-out infinite .15s;
+}
+.refresh-btn:hover:not(:disabled) .refresh-logo-heart,
+.refresh-btn:hover:not(:disabled) .refresh-logo {
+  animation-duration: .8s;
+}
+.refresh-btn.is-busy .refresh-logo-heart,
+.refresh-btn.is-busy .refresh-logo {
+  animation: mascotSpin .7s linear infinite;
+}
+.refresh-btn.is-busy .refresh-logo { animation-delay: .08s; }
+@keyframes mascotBob {
+  0%, 100% { transform: translateY(0) rotate(-6deg); }
+  50%      { transform: translateY(-2px) rotate(6deg); }
+}
+@keyframes mascotSpin {
+  to { transform: rotate(360deg); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .refresh-logo-heart, .refresh-logo { animation: none !important; }
+}
+
+/* =============================================================
+   KARTU YOUTUBE DI BERANDA — channel + video terbarunya
+   ============================================================= */
+.yt-home-list { display: grid; gap: 10px; }
+.yt-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 7px;
+  border-radius: 12px;
+  background: rgba(255,255,255,.75);
+  text-decoration: none;
+  transition: background .18s ease, transform .18s ease;
+}
+.yt-row:hover { background: #fff0f5; transform: translateX(3px); }
+.yt-row-thumb {
+  width: 74px;
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: 8px;
+  flex: none;
+  background: #f7d5df;
+}
+.yt-row-main { min-width: 0; display: grid; gap: 2px; }
+.yt-row-channel {
+  color: var(--coral, #ff806b);
+  font-size: .6rem;
+  font-weight: 800;
+  letter-spacing: .07em;
+  text-transform: uppercase;
+}
+.yt-row-title {
+  color: var(--ink, #33253d);
+  font-size: .76rem;
+  font-weight: 600;
+  line-height: 1.35;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.yt-row-arrow { margin-left: auto; color: var(--coral, #ff806b); font-size: .8rem; flex: none; }
+.yt-home-rail .rail-empty { margin: 0; color: #aa9da8; font-size: .72rem; }
 

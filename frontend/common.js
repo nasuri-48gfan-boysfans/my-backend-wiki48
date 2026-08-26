@@ -5278,6 +5278,24 @@ function liveTamu() {
   return Array.isArray(window.WIKI48_LIVE_TAMU) ? window.WIKI48_LIVE_TAMU : [];
 }
 
+/* Nama tampilan channel YouTube resmi keluarga 48G (dipakai kartu
+   video di beranda maupun halaman Video YouTube). */
+const YOUTUBE_CHANNEL_NAMA = {
+  'UCaIbbu5Xg3DpHsn_3Zw2m9w': 'JKT48',
+  'UCadv-UfEyjjwOPcZHc2QvIQ': 'JKT48 TV',
+  'UCG-5D9k_fL4FnMeNuraeAtA': 'SKE48',
+  'UCnhrIe3jZNmqDEL_zSBXADQ': 'NMB48',
+  'UCPQ0GEWwLaam1lTX9P-CgGA': 'HKT48',
+  'UCIfuY0NRq1szr_6tzFy23NQ': 'NGT48',
+  'UCa8GISK9_hsZ8aEJEL1u1Sg': 'STU48',
+  'UClIsaGq7vBEW00ASqwQyzPw': 'BNK48',
+  'UC0ca9IoigIsaRJL5nF3p3pw': 'TSH48',
+  'UCajEDiZYhD_9NbFA3nqFYjw': 'TPE48',
+  'UCxk6_F4aXUG6EkVvjFj0Ryg': 'CGM48',
+  'UCVOBJSAK2wqQD9Lm1rE-TdQ': 'KLP48',
+  'UCfmrcEdes7yDtEISGPM1T-A': 'AKB48',
+};
+
 function prioritizePinnedLive(list) {
   return list.slice().sort((a, b) => {
     const aPriority = a.isLive && isOshi(a.id) ? 0 : 1;
