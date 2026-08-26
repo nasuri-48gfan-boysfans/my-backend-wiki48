@@ -526,25 +526,6 @@ async function ensureSchema() {
      friendships  : pertemanan antar fans (permintaan → terima → teman). */
   await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS birth_date DATE');
   await pool.query("ALTER TABLE fans ADD COLUMN IF NOT EXISTS oshi_members JSONB NOT NULL DEFAULT '[]'::jsonb");
-  /* ---------- PREMIUM ----------
-     premium_until : kedaluwarsa langganan. Tidak ada kolom status —
-                     cukup bandingkan dengan NOW(), lewat tanggal otomatis
-                     balik gratis tanpa job pembersih.
-     premium_requests : pengajuan berbayar manual (QRIS) yang di-ACC admin. */
-  await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS premium_until TIMESTAMPTZ');
-  await pool.query(`
-    CREATE TABLE IF NOT EXISTS premium_requests (
-      id BIGSERIAL PRIMARY KEY,
-      fan_id BIGINT NOT NULL REFERENCES fans(id) ON DELETE CASCADE,
-      plan VARCHAR(10) NOT NULL CHECK (plan IN ('bulan', 'tahun')),
-      amount INTEGER NOT NULL,
-      bukti TEXT,
-      status VARCHAR(12) NOT NULL DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      reviewed_at TIMESTAMPTZ
-    )
-  `);
-  await pool.query('CREATE INDEX IF NOT EXISTS premium_requests_status_idx ON premium_requests (status, created_at DESC)');
   /* Biodata tambahan — semua opsional, diubah kapan saja dari profil. */
   await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS bio VARCHAR(280)');
   await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS kota VARCHAR(80)');
@@ -650,7 +631,6 @@ function publicFan(fan) {
     bio: fan.bio || '',
     kota: fan.kota || '',
     grupFavorit: fan.grup_favorit || '',
-    premium: Boolean(fan.premium_until && new Date(fan.premium_until) > new Date()),
     joinedAt: fan.created_at,
   };
 }
@@ -666,7 +646,6 @@ function fanPublik(fan) {
     bio: fan.bio || '',
     kota: fan.kota || '',
     grupFavorit: fan.grup_favorit || '',
-    premium: Boolean(fan.premium_until && new Date(fan.premium_until) > new Date()),
     joinedAt: fan.created_at,
   };
 }
@@ -909,7 +888,7 @@ app.post('/api/community/questions', communityLimiter, requireAuth, async (reque
 
 app.get('/api/me', requireAuth, async (request, response) => {
   try {
-    const result = await pool.query('SELECT public_code, name, email, profile_picture, premium_until, avatar_desain, oshi_reasons, oshi_members, birth_date, bio, kota, grup_favorit, created_at FROM fans WHERE id = $1', [request.session.fanId]);
+    const result = await pool.query('SELECT public_code, name, email, profile_picture, avatar_desain, oshi_reasons, oshi_members, birth_date, bio, kota, grup_favorit, created_at FROM fans WHERE id = $1', [request.session.fanId]);
     if (!result.rows[0]) return response.status(401).json({ error: 'Sesi tidak valid.' });
     const payload = publicFan(result.rows[0]);
     payload.akses = await ambilLencana(request.session.fanId);
@@ -1207,19 +1186,13 @@ app.patch('/api/me', requireAuth, async (request, response) => {
   const grupFavorit = potong(request.body.grupFavorit, 80);
   const avatarDesain = validasiAvatarDesain(request.body.avatarDesain);
   try {
-    /* Premium menentukan kuota: oshi 5 slot (free 3) + frame eksklusif. */
-    const premium = await cekPremium(request.session.fanId);
-    let desainFinal = avatarDesain;
-    if (desainFinal && !premium && FRAME_AVATAR_PREMIUM.includes(desainFinal.f)) {
-      desainFinal = { ...desainFinal, f: 'polos' }; // turunkan diam-diam ke frame gratis
-    }
     const result = await pool.query(
       `UPDATE fans SET name = $1, profile_picture = NULLIF($2, ''), oshi_reasons = $3::jsonb,
               birth_date = $4::date, oshi_members = $5::jsonb, bio = $6, kota = $7, grup_favorit = $8,
               avatar_desain = $9::jsonb, updated_at = NOW()
         WHERE id = $10
-        RETURNING id, public_code, name, email, profile_picture, premium_until, avatar_desain, oshi_reasons, oshi_members, birth_date, bio, kota, grup_favorit, created_at`,
-      [name, profilePicture, JSON.stringify(safeReasons), parseTanggalLahir(request.body.birthDate), JSON.stringify(validasiOshiMembers(request.body.oshiMembers, premium ? 5 : 3)), bio, kota, grupFavorit, desainFinal ? JSON.stringify(desainFinal) : null, request.session.fanId],
+        RETURNING id, public_code, name, email, profile_picture, avatar_desain, oshi_reasons, oshi_members, birth_date, bio, kota, grup_favorit, created_at`,
+      [name, profilePicture, JSON.stringify(safeReasons), parseTanggalLahir(request.body.birthDate), JSON.stringify(validasiOshiMembers(request.body.oshiMembers)), bio, kota, grupFavorit, avatarDesain ? JSON.stringify(avatarDesain) : null, request.session.fanId],
     );
     return response.json({ user: publicFan(result.rows[0]) });
   } catch (error) {
@@ -1228,8 +1201,8 @@ app.patch('/api/me', requireAuth, async (request, response) => {
   }
 });
 
-/* Daftar id member oshi: maksimal sesuai kuota (3 gratis / 5 premium),
-   hanya karakter id yang wajar. PATCH /api/me selalu MENIMPA daftar. */
+/* Daftar id member oshi: maksimal 3, hanya karakter id yang wajar.
+   PATCH /api/me selalu MENIMPA daftar. */
 function validasiOshiMembers(nilai, batas = 3) {
   if (!Array.isArray(nilai)) return [];
   const bersih = nilai
@@ -1240,20 +1213,6 @@ function validasiOshiMembers(nilai, batas = 3) {
 
 const GRADIEN_AVATAR_SAHIH = ['pink', 'coral', 'lilac', 'mint', 'langit', 'lemon', 'peach', 'abu'];
 const FRAME_AVATAR_SAHIH = ['polos', 'hati', 'bintang', 'pelangi', 'emas', 'neon', 'galaksi'];
-const FRAME_AVATAR_PREMIUM = ['neon', 'galaksi'];
-
-/* Harga langganan (rupiah) — bisa dioverride env di Railway. */
-const HARGA_PREMIUM = {
-  bulan: Number(process.env.PREMIUM_HARGA_BULAN || 10000),
-  tahun: Number(process.env.PREMIUM_HARGA_TAHUN || 100000),
-};
-
-async function cekPremium(fanId) {
-  if (!fanId) return false;
-  const result = await pool.query('SELECT premium_until FROM fans WHERE id = $1', [fanId]);
-  const until = result.rows[0] && result.rows[0].premium_until;
-  return Boolean(until && new Date(until) > new Date());
-}
 
 /* Desain avatar: { mode: 'desain'|'foto', e: emoji, g: gradasi, f: frame }. */
 function validasiAvatarDesain(nilai) {
@@ -1329,7 +1288,7 @@ app.get('/api/fans', communityLimiter, async (request, response) => {
 app.get('/api/fans/:code', communityLimiter, async (request, response) => {
   try {
     const result = await pool.query(
-      'SELECT id, public_code, name, profile_picture, avatar_desain, premium_until, birth_date, oshi_members, oshi_reasons, bio, kota, grup_favorit, created_at FROM fans WHERE public_code = $1',
+      'SELECT id, public_code, name, profile_picture, avatar_desain, birth_date, oshi_members, oshi_reasons, bio, kota, grup_favorit, created_at FROM fans WHERE public_code = $1',
       [String(request.params.code || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 32)],
     );
     const fan = result.rows[0];
@@ -1448,117 +1407,6 @@ app.get('/api/friends', requireAuth, async (request, response) => {
   } catch (error) {
     console.error(error);
     return response.status(500).json({ error: 'Gagal mengambil daftar teman.' });
-  }
-});
-
-/* =============================================================
-    PREMIUM — langganan manual QRIS dengan ACC admin
-   =============================================================
-   Fans mengajukan (plan + link bukti transfer) → admin memeriksa
-   bukti di halaman admin → approve menambah premium_until sesuai
-   paket (menumpuk bila masih aktif). Tanpa gateway = tanpa biaya,
-   dan titik sambung webhook gateway bisa ditempel di sini nanti. */
-
-app.get('/api/premium/info', (request, response) => {
-  return response.json({
-    harga: HARGA_PREMIUM,
-    qrisUrl: process.env.PREMIUM_QRIS_URL || '',
-    instruksi: process.env.PREMIUM_INSTRUKSI
-      || 'Transfer/scan QRIS sesuai harga, lalu kirim link bukti transfer (screenshot yang diunggah ke mana pun). Admin akan memeriksa maksimal 1×24 jam.',
-  });
-});
-
-app.post('/api/premium/request', requireAuth, async (request, response) => {
-  const plan = String(request.body.plan || '').toLowerCase();
-  if (!HARGA_PREMIUM[plan]) return response.status(400).json({ error: 'Pilih paket bulanan atau tahunan.' });
-  const bukti = String(request.body.bukti || '').trim().slice(0, 600) || null;
-  try {
-    const duplikat = await pool.query(
-      "SELECT id FROM premium_requests WHERE fan_id = $1 AND status = 'pending' LIMIT 1",
-      [request.session.fanId],
-    );
-    if (duplikat.rows.length) return response.status(409).json({ error: 'Kamu sudah punya pengajuan yang sedang diperiksa.' });
-    const hasil = await pool.query(
-      'INSERT INTO premium_requests (fan_id, plan, amount, bukti) VALUES ($1, $2, $3, $4) RETURNING id, plan, amount, status',
-      [request.session.fanId, plan, HARGA_PREMIUM[plan], bukti],
-    );
-    return response.status(201).json({ request: hasil.rows[0] });
-  } catch (error) {
-    console.error(error);
-    return response.status(500).json({ error: 'Gagal mengirim pengajuan premium.' });
-  }
-});
-
-app.get('/api/premium/status', requireAuth, async (request, response) => {
-  try {
-    const fan = await pool.query('SELECT premium_until FROM fans WHERE id = $1', [request.session.fanId]);
-    const until = fan.rows[0] && fan.rows[0].premium_until;
-    const pending = await pool.query(
-      "SELECT id, plan, amount, created_at FROM premium_requests WHERE fan_id = $1 AND status = 'pending' ORDER BY created_at DESC LIMIT 1",
-      [request.session.fanId],
-    );
-    return response.json({
-      premiumUntil: until && new Date(until) > new Date() ? until : null,
-      pending: pending.rows[0] || null,
-    });
-  } catch (error) {
-    console.error(error);
-    return response.status(500).json({ error: 'Gagal membaca status premium.' });
-  }
-});
-
-app.get('/api/admin/premium-requests', requireAdmin, async (request, response) => {
-  const status = String(request.query.status || 'pending');
-  const aman = ['pending', 'approved', 'rejected', 'all'].includes(status) ? status : 'pending';
-  try {
-    const result = await pool.query(
-      `SELECT pr.id, pr.plan, pr.amount, pr.bukti, pr.status, pr.created_at,
-              f.public_code, f.name, f.email, f.premium_until
-         FROM premium_requests pr JOIN fans f ON f.id = pr.fan_id
-        WHERE ($1 = 'all' OR pr.status = $1)
-        ORDER BY pr.created_at DESC LIMIT 100`,
-      [aman],
-    );
-    return response.json({ requests: result.rows });
-  } catch (error) {
-    console.error(error);
-    return response.status(500).json({ error: 'Gagal mengambil pengajuan premium.' });
-  }
-});
-
-app.post('/api/admin/premium-requests/:id/decide', requireAdmin, async (request, response) => {
-  const keputusan = String(request.body.keputusan || '');
-  if (!['approve', 'reject'].includes(keputusan)) return response.status(400).json({ error: 'Keputusan tidak dikenal.' });
-  try {
-    const ambil = await pool.query(
-      `SELECT pr.id, pr.fan_id, pr.plan, pr.status FROM premium_requests pr WHERE pr.id = $1`,
-      [Number(request.params.id)],
-    );
-    const reqRow = ambil.rows[0];
-    if (!reqRow) return response.status(404).json({ error: 'Pengajuan tidak ditemukan.' });
-    if (reqRow.status !== 'pending') return response.status(409).json({ error: 'Pengajuan ini sudah diputuskan.' });
-
-    if (keputusan === 'reject') {
-      await pool.query("UPDATE premium_requests SET status = 'rejected', reviewed_at = NOW() WHERE id = $1", [reqRow.id]);
-      return response.json({ status: 'rejected' });
-    }
-
-    /* Approve: tandai + perpanjang premium_until (menumpuk bila masih aktif). */
-    await pool.query('BEGIN');
-    await pool.query("UPDATE premium_requests SET status = 'approved', reviewed_at = NOW() WHERE id = $1", [reqRow.id]);
-    await pool.query(
-      `UPDATE fans SET premium_until = GREATEST(COALESCE(premium_until, NOW()), NOW())
-              + CASE $2::text WHEN 'tahun' THEN INTERVAL '12 months' ELSE INTERVAL '1 month' END
-        WHERE id = $1`,
-      [reqRow.fan_id, reqRow.plan],
-    );
-    await pool.query('COMMIT');
-    const cek = await pool.query('SELECT premium_until FROM fans WHERE id = $1', [reqRow.fan_id]);
-    return response.json({ status: 'approved', premiumUntil: cek.rows[0].premium_until });
-  } catch (error) {
-    await pool.query('ROLLBACK').catch(() => {});
-    console.error(error);
-    return response.status(500).json({ error: 'Gagal memproses pengajuan premium.' });
   }
 });
 

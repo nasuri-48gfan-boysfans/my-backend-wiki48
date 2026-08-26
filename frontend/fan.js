@@ -85,8 +85,6 @@ async function muatProfil() {
     if (fan.kota) bagian.push(`📍 ${fan.kota}`);
     if (fan.grupFavorit) bagian.push(`🎤 ${fan.grupFavorit}`);
     meta.textContent = bagian.join(' · ');
-    const prem = document.querySelector('#fanPrem');
-    if (prem) prem.hidden = !fan.premium;
     const badge = document.querySelector('#fanBadge');
     if (badge) {
       const petaLencana = { reader: '✅ Pembaca Terverifikasi', contributor: '🛠️ Kontributor', editor: '🛡️ Editor Wiki' };

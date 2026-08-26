@@ -85,10 +85,6 @@ function initProfilePage() {
         if (user.akses && petaLencana[user.akses]) { badge.textContent = petaLencana[user.akses]; badge.hidden = false; }
         else badge.hidden = true;
       }
-      const premChip = profile.querySelector('#profilePremium');
-      if (premChip) premChip.hidden = !user.premium;
-      penggunaPremium = Boolean(user.premium);
-      if (typeof setAvatarState === 'function') setAvatarState(avatarState);
       if (kotaInput) kotaInput.value = user.kota || '';
       if (grupInput) grupInput.value = user.grupFavorit || '';
       profilePicture = user.profilePicture || '';
@@ -189,8 +185,6 @@ function initProfilePage() {
    dijelajahi. Semua tombol berjalan lewat delegasi di atas.
    ============================================================= */
 let kodeSaya = '';
-let penggunaPremium = false;
-const FRAME_PREMIUM = ['neon', 'galaksi'];
 
 function avatarFanHtml(foto, nama) {
   return foto
@@ -298,11 +292,7 @@ function initAvatarBuilder(profile) {
 
   emojiGrid.innerHTML = AVATAR_EMOJI.map((e) => `<button type="button" class="avatar-emoji${e === avatarState.e ? ' is-active' : ''}" data-emoji="${e}">${e}</button>`).join('');
   gradientGrid.innerHTML = Object.keys(typeof AVATAR_GRADIEN === 'object' ? AVATAR_GRADIEN : {}).map((kunci) => `<button type="button" class="avatar-gradient${kunci === avatarState.g ? ' is-active' : ''}" data-g="${kunci}" style="background-image:${AVATAR_GRADIEN[kunci]}" aria-label="${kunci}"></button>`).join('');
-  frameGrid.innerHTML = Object.keys(AVATAR_FRAME_LABEL).map((kunci) => {
-    const premiumOnly = FRAME_PREMIUM.includes(kunci);
-    const terkunci = premiumOnly && !penggunaPremium;
-    return `<button type="button" class="avatar-frame${kunci === (avatarState.f || 'polos') ? ' is-active' : ''}" data-f="${kunci}"${terkunci ? ' disabled title="Khusus Premium 💎 — upgrade di halaman Premium"' : ''}><span class="avatar-frame-dot" data-frame="${kunci}"></span><small>${AVATAR_FRAME_LABEL[kunci]}${premiumOnly ? ' 💎' : ''}</small></button>`;
-  }).join('');
+  frameGrid.innerHTML = Object.keys(AVATAR_FRAME_LABEL).map((kunci) => `<button type="button" class="avatar-frame${kunci === (avatarState.f || 'polos') ? ' is-active' : ''}" data-f="${kunci}"><span class="avatar-frame-dot" data-frame="${kunci}"></span><small>${AVATAR_FRAME_LABEL[kunci]}</small></button>`).join('');
 
   emojiGrid.addEventListener('click', (event) => {
     const btn = event.target.closest('[data-emoji]');
