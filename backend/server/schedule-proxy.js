@@ -452,8 +452,13 @@ const SOURCES = {
   jkt48: {
     officialUrl: 'https://jkt48.com/schedule?lang=id',
     tz: 'WIB',
+    /* Bila JKT48_SCHEDULE_PROXY_URL diisi (URL Cloudflare Worker,
+       lihat frontend/jkt48-api-worker.js), request diteruskan lewat
+       sana untuk menghindari blokir Cloudflare terhadap IP datacenter.
+       Tanpa env itu, langsung ke jkt48.com seperti biasa. */
     async fetch({ month, year, lang }) {
-      const url = `https://jkt48.com/api/v1/schedules?month=${month}&year=${year}&lang=${lang}`;
+      const dasar = String(process.env.JKT48_SCHEDULE_PROXY_URL || '').trim().replace(/\/+$/, '') || 'https://jkt48.com';
+      const url = `${dasar}/api/v1/schedules?month=${month}&year=${year}&lang=${lang}`;
       const data = await requestJson(url, { referer: 'https://jkt48.com/schedule' });
       const rows = Array.isArray(data && data.data) ? data.data : [];
       return urutkan(rows

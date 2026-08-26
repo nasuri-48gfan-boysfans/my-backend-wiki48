@@ -2853,3 +2853,80 @@ html[lang] .article-card p, html[lang] .rail-card p, html[lang] .community-card 
 .yt-row-arrow { margin-left: auto; color: var(--coral, #ff806b); font-size: .8rem; flex: none; }
 .yt-home-rail .rail-empty { margin: 0; color: #aa9da8; font-size: .72rem; }
 
+/* =============================================================
+   SOSIAL — teman, permintaan, direktori fans (halaman profil)
+   ============================================================= */
+.friends-card { grid-column: 1 / -1; }
+.friends-subtitle { margin: 18px 0 8px; color: var(--ink, #33253d); font: 700 .95rem 'Fredoka', sans-serif; }
+.friends-card h2 { font-size: 1.45rem; }
+.friend-list { display: grid; gap: 8px; }
+.friends-empty { margin: 0; color: #aa9da8; font-size: .72rem; font-weight: 600; }
+.friend-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 9px 10px;
+  border: 1px solid var(--line, #eadfe5);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .78);
+}
+.friend-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+  flex: none;
+  background: #f7d5df center / cover no-repeat;
+  border: 2px solid #fff;
+  box-shadow: 0 3px 8px rgba(99, 61, 94, .14);
+}
+.friend-avatar-empty { display: grid; place-items: center; font-size: 1.15rem; background: linear-gradient(135deg, #ffe3ec, #f3ecff); }
+.friend-main { min-width: 0; display: grid; gap: 1px; text-decoration: none; color: inherit; margin-right: auto; }
+.friend-main strong { color: var(--ink, #33253d); font-size: .82rem; }
+.friend-main small { color: #a58f9f; font-size: .62rem; }
+a.friend-main:hover strong { color: var(--coral, #ff806b); }
+.friend-btn {
+  padding: 6px 10px;
+  border: 1px solid #f0d6df;
+  border-radius: 9px;
+  background: #fff;
+  color: #a27d8d;
+  font: 700 .64rem 'DM Sans', sans-serif;
+  cursor: pointer;
+  flex: none;
+  transition: transform .15s ease, box-shadow .15s ease, color .15s ease, border-color .15s ease;
+}
+.friend-btn:hover:not(:disabled) { color: var(--coral, #ff806b); border-color: #f3b8c9; transform: translateY(-1px); box-shadow: 0 4px 10px rgba(99, 61, 94, .12); }
+.friend-btn:disabled { cursor: default; opacity: .65; }
+.friend-btn.is-primary { background: var(--coral, #ff806b); border-color: var(--coral, #ff806b); color: #fff; box-shadow: 0 3px 0 #db6658; }
+.friend-btn.is-primary:hover:not(:disabled) { color: #fff; }
+.fan-discover { display: grid; grid-template-columns: repeat(auto-fill, minmax(210px, 1fr)); gap: 8px; }
+.fan-chip {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 9px;
+  border: 1px solid var(--line, #eadfe5);
+  border-radius: 12px;
+  background: rgba(255, 255, 255, .78);
+  text-decoration: none;
+  transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+.fan-chip:hover { border-color: #f3b8c9; transform: translateY(-2px); box-shadow: 0 8px 16px rgba(99, 61, 94, .1); }
+.fan-chip-name { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--ink, #33253d); font-weight: 700; font-size: .74rem; margin-right: auto; }
+.fan-actions { display: flex; align-items: center; gap: 10px; margin-top: 14px; flex-wrap: wrap; }
+.fan-friend-btn { min-height: 0; padding: 11px 15px; }
+.fan-friend-btn.is-primary { background: #57b894; box-shadow: 0 4px 0 #3f9674; }
+.fan-friend-badge {
+  padding: 9px 13px;
+  border-radius: 10px;
+  background: #eafaf2;
+  color: #2e8f68;
+  font: 800 .74rem 'DM Sans', sans-serif;
+}
+.fan-unfriend { border-color: #f6c9c9; color: #c76d6d; }
+@media (max-width: 760px) {
+  .fan-discover { grid-template-columns: 1fr; }
+  .friend-row { flex-wrap: wrap; }
+}
+
