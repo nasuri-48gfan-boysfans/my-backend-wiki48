@@ -5983,6 +5983,8 @@ const AVATAR_FRAME = {
   bintang: '0 0 0 3px #fff, 0 0 0 6px #ffd66b',
   pelangi: '0 0 0 3px #fff, 0 0 0 5px #f58aa8, 0 0 0 7px #b29be8, 0 0 0 9px #93dcc8',
   emas: '0 0 0 3px #fff, 0 0 0 6px #e8c34a, 0 6px 14px rgba(232, 195, 74, .45)',
+  neon: '0 0 0 3px #fff, 0 0 6px 2px #22d3ee, 0 0 14px 5px rgba(34, 211, 238, .55)',
+  galaksi: '0 0 0 3px #1b1233, 0 0 0 5px #7c5cff, 0 0 14px 4px rgba(124, 92, 255, .6)',
 };
 
 function terapkanAvatar(el, fan, fallbackEmoji) {

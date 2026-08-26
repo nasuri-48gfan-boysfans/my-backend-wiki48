@@ -105,4 +105,45 @@ function initUpdateMembers() {
   });
 }
 
-document.addEventListener('DOMContentLoaded', () => { initAdminLogin(); initAdminPage(); initUpdateMembers(); });
+/* ---------- PREMIUM: verifikasi bukti transfer & ACC ---------- */
+function premiumCard(item) {
+  const locale = { id: 'id-ID' }[currentUiCode()] || 'id-ID';
+  const sisa = item.premium_until ? new Date(item.premium_until) > new Date() : false;
+  return `<article class="request-card"><div class="request-card-head"><div><span class="request-country">${item.plan === 'tahun' ? 'TAHUN' : 'BULAN'} · ${rupiahAdmin(item.amount)}</span><h2>${escapeAdmin(item.name)}</h2><a href="fan.html?id=${escapeAdmin(item.public_code)}">${escapeAdmin(item.public_code)}</a></div><span class="request-status request-status-${item.status}">${item.status}</span></div><dl><div><dt>Bukti</dt><dd>${item.bukti ? `<a href="${escapeAdmin(item.bukti)}" target="_blank" rel="noopener">buka bukti transfer ↗</a>` : 'tidak dilampirkan'}</dd></div><div><dt>Diajukan</dt><dd>${new Date(item.created_at).toLocaleString(locale)}</dd></div><div><dt>Premium s.d.</dt><dd>${item.premium_until ? `${new Date(item.premium_until).toLocaleDateString(locale)}${sisa ? ' (aktif)' : ' (kedaluwarsa)'}` : 'belum pernah'}</dd></div></dl>${item.status === 'pending' ? `<div class="request-actions"><button data-prem-id="${item.id}" data-decide="approve" type="button">✓ ACC Premium</button><button data-prem-id="${item.id}" data-decide="reject" type="button">Tolak</button></div>` : ''}</article>`;
+}
+
+function rupiahAdmin(n) {
+  return 'Rp' + Number(n || 0).toLocaleString('id-ID');
+}
+
+async function loadPremium() {
+  const list = document.querySelector('#premiumList');
+  if (!list) return;
+  try {
+    const data = await adminApi('/api/admin/premium-requests?status=all');
+    list.innerHTML = data.requests.length ? data.requests.map(premiumCard).join('') : '<p class="community-loading">Belum ada pengajuan premium.</p>';
+  } catch (error) {
+    list.innerHTML = `<p class="admin-message is-error">${escapeAdmin(error.message)}</p>`;
+  }
+}
+
+function initPremiumAdmin() {
+  const list = document.querySelector('#premiumList');
+  if (!list) return;
+  list.addEventListener('click', async (event) => {
+    const button = event.target.closest('[data-prem-id]');
+    if (!button) return;
+    button.disabled = true;
+    try {
+      await adminApi(`/api/admin/premium-requests/${button.dataset.premId}/decide`, { method: 'POST', body: JSON.stringify({ keputusan: button.dataset.decide }) });
+      if (window.showToast) window.showToast(button.dataset.decide === 'approve' ? 'Premium diaktifkan!' : 'Pengajuan ditolak.', button.dataset.decide === 'approve' ? 'ok' : 'warn');
+      await loadPremium();
+    } catch (error) {
+      document.querySelector('#adminMessage').textContent = error.message;
+      button.disabled = false;
+    }
+  });
+  loadPremium();
+}
+
+document.addEventListener('DOMContentLoaded', () => { initAdminLogin(); initAdminPage(); initUpdateMembers(); initPremiumAdmin(); });
