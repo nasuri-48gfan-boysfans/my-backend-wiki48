@@ -5977,17 +5977,27 @@ const AVATAR_GRADIEN = {
   peach: 'linear-gradient(135deg, #ffe9d1, #ffb37c)',
   abu: 'linear-gradient(135deg, #efeaf1, #c9bfd0)',
 };
+const AVATAR_FRAME = {
+  polos: '',
+  hati: '0 0 0 3px #fff, 0 0 0 6px #ff806b',
+  bintang: '0 0 0 3px #fff, 0 0 0 6px #ffd66b',
+  pelangi: '0 0 0 3px #fff, 0 0 0 5px #f58aa8, 0 0 0 7px #b29be8, 0 0 0 9px #93dcc8',
+  emas: '0 0 0 3px #fff, 0 0 0 6px #e8c34a, 0 6px 14px rgba(232, 195, 74, .45)',
+};
 
 function terapkanAvatar(el, fan, fallbackEmoji) {
   if (!el) return;
   const desain = fan && fan.avatarDesain;
   const pakaiDesain = desain && desain.mode === 'desain' && desain.e;
   el.textContent = '';
+  const frame = desain && AVATAR_FRAME[desain.f] ? AVATAR_FRAME[desain.f] : '';
   if (pakaiDesain) {
     el.style.backgroundImage = AVATAR_GRADIEN[desain.g] || AVATAR_GRADIEN.pink;
     el.textContent = desain.e;
+    el.style.boxShadow = frame;
     return;
   }
+  el.style.boxShadow = frame;
   if (fan && fan.photo) {
     el.style.backgroundImage = `url(${fan.photo})`;
     return;

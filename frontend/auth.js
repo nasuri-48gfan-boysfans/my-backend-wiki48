@@ -79,6 +79,12 @@ function initProfilePage() {
       kodeSaya = user.id;
       if (birthInput && user.birthDate) birthInput.value = user.birthDate;
       if (bioInput) bioInput.value = user.bio || '';
+      const badge = profile.querySelector('#profileBadge');
+      if (badge) {
+        const petaLencana = { reader: '✅ Pembaca Terverifikasi', contributor: '🛠️ Kontributor', editor: '🛡️ Editor Wiki' };
+        if (user.akses && petaLencana[user.akses]) { badge.textContent = petaLencana[user.akses]; badge.hidden = false; }
+        else badge.hidden = true;
+      }
       if (kotaInput) kotaInput.value = user.kota || '';
       if (grupInput) grupInput.value = user.grupFavorit || '';
       profilePicture = user.profilePicture || '';
@@ -239,7 +245,8 @@ document.addEventListener('DOMContentLoaded', () => {
    ke akun lewat PATCH /api/me (field avatarDesain).
    ============================================================= */
 const AVATAR_EMOJI = ['🐰', '🐱', '🦊', '🐼', '🐯', '🐻', '🐷', '🐸', '🐧', '🐤', '🦄', '🐢', '🐙', '🦋', '🌸', '🌻', '🍓', '🍰', '🍭', '⭐', '💖', '🎀', '✨', '🌙'];
-let avatarState = { mode: 'desain', e: '🐰', g: 'pink' };
+let avatarState = { mode: 'desain', e: '🐰', g: 'pink', f: 'polos' };
+const AVATAR_FRAME_LABEL = { polos: 'Polos', hati: '♥ Hati', bintang: '★ Bintang', pelangi: '🌈 Pelangi', emas: '🏅 Emas' };
 
 function perbaruiPreviewAvatar(profile) {
   const preview = profile.querySelector('#avatarPreview');
@@ -248,6 +255,7 @@ function perbaruiPreviewAvatar(profile) {
   if (pakaiFoto) {
     preview.style.backgroundImage = `url(${pakaiFoto})`;
     preview.textContent = '';
+    if (typeof terapkanAvatar === 'function') terapkanAvatar(preview, { avatarDesain: avatarState, photo: pakaiFoto });
     return;
   }
   if (typeof terapkanAvatar === 'function') terapkanAvatar(preview, { avatarDesain: avatarState });
@@ -259,12 +267,14 @@ function setAvatarState(desain) {
     mode: desain.mode === 'foto' ? 'foto' : 'desain',
     e: desain.e || '🐰',
     g: desain.g || 'pink',
+    f: desain.f || 'polos',
   };
   const profile = document.querySelector('#profilePage');
   if (!profile) return;
   profile.querySelectorAll('input[name="avatarMode"]').forEach((radio) => { radio.checked = radio.value === avatarState.mode; });
   profile.querySelectorAll('#avatarEmojiGrid [data-emoji]').forEach((b) => b.classList.toggle('is-active', b.dataset.emoji === avatarState.e));
   profile.querySelectorAll('#avatarGradientGrid [data-g]').forEach((b) => b.classList.toggle('is-active', b.dataset.g === avatarState.g));
+  profile.querySelectorAll('#avatarFrameGrid [data-f]').forEach((b) => b.classList.toggle('is-active', b.dataset.f === avatarState.f));
   profile.querySelector('#avatarPanelDesain').hidden = avatarState.mode !== 'desain';
   profile.querySelector('#avatarPanelFoto').hidden = avatarState.mode !== 'foto';
   perbaruiPreviewAvatar(profile);
@@ -277,23 +287,29 @@ function getAvatarState() {
 function initAvatarBuilder(profile) {
   const emojiGrid = profile.querySelector('#avatarEmojiGrid');
   const gradientGrid = profile.querySelector('#avatarGradientGrid');
-  if (!emojiGrid || !gradientGrid) return;
+  const frameGrid = profile.querySelector('#avatarFrameGrid');
+  if (!emojiGrid || !gradientGrid || !frameGrid) return;
 
   emojiGrid.innerHTML = AVATAR_EMOJI.map((e) => `<button type="button" class="avatar-emoji${e === avatarState.e ? ' is-active' : ''}" data-emoji="${e}">${e}</button>`).join('');
   gradientGrid.innerHTML = Object.keys(typeof AVATAR_GRADIEN === 'object' ? AVATAR_GRADIEN : {}).map((kunci) => `<button type="button" class="avatar-gradient${kunci === avatarState.g ? ' is-active' : ''}" data-g="${kunci}" style="background-image:${AVATAR_GRADIEN[kunci]}" aria-label="${kunci}"></button>`).join('');
+  frameGrid.innerHTML = Object.keys(AVATAR_FRAME_LABEL).map((kunci) => `<button type="button" class="avatar-frame${kunci === (avatarState.f || 'polos') ? ' is-active' : ''}" data-f="${kunci}"><span class="avatar-frame-dot" data-frame="${kunci}"></span><small>${AVATAR_FRAME_LABEL[kunci]}</small></button>`).join('');
 
   emojiGrid.addEventListener('click', (event) => {
     const btn = event.target.closest('[data-emoji]');
     if (!btn) return;
     avatarState.e = btn.dataset.emoji;
-    avatarState.mode = 'desain';
     setAvatarState(avatarState);
   });
   gradientGrid.addEventListener('click', (event) => {
     const btn = event.target.closest('[data-g]');
     if (!btn) return;
     avatarState.g = btn.dataset.g;
-    avatarState.mode = 'desain';
+    setAvatarState(avatarState);
+  });
+  frameGrid.addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-f]');
+    if (!btn) return;
+    avatarState.f = btn.dataset.f;
     setAvatarState(avatarState);
   });
 

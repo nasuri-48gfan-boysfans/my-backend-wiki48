@@ -2996,6 +2996,29 @@ a.friend-main:hover strong { color: var(--coral, #ff806b); }
 }
 .avatar-gradient:hover { transform: scale(1.08); }
 .avatar-gradient.is-active { box-shadow: 0 0 0 3px var(--coral, #ff806b), 0 3px 8px rgba(99, 61, 94, .18); }
+.avatar-frame-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; }
+.avatar-frame { display: grid; justify-items: center; gap: 4px; padding: 6px 4px; border: 1px solid transparent; border-radius: 10px; background: none; cursor: pointer; }
+.avatar-frame:hover { background: #fff0f5; }
+.avatar-frame.is-active { border-color: var(--coral, #ff806b); background: #fff0f5; }
+.avatar-frame-dot { width: 26px; height: 26px; border-radius: 50%; background: linear-gradient(135deg, #ffd7e4, #ff9ec2); border: 2px solid #fff; }
+.avatar-frame-dot[data-frame="hati"] { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #ff806b; }
+.avatar-frame-dot[data-frame="bintang"] { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #ffd66b; }
+.avatar-frame-dot[data-frame="pelangi"] { box-shadow: 0 0 0 2px #fff, 0 0 0 3px #f58aa8, 0 0 0 4px #b29be8, 0 0 0 5px #93dcc8; }
+.avatar-frame-dot[data-frame="emas"] { box-shadow: 0 0 0 2px #fff, 0 0 0 3.5px #e8c34a; }
+.avatar-frame small { color: #8a7590; font-size: .56rem; font-weight: 700; }
+.badge-akses {
+  display: inline-block;
+  margin-left: 8px;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #fff3c9, #ffe0a0);
+  border: 1px solid #eecf7d;
+  color: #7a5b12;
+  font-size: .6rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  vertical-align: middle;
+}
 
 /* Ikon profil header beranda: foto/desain fans tampil rapi memenuhi lingkaran. */
 .profile-bubble { background-size: cover; background-position: center; overflow: hidden; }

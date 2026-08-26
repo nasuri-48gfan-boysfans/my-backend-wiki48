@@ -890,7 +890,9 @@ app.get('/api/me', requireAuth, async (request, response) => {
   try {
     const result = await pool.query('SELECT public_code, name, email, profile_picture, avatar_desain, oshi_reasons, oshi_members, birth_date, bio, kota, grup_favorit, created_at FROM fans WHERE id = $1', [request.session.fanId]);
     if (!result.rows[0]) return response.status(401).json({ error: 'Sesi tidak valid.' });
-    return response.json({ user: publicFan(result.rows[0]) });
+    const payload = publicFan(result.rows[0]);
+    payload.akses = await ambilLencana(request.session.fanId);
+    return response.json({ user: payload });
   } catch (error) {
     console.error(error);
     return response.status(500).json({ error: 'Gagal mengambil profil.' });
@@ -1211,16 +1213,29 @@ function validasiOshiMembers(nilai) {
 }
 
 const GRADIEN_AVATAR_SAHIH = ['pink', 'coral', 'lilac', 'mint', 'langit', 'lemon', 'peach', 'abu'];
+const FRAME_AVATAR_SAHIH = ['polos', 'hati', 'bintang', 'pelangi', 'emas'];
 
-/* Desain avatar: { mode: 'desain'|'foto', e: emoji, g: gradasi }.
-   mode 'foto' → yang dipakai profile_picture (upload / URL Showroom). */
+/* Desain avatar: { mode: 'desain'|'foto', e: emoji, g: gradasi, f: frame }. */
 function validasiAvatarDesain(nilai) {
   if (!nilai || typeof nilai !== 'object' || Array.isArray(nilai)) return null;
   const mode = nilai.mode === 'foto' ? 'foto' : nilai.mode === 'desain' ? 'desain' : null;
   if (!mode) return null;
   const e = String(nilai.e || '').trim().slice(0, 16) || '🐰';
   const g = GRADIEN_AVATAR_SAHIH.includes(nilai.g) ? nilai.g : 'pink';
-  return { mode, e, g };
+  const f = FRAME_AVATAR_SAHIH.includes(nilai.f) ? nilai.f : 'polos';
+  return { mode, e, g, f };
+}
+
+/* Lencana kontributor tertinggi yang disetujui untuk seorang fans. */
+async function ambilLencana(fanId) {
+  const result = await pool.query(
+    `SELECT access_level FROM access_requests
+      WHERE fan_id = $1 AND status = 'approved'
+      ORDER BY CASE access_level WHEN 'editor' THEN 0 WHEN 'contributor' THEN 1 ELSE 2 END
+      LIMIT 1`,
+    [fanId],
+  );
+  return result.rows[0] ? result.rows[0].access_level : null;
 }
 
 /* =============================================================
@@ -1287,7 +1302,7 @@ app.get('/api/fans/:code', communityLimiter, async (request, response) => {
       : {};
     const isSelf = request.session.fanId === Number(fan.id);
     return response.json({
-      fan: { ...fanPublik(fan), oshiReasons: alasan },
+      fan: { ...fanPublik(fan), oshiReasons: alasan, akses: await ambilLencana(Number(fan.id)) },
       isSelf,
       friendship: await statusPertemanan(request.session.fanId, Number(fan.id)),
     });

@@ -82,7 +82,15 @@ async function muatProfil() {
     judul.textContent = fan.name;
     const bagian = [`Bergabung ${formatTanggal(fan.joinedAt, { month: 'long', year: 'numeric' })}`];
     if (fan.birthDate) bagian.push(`🎂 ${formatTanggal(fan.birthDate)}`);
+    if (fan.kota) bagian.push(`📍 ${fan.kota}`);
+    if (fan.grupFavorit) bagian.push(`🎤 ${fan.grupFavorit}`);
     meta.textContent = bagian.join(' · ');
+    const badge = document.querySelector('#fanBadge');
+    if (badge) {
+      const petaLencana = { reader: '✅ Pembaca Terverifikasi', contributor: '🛠️ Kontributor', editor: '🛡️ Editor Wiki' };
+      if (fan.akses && petaLencana[fan.akses]) { badge.textContent = petaLencana[fan.akses]; badge.hidden = false; }
+      else badge.hidden = true;
+    }
 
     const avatar = document.querySelector('#fanAvatar');
     if (avatar && typeof terapkanAvatar === 'function') terapkanAvatar(avatar, fan);
