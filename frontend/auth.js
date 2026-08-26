@@ -56,6 +56,10 @@ function initProfilePage() {
   const joined = profile.querySelector('[data-profile-joined]');
   const nameInput = profile.querySelector('#profileName');
   const birthInput = profile.querySelector('#profileBirth');
+  const bioInput = profile.querySelector('#profileBio');
+  const kotaInput = profile.querySelector('#profileKota');
+  const grupInput = profile.querySelector('#profileGrup');
+  const fotoUrlInput = profile.querySelector('#avatarFotoUrl');
   const avatar = profile.querySelector('#profileAvatar');
   const pictureInput = profile.querySelector('#profilePicture');
   let profilePicture = '';
@@ -74,7 +78,17 @@ function initProfilePage() {
       nameInput.value = user.name;
       kodeSaya = user.id;
       if (birthInput && user.birthDate) birthInput.value = user.birthDate;
+      if (bioInput) bioInput.value = user.bio || '';
+      if (kotaInput) kotaInput.value = user.kota || '';
+      if (grupInput) grupInput.value = user.grupFavorit || '';
       profilePicture = user.profilePicture || '';
+      if (fotoUrlInput && /^https:\/\//.test(profilePicture)) fotoUrlInput.value = profilePicture;
+      /* Avatar tersimpan di akun → pratinjau & panel ikut. */
+      if (user.avatarDesain && typeof setAvatarState === 'function') {
+        setAvatarState(user.avatarDesain);
+      } else if (typeof terapkanAvatar === 'function') {
+        terapkanAvatar(profile.querySelector('#avatarPreview'), { photo: profilePicture });
+      }
       oshiReasons = { ...loadOshiReasons(), ...(user.oshiReasons || {}) };
       /* Oshi versi server lebih diutamakan bila ada — sinkron balik ke
          perangkat ini supaya kartu oshi tampil walau ganti browser. */
@@ -95,10 +109,24 @@ function initProfilePage() {
     event.preventDefault();
     const updatedName = nameInput.value.trim();
     if (!updatedName) return;
-    apiRequest('/api/me', { method: 'PATCH', body: JSON.stringify({ name: updatedName, birthDate: birthInput ? birthInput.value : '', profilePicture, oshiReasons, oshiMembers: oshiList.slice(0, 3) }) })
+    /* Foto final: URL yang ditempel menang atas upload/existing. */
+    const fotoFinal = (fotoUrlInput && fotoUrlInput.value.trim()) || profilePicture;
+    apiRequest('/api/me', { method: 'PATCH', body: JSON.stringify({
+      name: updatedName,
+      birthDate: birthInput ? birthInput.value : '',
+      bio: bioInput ? bioInput.value : '',
+      kota: kotaInput ? kotaInput.value : '',
+      grupFavorit: grupInput ? grupInput.value : '',
+      profilePicture: fotoFinal,
+      oshiReasons,
+      oshiMembers: oshiList.slice(0, 3),
+      avatarDesain: typeof getAvatarState === 'function' ? getAvatarState() : null,
+    }) })
       .then(({ user }) => {
         name.textContent = user.name;
+        profilePicture = user.profilePicture || '';
         profile.querySelector('#profileSaved').hidden = false;
+        if (typeof sinkronAvatarHeader === 'function') sinkronAvatarHeader();
         renderTemanSection(profile);
       })
       .catch((saveError) => { profile.querySelector('#profileSaved').textContent = saveError.message; profile.querySelector('#profileSaved').hidden = false; });
@@ -121,6 +149,8 @@ function initProfilePage() {
   profile.querySelector('#logoutButton').addEventListener('click', () => {
     apiRequest('/api/auth/logout', { method: 'POST' }).finally(() => { window.location.href = 'login.html'; });
   });
+
+  initAvatarBuilder(profile);
 
   /* Satu listener delegasi untuk semua tombol sosial (terima/tolak/
      tambah/hapus) — section teman sering dirender ulang. */
@@ -196,6 +226,100 @@ async function renderTemanSection(profile) {
   } catch {
     list.innerHTML = '<p class="friends-empty">Gagal memuat data teman.</p>';
   }
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  initLoginPage();
+  initProfilePage();
+});
+
+/* =============================================================
+   AVATAR BUILDER — pilih 🎨 desain (emoji + gradasi) atau
+   🖼️ foto (upload di hero / URL Showroom). Pilihan ikut disimpan
+   ke akun lewat PATCH /api/me (field avatarDesain).
+   ============================================================= */
+const AVATAR_EMOJI = ['🐰', '🐱', '🦊', '🐼', '🐯', '🐻', '🐷', '🐸', '🐧', '🐤', '🦄', '🐢', '🐙', '🦋', '🌸', '🌻', '🍓', '🍰', '🍭', '⭐', '💖', '🎀', '✨', '🌙'];
+let avatarState = { mode: 'desain', e: '🐰', g: 'pink' };
+
+function perbaruiPreviewAvatar(profile) {
+  const preview = profile.querySelector('#avatarPreview');
+  if (!preview) return;
+  const pakaiFoto = avatarState.mode === 'foto' && ((profile.querySelector('#avatarFotoUrl') || {}).value || '').trim();
+  if (pakaiFoto) {
+    preview.style.backgroundImage = `url(${pakaiFoto})`;
+    preview.textContent = '';
+    return;
+  }
+  if (typeof terapkanAvatar === 'function') terapkanAvatar(preview, { avatarDesain: avatarState });
+}
+
+function setAvatarState(desain) {
+  if (!desain) return;
+  avatarState = {
+    mode: desain.mode === 'foto' ? 'foto' : 'desain',
+    e: desain.e || '🐰',
+    g: desain.g || 'pink',
+  };
+  const profile = document.querySelector('#profilePage');
+  if (!profile) return;
+  profile.querySelectorAll('input[name="avatarMode"]').forEach((radio) => { radio.checked = radio.value === avatarState.mode; });
+  profile.querySelectorAll('#avatarEmojiGrid [data-emoji]').forEach((b) => b.classList.toggle('is-active', b.dataset.emoji === avatarState.e));
+  profile.querySelectorAll('#avatarGradientGrid [data-g]').forEach((b) => b.classList.toggle('is-active', b.dataset.g === avatarState.g));
+  profile.querySelector('#avatarPanelDesain').hidden = avatarState.mode !== 'desain';
+  profile.querySelector('#avatarPanelFoto').hidden = avatarState.mode !== 'foto';
+  perbaruiPreviewAvatar(profile);
+}
+
+function getAvatarState() {
+  return { ...avatarState };
+}
+
+function initAvatarBuilder(profile) {
+  const emojiGrid = profile.querySelector('#avatarEmojiGrid');
+  const gradientGrid = profile.querySelector('#avatarGradientGrid');
+  if (!emojiGrid || !gradientGrid) return;
+
+  emojiGrid.innerHTML = AVATAR_EMOJI.map((e) => `<button type="button" class="avatar-emoji${e === avatarState.e ? ' is-active' : ''}" data-emoji="${e}">${e}</button>`).join('');
+  gradientGrid.innerHTML = Object.keys(typeof AVATAR_GRADIEN === 'object' ? AVATAR_GRADIEN : {}).map((kunci) => `<button type="button" class="avatar-gradient${kunci === avatarState.g ? ' is-active' : ''}" data-g="${kunci}" style="background-image:${AVATAR_GRADIEN[kunci]}" aria-label="${kunci}"></button>`).join('');
+
+  emojiGrid.addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-emoji]');
+    if (!btn) return;
+    avatarState.e = btn.dataset.emoji;
+    avatarState.mode = 'desain';
+    setAvatarState(avatarState);
+  });
+  gradientGrid.addEventListener('click', (event) => {
+    const btn = event.target.closest('[data-g]');
+    if (!btn) return;
+    avatarState.g = btn.dataset.g;
+    avatarState.mode = 'desain';
+    setAvatarState(avatarState);
+  });
+
+  profile.querySelectorAll('input[name="avatarMode"]').forEach((radio) => {
+    radio.addEventListener('change', () => {
+      avatarState.mode = radio.checked ? radio.value : avatarState.mode;
+      profile.querySelectorAll('.avatar-mode').forEach((label) => label.classList.toggle('is-active', label.querySelector('input').checked));
+      profile.querySelector('#avatarPanelDesain').hidden = avatarState.mode !== 'desain';
+      profile.querySelector('#avatarPanelFoto').hidden = avatarState.mode !== 'foto';
+      perbaruiPreviewAvatar(profile);
+    });
+  });
+
+  const urlInput = profile.querySelector('#avatarFotoUrl');
+  urlInput?.addEventListener('input', () => perbaruiPreviewAvatar(profile));
+
+  /* Upload file dari hero ikut memindahkan mode ke foto otomatis. */
+  const pictureInput = profile.querySelector('#profilePicture');
+  pictureInput?.addEventListener('change', () => {
+    if (!pictureInput.files?.length) return;
+    avatarState.mode = 'foto';
+    profile.querySelectorAll('input[name="avatarMode"]').forEach((r) => { r.checked = r.value === 'foto'; });
+    profile.querySelectorAll('.avatar-mode').forEach((label) => label.classList.toggle('is-active', label.querySelector('input').checked));
+    profile.querySelector('#avatarPanelDesain').hidden = true;
+    profile.querySelector('#avatarPanelFoto').hidden = false;
+  });
 }
 
 document.addEventListener('DOMContentLoaded', () => {

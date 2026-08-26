@@ -1,4 +1,4 @@
-  const CACHE_NAME = 'wiki48-shell-v14';
+  const CACHE_NAME = 'wiki48-shell-v15';
 const APP_SHELL = [
   '/index.html',
   '/members.html',

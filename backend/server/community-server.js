@@ -526,6 +526,13 @@ async function ensureSchema() {
      friendships  : pertemanan antar fans (permintaan → terima → teman). */
   await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS birth_date DATE');
   await pool.query("ALTER TABLE fans ADD COLUMN IF NOT EXISTS oshi_members JSONB NOT NULL DEFAULT '[]'::jsonb");
+  /* Biodata tambahan — semua opsional, diubah kapan saja dari profil. */
+  await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS bio VARCHAR(280)');
+  await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS kota VARCHAR(80)');
+  await pool.query('ALTER TABLE fans ADD COLUMN IF NOT EXISTS grup_favorit VARCHAR(80)');
+  /* Desain avatar bawaan: { e: emoji, g: nama gradasi } — dirender
+     client-side sehingga tajam di ukuran apa pun tanpa menyimpan gambar. */
+  await pool.query("ALTER TABLE fans ADD COLUMN IF NOT EXISTS avatar_desain JSONB");
   await pool.query(`
     CREATE TABLE IF NOT EXISTS friendships (
       id BIGSERIAL PRIMARY KEY,
@@ -617,9 +624,13 @@ function publicFan(fan) {
     name: fan.name,
     email: fan.email,
     profilePicture: fan.profile_picture || '',
+    avatarDesain: fan.avatar_desain && typeof fan.avatar_desain === 'object' ? fan.avatar_desain : null,
     oshiReasons: fan.oshi_reasons || {},
     oshiMembers: Array.isArray(fan.oshi_members) ? fan.oshi_members : [],
     birthDate: fan.birth_date ? String(fan.birth_date).slice(0, 10) : '',
+    bio: fan.bio || '',
+    kota: fan.kota || '',
+    grupFavorit: fan.grup_favorit || '',
     joinedAt: fan.created_at,
   };
 }
@@ -630,8 +641,11 @@ function fanPublik(fan) {
     code: fan.public_code,
     name: fan.name,
     photo: fan.profile_picture || '',
-    birthDate: fan.birth_date ? String(fan.birth_date).slice(0, 10) : '',
+    avatarDesain: fan.avatar_desain && typeof fan.avatar_desain === 'object' ? fan.avatar_desain : null,
     oshiMembers: Array.isArray(fan.oshi_members) ? fan.oshi_members : [],
+    bio: fan.bio || '',
+    kota: fan.kota || '',
+    grupFavorit: fan.grup_favorit || '',
     joinedAt: fan.created_at,
   };
 }
@@ -874,7 +888,7 @@ app.post('/api/community/questions', communityLimiter, requireAuth, async (reque
 
 app.get('/api/me', requireAuth, async (request, response) => {
   try {
-    const result = await pool.query('SELECT public_code, name, email, profile_picture, oshi_reasons, oshi_members, birth_date, created_at FROM fans WHERE id = $1', [request.session.fanId]);
+    const result = await pool.query('SELECT public_code, name, email, profile_picture, avatar_desain, oshi_reasons, oshi_members, birth_date, bio, kota, grup_favorit, created_at FROM fans WHERE id = $1', [request.session.fanId]);
     if (!result.rows[0]) return response.status(401).json({ error: 'Sesi tidak valid.' });
     return response.json({ user: publicFan(result.rows[0]) });
   } catch (error) {
@@ -1156,13 +1170,27 @@ app.patch('/api/me', requireAuth, async (request, response) => {
   if (name.length < 2 || name.length > 80) return response.status(400).json({ error: 'Nama harus terdiri dari 2 sampai 80 karakter.' });
   const profilePicture = String(request.body.profilePicture || '');
   const oshiReasons = request.body.oshiReasons && typeof request.body.oshiReasons === 'object' && !Array.isArray(request.body.oshiReasons) ? request.body.oshiReasons : {};
-  if (profilePicture && !/^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(profilePicture)) return response.status(400).json({ error: 'Foto profil harus berupa JPEG, PNG, atau WebP.' });
-  if (profilePicture.length > 2_400_000) return response.status(400).json({ error: 'Ukuran foto profil maksimal 1,8 MB.' });
   const safeReasons = Object.fromEntries(Object.entries(oshiReasons).filter(([id, reason]) => /^[a-z0-9-]{3,40}$/.test(id) && typeof reason === 'string' && reason.trim().length >= 3).map(([id, reason]) => [id, reason.trim().slice(0, 240)]));
+  /* Foto profil: boleh dataURL (upload) ATAU URL https (mis. avatar
+     Showroom). URL dibatasi panjang & karakter agar aman. */
+  const adalahDataUrl = /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(profilePicture);
+  const adalahUrlFoto = /^https:\/\/[^\s"'<>\\]+$/.test(profilePicture) && profilePicture.length <= 600;
+  if (profilePicture && !adalahDataUrl && !adalahUrlFoto) return response.status(400).json({ error: 'Foto profil harus berupa JPEG, PNG, WebP, atau URL https gambar.' });
+  if (adalahDataUrl && profilePicture.length > 2_400_000) return response.status(400).json({ error: 'Ukuran foto profil maksimal 1,8 MB.' });
+  /* Biodata opsional — kosong berarti menghapus isian. */
+  const potong = (nilai, maks) => String(nilai || '').trim().slice(0, maks) || null;
+  const bio = potong(request.body.bio, 280);
+  const kota = potong(request.body.kota, 80);
+  const grupFavorit = potong(request.body.grupFavorit, 80);
+  const avatarDesain = validasiAvatarDesain(request.body.avatarDesain);
   try {
     const result = await pool.query(
-      'UPDATE fans SET name = $1, profile_picture = NULLIF($2, \'\'), oshi_reasons = $3::jsonb, birth_date = $4::date, oshi_members = $5::jsonb, updated_at = NOW() WHERE id = $6 RETURNING public_code, name, email, profile_picture, oshi_reasons, oshi_members, birth_date, created_at',
-      [name, profilePicture, JSON.stringify(safeReasons), parseTanggalLahir(request.body.birthDate), JSON.stringify(validasiOshiMembers(request.body.oshiMembers)), request.session.fanId],
+      `UPDATE fans SET name = $1, profile_picture = NULLIF($2, ''), oshi_reasons = $3::jsonb,
+              birth_date = $4::date, oshi_members = $5::jsonb, bio = $6, kota = $7, grup_favorit = $8,
+              avatar_desain = $9::jsonb, updated_at = NOW()
+        WHERE id = $10
+        RETURNING id, public_code, name, email, profile_picture, avatar_desain, oshi_reasons, oshi_members, birth_date, bio, kota, grup_favorit, created_at`,
+      [name, profilePicture, JSON.stringify(safeReasons), parseTanggalLahir(request.body.birthDate), JSON.stringify(validasiOshiMembers(request.body.oshiMembers)), bio, kota, grupFavorit, avatarDesain ? JSON.stringify(avatarDesain) : null, request.session.fanId],
     );
     return response.json({ user: publicFan(result.rows[0]) });
   } catch (error) {
@@ -1180,6 +1208,19 @@ function validasiOshiMembers(nilai) {
     .map((id) => String(id || '').trim())
     .filter((id) => /^[a-z0-9-]{2,64}$/.test(id));
   return [...new Set(bersih)].slice(0, 3);
+}
+
+const GRADIEN_AVATAR_SAHIH = ['pink', 'coral', 'lilac', 'mint', 'langit', 'lemon', 'peach', 'abu'];
+
+/* Desain avatar: { mode: 'desain'|'foto', e: emoji, g: gradasi }.
+   mode 'foto' → yang dipakai profile_picture (upload / URL Showroom). */
+function validasiAvatarDesain(nilai) {
+  if (!nilai || typeof nilai !== 'object' || Array.isArray(nilai)) return null;
+  const mode = nilai.mode === 'foto' ? 'foto' : nilai.mode === 'desain' ? 'desain' : null;
+  if (!mode) return null;
+  const e = String(nilai.e || '').trim().slice(0, 16) || '🐰';
+  const g = GRADIEN_AVATAR_SAHIH.includes(nilai.g) ? nilai.g : 'pink';
+  return { mode, e, g };
 }
 
 /* =============================================================
@@ -1233,7 +1274,7 @@ app.get('/api/fans', communityLimiter, async (request, response) => {
 app.get('/api/fans/:code', communityLimiter, async (request, response) => {
   try {
     const result = await pool.query(
-      'SELECT id, public_code, name, profile_picture, birth_date, oshi_members, oshi_reasons, created_at FROM fans WHERE public_code = $1',
+      'SELECT id, public_code, name, profile_picture, avatar_desain, birth_date, oshi_members, oshi_reasons, bio, kota, grup_favorit, created_at FROM fans WHERE public_code = $1',
       [String(request.params.code || '').toLowerCase().replace(/[^a-z0-9]/g, '').slice(0, 32)],
     );
     const fan = result.rows[0];

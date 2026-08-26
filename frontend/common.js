@@ -5961,10 +5961,59 @@ function initActiveNav() {
   });
 }
 
+/* =============================================================
+   AVATAR FANS — desain emoji+gradasi atau foto (upload/URL)
+   Dipakai ikon profil di beranda, halaman profil, dan profil publik.
+   Prioritas render: mode 'desain' → emoji+gradasi; selain itu foto;
+   tanpa keduanya → maskot 🐰.
+   ============================================================= */
+const AVATAR_GRADIEN = {
+  pink: 'linear-gradient(135deg, #ffd7e4, #ff9ec2)',
+  coral: 'linear-gradient(135deg, #ffe0d6, #ff9d84)',
+  lilac: 'linear-gradient(135deg, #e9e0ff, #bfa8f2)',
+  mint: 'linear-gradient(135deg, #d5f5ea, #93dcc8)',
+  langit: 'linear-gradient(135deg, #dbeeff, #8fc7ef)',
+  lemon: 'linear-gradient(135deg, #fff3c9, #ffd66b)',
+  peach: 'linear-gradient(135deg, #ffe9d1, #ffb37c)',
+  abu: 'linear-gradient(135deg, #efeaf1, #c9bfd0)',
+};
+
+function terapkanAvatar(el, fan, fallbackEmoji) {
+  if (!el) return;
+  const desain = fan && fan.avatarDesain;
+  const pakaiDesain = desain && desain.mode === 'desain' && desain.e;
+  el.textContent = '';
+  if (pakaiDesain) {
+    el.style.backgroundImage = AVATAR_GRADIEN[desain.g] || AVATAR_GRADIEN.pink;
+    el.textContent = desain.e;
+    return;
+  }
+  if (fan && fan.photo) {
+    el.style.backgroundImage = `url(${fan.photo})`;
+    return;
+  }
+  el.style.backgroundImage = '';
+  el.textContent = fallbackEmoji || '🐰';
+}
+
+/* Ikon profil di header beranda mengikuti akun yang masuk. */
+async function sinkronAvatarHeader() {
+  const bubble = document.querySelector('.profile-bubble');
+  if (!bubble || typeof window.wiki48Fetch !== 'function') return;
+  try {
+    const response = await window.wiki48Fetch('/api/me');
+    if (!response.ok) return;
+    const data = await response.json();
+    bubble.classList.add('is-fan');
+    terapkanAvatar(bubble, { photo: data.user.profilePicture, avatarDesain: data.user.avatarDesain });
+  } catch { /* tamu → tetap maskot */ }
+}
+
 function bootWiki48Chrome() {
   initActiveNav();
   initI18n();
   initDrawer();
+  sinkronAvatarHeader();
 }
 
 if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', bootWiki48Chrome);

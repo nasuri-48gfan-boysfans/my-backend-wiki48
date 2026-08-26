@@ -85,7 +85,7 @@ async function muatProfil() {
     meta.textContent = bagian.join(' · ');
 
     const avatar = document.querySelector('#fanAvatar');
-    if (avatar && fan.photo) { avatar.textContent = ''; avatar.style.backgroundImage = `url(${fan.photo})`; }
+    if (avatar && typeof terapkanAvatar === 'function') terapkanAvatar(avatar, fan);
 
     if (data.isSelf) tombolAksi(null), (document.querySelector('#friendActionWrap').innerHTML = '<a class="profile-link" href="profile.html">Ini profilmu — kelola di sini →</a>');
 

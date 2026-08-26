@@ -25,7 +25,27 @@
     <div class="profile-avatar-wrap"><div class="profile-avatar" id="profileAvatar" aria-hidden="true">🐰</div><label class="profile-picture-button" for="profilePicture" data-i18n="changePhoto">Ganti foto</label><input id="profilePicture" type="file" accept="image/jpeg,image/png,image/webp" hidden /></div>
     <div><p class="eyebrow pink-eyebrow" data-i18n="personalSpace">Ruang personalmu</p><h1 id="profileTitle"><span data-i18n="helloBefore">Halo,</span> <span data-profile-name>Wiki Fan</span><span data-i18n="helloAfter">!</span></h1><p class="profile-email" data-profile-email></p></div>
   </section>
-  <div class="profile-content"><section class="profile-card profile-edit-card" aria-labelledby="editTitle"><p class="eyebrow coral-eyebrow" data-i18n="identityEyebrow">Identitas</p><h2 id="editTitle" data-i18n="editBioTitle">Edit biodata fans</h2><form id="profileForm" class="profile-form"><label for="profileName" data-i18n="nameLabel">Nama tampilan</label><input id="profileName" type="text" maxlength="40" required /><label for="profileBirth" data-i18n="birthLabel">Tanggal lahir <small>(tampil di profil publikmu)</small></label><input id="profileBirth" type="date" min="1900-01-01" max="2026-12-31" /><p class="profile-privacy" data-i18n="privacyNote">Data pribadi dipseudonimkan dengan kode acak dan foto diperiksa formatnya sebelum disimpan.</p><button class="auth-submit" type="submit"><span data-i18n="saveChanges">Simpan perubahan</span> <span aria-hidden="true">→</span></button><p id="profileSaved" class="profile-saved" hidden data-i18n="profileSavedMsg">Profil berhasil diperbarui.</p></form></section>
+  <div class="profile-content"><section class="profile-card profile-edit-card" aria-labelledby="editTitle"><p class="eyebrow coral-eyebrow" data-i18n="identityEyebrow">Identitas</p><h2 id="editTitle" data-i18n="editBioTitle">Edit biodata fans</h2><form id="profileForm" class="profile-form"><label for="profileName" data-i18n="nameLabel">Nama tampilan</label><input id="profileName" type="text" maxlength="40" required /><label for="profileBirth" data-i18n="birthLabel">Tanggal lahir <small>(tampil di profil publikmu)</small></label><input id="profileBirth" type="date" min="1900-01-01" max="2026-12-31" /><label for="profileBio">Bio singkat</label><textarea id="profileBio" rows="3" maxlength="280" placeholder="Ceritakan kamu fans siapa, suka setlist apa…"></textarea><div class="avatar-bio-duo"><label for="profileKota">Kota</label><input id="profileKota" type="text" maxlength="80" placeholder="Jakarta" /><label for="profileGrup">Grup favorit</label><input id="profileGrup" type="text" maxlength="80" placeholder="JKT48" /></div>
+      <fieldset class="avatar-builder">
+        <legend>Avatar kamu</legend>
+        <div class="avatar-preview-wrap"><span class="avatar-preview" id="avatarPreview">🐰</span></div>
+        <div class="avatar-modes" role="radiogroup" aria-label="Jenis avatar">
+          <label class="avatar-mode is-active"><input type="radio" name="avatarMode" value="desain" checked /> 🎨 Desain</label>
+          <label class="avatar-mode"><input type="radio" name="avatarMode" value="foto" /> 🖼️ Foto / Showroom</label>
+        </div>
+        <div id="avatarPanelDesain">
+          <p class="avatar-label">Pilih emoji</p>
+          <div class="avatar-emoji-grid" id="avatarEmojiGrid"></div>
+          <p class="avatar-label">Pilih warna</p>
+          <div class="avatar-gradient-grid" id="avatarGradientGrid"></div>
+        </div>
+        <div id="avatarPanelFoto" hidden>
+          <label for="avatarFotoUrl">Tempel URL foto (mis. avatar Showroom kamu)</label>
+          <input id="avatarFotoUrl" type="url" placeholder="https://…jpg/png" />
+          <p class="friends-empty">Bisa juga upload file lewat tombol “Ganti foto” di atas ↑</p>
+        </div>
+      </fieldset>
+      <p class="profile-privacy" data-i18n="privacyNote">Data pribadi dipseudonimkan dengan kode acak dan foto diperiksa formatnya sebelum disimpan.</p><button class="auth-submit" type="submit"><span data-i18n="saveChanges">Simpan perubahan</span> <span aria-hidden="true">→</span></button><p id="profileSaved" class="profile-saved" hidden data-i18n="profileSavedMsg">Profil berhasil diperbarui.</p></form></section>
     <aside class="profile-card profile-summary"><p class="eyebrow lilac-eyebrow" data-i18n="sinceEyebrow">Member sejak</p><strong data-profile-joined></strong><p data-i18n="oshiStoredNote">My Oshi dan alasan pilihanmu tersimpan di akunmu.</p><div id="profileOshi" class="profile-oshi-list"></div><a class="profile-link" href="members.html"><span data-i18n="manageOshi">Kelola My Oshi</span> <span aria-hidden="true">→</span></a><button id="logoutButton" class="logout-button" type="button" data-i18n="logoutBtn">Keluar dari akun</button></aside>
     <section class="profile-card friends-card" aria-labelledby="temanTitle">
       <p class="eyebrow mint-eyebrow">Komunitas</p>
