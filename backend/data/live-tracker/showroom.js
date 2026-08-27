@@ -6,7 +6,7 @@ const { requestJson } = require('./http');
 const DOMESTIC_GROUPS = ['AKB48', 'SKE48', 'NMB48', 'HKT48', 'NGT48', 'STU48'];
 const KAIGAI_GROUPS = ['JKT48', 'BNK48', 'TSH48', 'TPE48', 'AKB48 Team TP', 'CGM48', 'KLP48'];
 const GROUP_DETECTION_ALIASES = { 'AKB48 Team SH': 'TSH48' };
-const SHOWROOM_WORKER_API = 'https://workers-showroom-48wiki.wiki48workers.workers.dev/';
+const SHOWROOM_WORKER_API = 'https://workers-showroom-48wiki.wiki48workers.workers.dev';
 
 /** @typedef {{ id: string, member_name: string, group: string, category: 'Domestic'|'Kaigai', platform: 'showroom', is_live: boolean, live_url: string|null, title: string|null }} LiveMember */
 
