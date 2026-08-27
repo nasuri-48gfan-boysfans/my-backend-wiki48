@@ -339,6 +339,33 @@ console.log('[DEBUG SHOWROOM]', {
 try {
   const testRooms = await providers.showroom.onlivesBy48Groups();
 
+  console.log('[DEBUG SHOWROOM] mencoba memanggil Cloudflare...');
+
+try {
+  console.log('[DEBUG SHOWROOM] sebelum onlivesBy48Groups');
+
+  const testRooms = await providers.showroom.onlivesBy48Groups();
+
+  console.log('[DEBUG SHOWROOM] setelah onlivesBy48Groups');
+
+  console.log('[DEBUG SHOWROOM] mencoba memanggil Cloudflare...');
+
+try {
+  console.log('[DEBUG SHOWROOM] sebelum onlivesBy48Groups');
+
+  const testRooms = await providers.showroom.onlivesBy48Groups();
+
+  console.log('[DEBUG SHOWROOM] setelah onlivesBy48Groups');
+
+  console.log('[DEBUG SHOWROOM] mencoba memanggil Cloudflare...');
+
+try {
+  console.log('[DEBUG SHOWROOM] sebelum onlivesBy48Groups');
+
+  const testRooms = await providers.showroom.onlivesBy48Groups();
+
+  console.log('[DEBUG SHOWROOM] setelah onlivesBy48Groups');
+
   console.log('[DEBUG SHOWROOM] Cloudflare response:', {
     jumlah: testRooms.length,
     rooms: testRooms.map((room) => ({
