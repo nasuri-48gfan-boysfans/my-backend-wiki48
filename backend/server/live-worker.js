@@ -307,6 +307,14 @@ function createLiveWorker({
     const all48List = mappings.filter((m) => /^[a-z0-9]+(?:48|48tsh)-/i.test(String(m.id || '')));
     const idnList = mappings.filter((m) => m.idn_username);
     const youtubeList = mappings.filter((m) => m.youtube_video_id || m.youtube_channel_id);
+
+console.log('[DEBUG SHOWROOM]', {
+  totalMembers: mappings.length,
+  all48List: all48List.length,
+  showroomList: showroomList.length,
+  idnList: idnList.length,
+});
+     
     const mapped = new Set([...all48List, ...showroomList, ...idnList, ...youtubeList].map((m) => m.id)).size;
     catatMappingKosong(mapped);
 
