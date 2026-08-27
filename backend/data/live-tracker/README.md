@@ -8,6 +8,27 @@ parser akan retry lalu mencatat error tanpa mematikan seluruh batch.
 
 Node.js 18+ diperlukan karena modul memakai `fetch` bawaan.
 
+### Worker production 24/7
+
+Jalankan worker sebagai **service deployment terpisah** dari API, bukan di
+komputer lokal. Set root directory service ke `backend/`, gunakan command:
+
+```powershell
+npm run worker
+```
+
+Worker ini tidak selesai sendiri: ia polling sesuai `LIVE_TRACKER_INTERVAL_MS`,
+menulis snapshot ke Redis, dan akan dijalankan ulang oleh platform bila proses
+atau mesin service restart. Set health check ke `/healthz` dan salin environment
+Redis, kredensial provider, serta webhook Discord ke service worker. API dan
+worker wajib memakai Redis Upstash yang sama.
+
+Untuk test satu siklus tanpa menyalakan loop:
+
+```powershell
+npm run live:once
+```
+
 ```powershell
 # Buat/refresh mapping room Showroom dari daftar room yang sedang live
 node data/live-tracker/cli.js --discover
