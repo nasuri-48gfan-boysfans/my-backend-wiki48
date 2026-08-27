@@ -334,6 +334,23 @@ console.log('[DEBUG SHOWROOM]', {
       const entri = tandaiMati(mapping.id, platform);
       if (entri) transitions.push({ type: 'ended', ...entri, is_live: false });
     };
+     console.log('[DEBUG SHOWROOM] mencoba memanggil Cloudflare...');
+
+try {
+  const testRooms = await providers.showroom.onlivesBy48Groups();
+
+  console.log('[DEBUG SHOWROOM] Cloudflare response:', {
+    jumlah: testRooms.length,
+    rooms: testRooms.map((room) => ({
+      room_id: room.room_id,
+      room_url_key: room.room_url_key,
+      member_name: room.member_name,
+      group: room.groupName,
+    })),
+  });
+} catch (error) {
+  console.error('[DEBUG SHOWROOM] Cloudflare gagal:', error.message);
+}
 
     /* ---------- Showroom: satu fetch massal seluruh 48 Group Family ---------- */
     if (providers.showroom && all48List.length > 0 && typeof providers.showroom.onlivesBy48Groups === 'function') {
