@@ -7,7 +7,11 @@
     "install:backend": "npm --prefix backend install",
     "start:backend": "npm --prefix backend start",
     "dev:backend": "npm --prefix backend run dev",
+    "live": "node backend/server/live-runner.js",
+    "live:once": "node backend/server/live-runner.js --once",
     "live:backend": "npm --prefix backend run live",
+    "worker:live": "npm --prefix backend run live",
+    "worker:live:once": "node backend/server/live-runner.js --once",
     "dev:frontend": "npm --prefix frontend run dev",
     "uji": "npm --prefix backend run uji"
   }
