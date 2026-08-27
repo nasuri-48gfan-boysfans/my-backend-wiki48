@@ -56,7 +56,7 @@ function isOfficialRoom(room) {
 class ShowroomAdapter {
   constructor({ baseUrl = 'https://www.showroom-live.com', publicApiUrl = process.env.SHOWROOM_ONLIVES_API_URL || SHOWROOM_WORKER_API, limiter = new RateLimiter(), authToken, timeoutMs = 15000, dispatcher } = {}) {
     this.baseUrl = baseUrl.replace(/\/$/, '');
-    this.publicApiUrl = publicApiUrl;
+    this.publicApiUrl = publicApiUrl.replace(/\/$/, '');
     this.limiter = limiter;
     this.authToken = authToken;
     this.timeoutMs = timeoutMs;
